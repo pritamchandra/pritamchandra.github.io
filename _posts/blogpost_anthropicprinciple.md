@@ -1,3 +1,13 @@
+---
+layout: post
+title: The Anthropic Principle
+date: 2015-10-20 11:12:00-0400
+description: blog post math
+tags: fiction sample
+categories:
+related_posts: false
+---
+
 It is a strange thing that all these years have passed. The nervousness is intact. I have a vague memory of telling people that I wished to work part time as a construction laborer. This was when I had a big job. Though I lied a lot then, this was true.
 
 Nowadays I write ledgers in my village. There is dust everywhere and a stench in the bathroom. But it's fine. I hang out only with the villagers. And I don't lust after women.
