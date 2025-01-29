@@ -6,8 +6,15 @@
     <description>Recent content in Posts on A minimal Hugo website</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 14 Feb 2016 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 28 Jan 2025 17:40:49 +0530</lastBuildDate>
     <atom:link href="https://pritamchandra.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Sailor take me your way</title>
+      <link>https://pritamchandra.github.io/post/2025/01/28/sailor-take-me-your-way/</link>
+      <pubDate>Tue, 28 Jan 2025 17:40:49 +0530</pubDate>
+      <guid>https://pritamchandra.github.io/post/2025/01/28/sailor-take-me-your-way/</guid>
+      <description>&lt;p&gt;Oh Sailor come.The ruins abounnd&#xA;my house on this shaky ground&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def f(n):&#xA;&#x9;return n&#xA;&lt;/code&gt;&lt;/pre&gt;&#xA;&lt;p&gt;$x^2 = \frac{1}{x}$&lt;/p&gt;</description>
+    </item>
     <item>
       <title>A Plain Markdown Post</title>
       <link>https://pritamchandra.github.io/post/2016/02/14/a-plain-markdown-post/</link>
