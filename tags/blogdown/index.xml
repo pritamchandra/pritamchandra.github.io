@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Blogdown on A minimal Hugo website</title>
-    <link>https://pritamchandra.github.io/tags/blogdown/</link>
+    <link>http://localhost:1313/tags/blogdown/</link>
     <description>Recent content in Blogdown on A minimal Hugo website</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 14 Feb 2024 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://pritamchandra.github.io/tags/blogdown/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/blogdown/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Apologetics of Human Freedom</title>
-      <link>https://pritamchandra.github.io/post/2024/02/14/apologetics-of-human-freedom/</link>
+      <title>Poetry test</title>
+      <link>http://localhost:1313/note/2024/02/14/poetry-test/</link>
       <pubDate>Wed, 14 Feb 2024 00:00:00 +0000</pubDate>
-      <guid>https://pritamchandra.github.io/post/2024/02/14/apologetics-of-human-freedom/</guid>
-      <description>&lt;!--&#xA;&#xA;--&gt;&#xA;&lt;p&gt;Underneath all conversations around theism against atheism lies still the problem of evil. Be it philosophers or laymen, from early centuries to contemporary ones, people still reject God primarily because they cannot reconcile a benevolent, omnipotent creator with our collectively painful and terrible existence.&lt;/p&gt;&#xA;&lt;p&gt;Sometimes, the inherent and solitary demand is the following - one can accept suffering from a good God only if it is good. Along these lines, one demands suffering to serve the existence of something bright, and, the presence of suffering must be the necessary precondition for the fullest expression of that brightness.&lt;/p&gt;</description>
+      <guid>http://localhost:1313/note/2024/02/14/poetry-test/</guid>
+      <description>&lt;!--&#xA;&lt;pre&gt;&#xA;But O heart! heart! heart!&#xA;   O the bleeding drops of red,&#xA;  Where on the deck my Captain lies,&#xA; Fallen cold and dead.&#xA;&lt;/pre&gt;&#xA;--&gt;&#xA;&lt;!-- &#xA;the following lines have &#34;em&#34; spaces which are special unicode character&#xA;not collapsed by HTML&#xA;--&gt;&#xA;&lt;p&gt;The action of every agent&lt;br&gt;&#xA;  into the world&lt;br&gt;&#xA;starts&lt;br&gt;&#xA;  from their physical selves.&lt;/p&gt;</description>
     </item>
     <item>
       <title>A Plain Markdown Post</title>
-      <link>https://pritamchandra.github.io/post/2016/02/14/a-plain-markdown-post/</link>
+      <link>http://localhost:1313/note/2016/02/14/a-plain-markdown-post/</link>
       <pubDate>Sun, 14 Feb 2016 00:00:00 +0000</pubDate>
-      <guid>https://pritamchandra.github.io/post/2016/02/14/a-plain-markdown-post/</guid>
+      <guid>http://localhost:1313/note/2016/02/14/a-plain-markdown-post/</guid>
       <description>&lt;p&gt;This sample post is mainly for&#xA;&lt;a href=&#34;https://github.com/rstudio/blogdown&#34;&gt;&lt;strong&gt;blogdown&lt;/strong&gt;&lt;/a&gt; users. If you do not use&#xA;&lt;strong&gt;blogdown&lt;/strong&gt;, you can skip the first section.&lt;/p&gt;&#xA;&lt;h1 id=&#34;1-markdown-or-r-markdown&#34;&gt;1. Markdown or R Markdown&lt;/h1&gt;&#xA;&lt;p&gt;This is a post written in plain Markdown (&lt;code&gt;*.md&lt;/code&gt;) instead of R Markdown&#xA;(&lt;code&gt;*.Rmd&lt;/code&gt;). The major differences are:&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;You cannot run any R code in a plain Markdown document, whereas in an R&#xA;Markdown document, you can embed R code chunks (&lt;code&gt;```{r}&lt;/code&gt;);&lt;/li&gt;&#xA;&lt;li&gt;A plain Markdown post is rendered through&#xA;&lt;a href=&#34;https://gohugo.io/overview/configuration/&#34;&gt;Goldmark&lt;/a&gt; by default, and an R&#xA;Markdown document is compiled by&#xA;&lt;a href=&#34;http://rmarkdown.rstudio.com&#34;&gt;&lt;strong&gt;rmarkdown&lt;/strong&gt;&lt;/a&gt; and&#xA;&lt;a href=&#34;http://pandoc.org&#34;&gt;Pandoc&lt;/a&gt;.&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;p&gt;There are differences in syntax between Goldmark&amp;rsquo;s Markdown and Pandoc&amp;rsquo;s&#xA;Markdown. For example, Goldmark does not support LaTeX math and Pandoc does. I&#xA;have added the KaTeX support to this theme (i.e.,&#xA;&lt;a href=&#34;https://github.com/yihui/hugo-xmin&#34;&gt;hugo-xmin&lt;/a&gt;)&lt;/p&gt;</description>
     </item>
   </channel>

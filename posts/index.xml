@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on A minimal Hugo website</title>
-    <link>https://pritamchandra.github.io/posts/</link>
+    <link>http://localhost:1313/posts/</link>
     <description>Recent content in Posts on A minimal Hugo website</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 28 Jan 2025 17:40:49 +0530</lastBuildDate>
-    <atom:link href="https://pritamchandra.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Sailor take me your way</title>
-      <link>https://pritamchandra.github.io/posts/mypost/</link>
+      <link>http://localhost:1313/posts/mypost/</link>
       <pubDate>Tue, 28 Jan 2025 17:40:49 +0530</pubDate>
-      <guid>https://pritamchandra.github.io/posts/mypost/</guid>
+      <guid>http://localhost:1313/posts/mypost/</guid>
       <description>&lt;p&gt;Oh Sailor come.The ruins abounnd&#xA;my house on this shaky ground&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def f(n):&#xA;&#x9;return n&#xA;&lt;/code&gt;&lt;/pre&gt;&#xA;&lt;p&gt;$x^2 = \frac{1}{x}$&lt;/p&gt;</description>
     </item>
   </channel>

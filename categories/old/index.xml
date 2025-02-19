@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Old on A minimal Hugo website</title>
+    <link>http://localhost:1313/categories/old/</link>
+    <description>Recent content in Old on A minimal Hugo website</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 14 Jan 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/categories/old/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>The Anthropic Principle</title>
+      <link>http://localhost:1313/post/2023/01/14/the-anthropic-principle/</link>
+      <pubDate>Sat, 14 Jan 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/post/2023/01/14/the-anthropic-principle/</guid>
+      <description>&lt;p&gt;It is a strange thing that all these years have passed. The nervousness is intact. I have a vague memory of telling people that I wished to work part time as a construction laborer. This was when I had a big job. Though I lied a lot then, this was true.&lt;/p&gt;&#xA;&lt;p&gt;Nowadays I write ledgers in my village. There is dust everywhere and a stench in the bathroom. But it&amp;rsquo;s fine. I hang out only with the villagers. And I don&amp;rsquo;t lust after women.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
