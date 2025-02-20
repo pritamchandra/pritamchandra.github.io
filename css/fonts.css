@@ -1,0 +1,18 @@
+body {
+  /* font-family: 'Merriweather', 'Montserrat'; */
+  /* font-family: Georgia, 'Times New Roman', Times, serif; */
+  /* 'PT Serif', 'PT Sans' */
+  /* font-family: 'Times New Roman', Times, serif; */
+  /* font-family: Optima, Candara, Calibri, Arial, sans-serif; */
+  /* font-family: 'Montserrat Light', sans-serif; */
+  /* , 'Segoe UI', 'Segoe UI Symbol', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;*/
+  /* font-family: 'Geneva', 'Tahoma', 'Verdana'; */
+  font-family: sans-serif;
+  /* font-family: 'Georgia'; */
+  /* font-weight: 200; /*what is this */
+  /* font-size: .95em; */
+}
+code {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 80%;
+}

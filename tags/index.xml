@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on A minimal Hugo website</title>
+    <link>https://pritamchandra.github.io/tags/</link>
+    <description>Recent content in Tags on A minimal Hugo website</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 14 Jan 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://pritamchandra.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Poetry</title>
+      <link>https://pritamchandra.github.io/tags/poetry/</link>
+      <pubDate>Tue, 14 Jan 2025 00:00:00 +0000</pubDate>
+      <guid>https://pritamchandra.github.io/tags/poetry/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Psalm</title>
+      <link>https://pritamchandra.github.io/tags/psalm/</link>
+      <pubDate>Tue, 14 Jan 2025 00:00:00 +0000</pubDate>
+      <guid>https://pritamchandra.github.io/tags/psalm/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Realism</title>
+      <link>https://pritamchandra.github.io/tags/realism/</link>
+      <pubDate>Tue, 14 Jan 2025 00:00:00 +0000</pubDate>
+      <guid>https://pritamchandra.github.io/tags/realism/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Song</title>
+      <link>https://pritamchandra.github.io/tags/song/</link>
+      <pubDate>Tue, 14 Jan 2025 00:00:00 +0000</pubDate>
+      <guid>https://pritamchandra.github.io/tags/song/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Oped</title>
+      <link>https://pritamchandra.github.io/tags/oped/</link>
+      <pubDate>Sat, 14 Dec 2024 00:00:00 +0000</pubDate>
+      <guid>https://pritamchandra.github.io/tags/oped/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Journal</title>
+      <link>https://pritamchandra.github.io/tags/journal/</link>
+      <pubDate>Thu, 24 Oct 2024 00:00:00 +0000</pubDate>
+      <guid>https://pritamchandra.github.io/tags/journal/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Testimony</title>
+      <link>https://pritamchandra.github.io/tags/testimony/</link>
+      <pubDate>Thu, 24 Oct 2024 00:00:00 +0000</pubDate>
+      <guid>https://pritamchandra.github.io/tags/testimony/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Elegy</title>
+      <link>https://pritamchandra.github.io/tags/elegy/</link>
+      <pubDate>Sat, 14 Sep 2024 00:00:00 +0000</pubDate>
+      <guid>https://pritamchandra.github.io/tags/elegy/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Translation</title>
+      <link>https://pritamchandra.github.io/tags/translation/</link>
+      <pubDate>Sun, 14 Jul 2024 00:00:00 +0000</pubDate>
+      <guid>https://pritamchandra.github.io/tags/translation/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Commentary</title>
+      <link>https://pritamchandra.github.io/tags/commentary/</link>
+      <pubDate>Mon, 13 Nov 2023 00:00:00 +0000</pubDate>
+      <guid>https://pritamchandra.github.io/tags/commentary/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Prose</title>
+      <link>https://pritamchandra.github.io/tags/prose/</link>
+      <pubDate>Sat, 14 Jan 2023 00:00:00 +0000</pubDate>
+      <guid>https://pritamchandra.github.io/tags/prose/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>
