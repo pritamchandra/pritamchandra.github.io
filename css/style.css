@@ -362,7 +362,7 @@ body.dark-mode main * {
     /* Example styles for small screens */
     body {
         font-size: 1em;
-        font-weight: 300;
+        font-weight: 400;
         } 
     .list a {
       text-decoration: none;
