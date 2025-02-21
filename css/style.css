@@ -25,6 +25,10 @@ body {
     float:right;
 }
 
+.small {
+  transform: scale(.9);
+}
+
 
 /* header and footer areas */
 .menu 
@@ -34,6 +38,7 @@ body {
 .menu li { 
   display: inline-block; 
   font-family: sans-serif;
+  font-size: 1em;
 }
 .article-meta, .menu a {
   text-decoration: none;
