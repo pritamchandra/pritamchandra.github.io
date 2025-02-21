@@ -371,4 +371,10 @@ body.dark-mode main * {
       text-overflow: ellipsis;
       max-width: 25ch; 
     }
+
+    body.dark-mode, 
+    body.dark-mode main * {
+      font-size: 1em;
+      font-weight: 400;
+    }
 }
