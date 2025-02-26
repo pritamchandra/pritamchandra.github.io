@@ -72,6 +72,13 @@
       <description>&lt;p&gt;It is not a wise thing to do to test scripture to align with the scientific narrative of creation, especially in relation to the chronology of the creation of various entities. This is not because they contradict, but simply because Scripture has a metaphysical underpinning which science is unable to take into account.&lt;/p&gt;&#xA;&lt;p&gt;For example, time as we know it is demarcated by the objects in the space (heavenly bodies) and forces of interactions between them. These themselves are created in the third day of the Genesis narrative. So, what day one represents is not our familiar physical time (which was only created in day three). Neither the order of the days represents the chronology of creation.&#xA;Rather, the creation narrative should be attempted to be seen, with fear and trembling, from God&amp;rsquo;s perspective, which is outside time.&lt;/p&gt;</description>
     </item>
     <item>
+      <title>Exposition on RVSD</title>
+      <link>https://pritamchandra.github.io/post/2023/04/24/exposition-on-rvsd/</link>
+      <pubDate>Mon, 24 Apr 2023 00:00:00 +0000</pubDate>
+      <guid>https://pritamchandra.github.io/post/2023/04/24/exposition-on-rvsd/</guid>
+      <description>&lt;p&gt;The following a brief explainer to the algorithm &lt;em&gt;Robust Vector Space Decomposition (RVSD)&lt;/em&gt; introduced in our ITCS 2024 &lt;a class = &#34;colored-link&#34; href = &#34;https://arxiv.org/abs/2311.07284&#34;&gt;paper&lt;/a&gt;. The video was recorded for the same conference. RVSD in its generality is a powerful meta-algorithm that is able to tackle various important unsupervised learning tasks, such as subspace clustering, mixtures of Gaussians, tensor decompositions. The specifics of these reductions are discussed in detail in the paper. For Subspace Clustering we provide a complete smoothed analysis of this algorithm.&lt;/p&gt;</description>
+    </item>
+    <item>
       <title>The Anthropic Principle</title>
       <link>https://pritamchandra.github.io/post/2023/01/14/the-anthropic-principle/</link>
       <pubDate>Sat, 14 Jan 2023 00:00:00 +0000</pubDate>

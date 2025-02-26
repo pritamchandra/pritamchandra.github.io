@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Technical Expositions on Pritam Chandra</title>
+    <link>https://pritamchandra.github.io/categories/technical-expositions/</link>
+    <description>Recent content in Technical Expositions on Pritam Chandra</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 24 Apr 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://pritamchandra.github.io/categories/technical-expositions/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Exposition on RVSD</title>
+      <link>https://pritamchandra.github.io/post/2023/04/24/exposition-on-rvsd/</link>
+      <pubDate>Mon, 24 Apr 2023 00:00:00 +0000</pubDate>
+      <guid>https://pritamchandra.github.io/post/2023/04/24/exposition-on-rvsd/</guid>
+      <description>&lt;p&gt;The following a brief explainer to the algorithm &lt;em&gt;Robust Vector Space Decomposition (RVSD)&lt;/em&gt; introduced in our ITCS 2024 &lt;a class = &#34;colored-link&#34; href = &#34;https://arxiv.org/abs/2311.07284&#34;&gt;paper&lt;/a&gt;. The video was recorded for the same conference. RVSD in its generality is a powerful meta-algorithm that is able to tackle various important unsupervised learning tasks, such as subspace clustering, mixtures of Gaussians, tensor decompositions. The specifics of these reductions are discussed in detail in the paper. For Subspace Clustering we provide a complete smoothed analysis of this algorithm.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
