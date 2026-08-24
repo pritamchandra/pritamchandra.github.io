@@ -22,6 +22,7 @@
     {% assign cross_href = "/blog/" | relative_url %}
   {% when "reading" %}
     {% assign show_toggle = true %}
+    {% assign drawer_always = true %}
     {% assign sitename_href = "/" | relative_url %}
     {% assign cross_text = "Blog" %}
     {% assign cross_href = "/blog/" | relative_url %}
@@ -33,7 +34,7 @@
 {% endcase %}
 <nav class="sitenav" aria-label="Site">
   <div class="nav-cluster">
-    {% if show_toggle %}<button class="nav-btn icon-btn" data-action="toggle-sidebars" aria-pressed="false" title="Show or hide the sidebars">&#9776;</button>{% endif %}
+    {% if show_toggle %}<button class="nav-btn icon-btn" data-action="toggle-sidebars"{% if drawer_always %} data-drawer-always="true"{% endif %} aria-pressed="false" title="Show or hide the sidebar">&#9776;</button>{% endif %}
     <a class="nav-sitename" href="{{ sitename_href }}"><span class="full">Pritam Chandra</span><span class="short">PC</span></a>
     <span class="nav-spacer"></span>
     <a class="nav-link" href="{{ cross_href }}">{{ cross_text }}</a>

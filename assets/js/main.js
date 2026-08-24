@@ -92,7 +92,12 @@
   sbBtn.forEach(function(b){
     b.setAttribute('aria-pressed', root.classList.contains('sb-hidden'));
     b.addEventListener('click', function(){
-      if (isMobile()){
+      /* Pages with no sidebar grid column at all (just a drawer, at
+         every width — currently only the reading list) mark their
+         toggle button data-drawer-always, so it always opens the
+         drawer instead of ever touching sb-hidden — there's no
+         .col-sidebar on these pages for sb-hidden to do anything to. */
+      if (isMobile() || b.hasAttribute('data-drawer-always')){
         root.classList.toggle('drawer-open');
       } else {
         root.classList.toggle('sb-hidden');

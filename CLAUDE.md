@@ -1403,3 +1403,45 @@ written:**
   desktop), 2.025rem below 700px (was a flat 1.35rem). Applies to every
   page via the shared `.cluster` class, `.layout-2col` pages included,
   not just `.layout-3col` ones — Pritam's explicit "universally" scope.
+
+**UPDATE, superseding the Resume dual-copy approach above:** Pritam
+changed his mind on where Resume permanently lives — not a
+breakpoint-dependent relocation at all anymore. It's now a single,
+ordinary instance in the **left** sidebar, between the Contents nav and
+the "Interests" paragraph (drawer copy: same relative spot, at the end
+of the Contents `drawer-section`, since the drawer never duplicated
+"Interests" separately). The `.resume-link-desktop`/`.resume-link-merged`
+dual-copy CSS toggle described above is gone entirely — deleted, not
+just unused — since there's only one copy of the link now and it never
+needs to move: it's part of the *left* sidebar's content, which was
+never the side that reordered at the 1000px merge point in the first
+place (only the *right* sidebar's content — photo aside, Elsewhere +
+link list — merges underneath it, exactly as it always did before the
+Resume-relocation experiment). The right sidebar is back to being just
+photo/caption + "Elsewhere", i.e. exactly what it was before any of
+this Resume back-and-forth started.
+
+**UPDATE, reading list page — the `.layout-2col` sidebar approach above
+was scrapped**, not fixed. Pritam wanted the reading list to behave like
+a standalone post (single centered content column, `.cluster > main`,
+no grid, no sidebar-related breakpoint at all) at *every* width, with
+Timeline access being a drawer *only* — available and working
+identically whether the viewport is 300px or 3000px, not gated to "below
+700px" the way the drawer normally is elsewhere on the site. Two things
+made this work:
+- The page markup dropped `.layout-2col`/`.col-sidebar` entirely — it's
+  now structurally identical to `_layouts/post.html` (plus the hamburger
+  button, which post pages don't have at all).
+- The hamburger button on this page carries a new `data-drawer-always`
+  attribute (set via a `drawer_always` flag in `nav.html`'s per-layout
+  case statement). `base.js`'s toggle-sidebars click handler checks for
+  this attribute alongside its existing `isMobile()` check — if either
+  is true, it opens the drawer; only when neither is true does it fall
+  back to toggling `sb-hidden` (which would be a no-op here anyway,
+  since there's no `.col-sidebar` on this page for `sb-hidden` to hide).
+  This is the first page on the site where the drawer is reachable above
+  700px at all — every other drawer is strictly a <700px fallback for a
+  grid sidebar that's visible above that width. If a future page ever
+  wants "sidebar content, but only ever as a drawer, at any width"
+  again, this is the mechanism to reuse: no grid column, plus
+  `data-drawer-always` on that page's nav case.
