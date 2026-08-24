@@ -371,10 +371,12 @@ That's it — once these files exist, the book automatically shows up on the
 blog home's timeline, gets a working table of contents, and its tags
 become real links.
 
-## 5. Adding a book to your reading list
+## 5. The reading list — adding, editing, and favorites
 
-Your reading list lives at `pritamchandra.github.io/reading/` and each
-book is one file in `_reading/`, named however you like, e.g.:
+Your reading list lives at `pritamchandra.github.io/reading/`. It has two
+parts: the **favorites shelf** at the top (up to a handful of covers,
+side by side) and the **full list** below it (every book, newest first).
+Every book is just one file in `_reading/`, named however you like, e.g.:
 
 ```
 _reading/the-name-of-the-wind.md
@@ -388,7 +390,8 @@ cover: "https://covers.openlibrary.org/b/isbn/9780756404079-M.jpg"
 goodreads: "https://www.goodreads.com/book/show/186074.The_Name_of_the_Wind"
 year: 2027          # the year you finished it — leave as `null` while reading
 status: null         # set to `reading` (no quotes) while you're partway through, instead of a year
-order: 9             # one higher than whatever your last book's order was
+order: 10            # one higher than whatever your last book's order was
+favorite: null       # see "Favorites" below — leave null unless it's one of your handful of favorites
 ---
 Your review goes here, if you want to write one — completely optional,
 ordinary Markdown. Leave this blank (just the front matter, nothing
@@ -396,27 +399,66 @@ below the second `---`) for a book you don't want to write about; it'll
 still show up in the list with no "Review" link next to it.
 ```
 
-**The easiest way to fill in `cover`, `title`, and `author`**: find the
-book on Goodreads, copy its URL, and just ask me (Claude Code) in a chat
-message to add it — paste the Goodreads link plus the year (or "still
-reading") and I'll look up the cover image and pull the author's name for
-you, then write the file myself. This isn't something the site does
-automatically on its own (a plain Jekyll site like this one can't reach
-out to the internet while it's building) — it's a "ask Claude to do it"
-step each time you add a book, same as asking me to add a blog post.
+**Editing a book already on the list** (fixing a year, adding a review
+later, swapping a cover) is just opening its file in `_reading/` and
+changing the field — nothing else to update, the list and the favorites
+shelf both rebuild from these files automatically.
 
-If you'd rather do it by hand: the `cover` field just needs to be a URL
-to an image. [Open Library's cover
+### Getting the cover, title, and author
+
+**The easiest way**: find the book on Goodreads, copy its URL, and just
+ask me (Claude Code) in a chat message to add it — paste the Goodreads
+link plus the year (or "still reading") and I'll look up the cover image
+and pull the author's name for you, then write the file myself. This
+isn't something the site does automatically on its own (a plain Jekyll
+site like this one can't reach out to the internet while it's building)
+— it's a "ask Claude to do it" step each time you add a book, same as
+asking me to add a blog post.
+
+**If you already have a specific cover image you want** (a photo of your
+own copy, a nicer scan, a particular edition) — just give me that image,
+or a direct link to it, and tell me to use it instead of looking one up.
+The `cover` field is just a URL; whatever you hand me becomes that URL,
+and I only go looking on Goodreads/Open Library when you *don't* give me
+one. If you're doing this yourself rather than asking me: drop the image
+file in `assets/img/` and point `cover` at it, e.g. `cover:
+"/assets/img/my-photo-of-this-book.jpg"`.
+
+**If you'd rather look up a generic cover yourself**: the `cover` field
+just needs to be a URL to an image. [Open Library's cover
 service](https://covers.openlibrary.org) is a reliable free source —
 search for your book at [openlibrary.org](https://openlibrary.org), open
 its page, and the image URL follows the pattern
 `https://covers.openlibrary.org/b/id/<some number>-M.jpg` (right-click
-the cover on the book's page → "Copy Image Address" gets you this).
+the cover on the book's page → "Copy Image Address" gets you this). One
+thing worth checking: Open Library sometimes surfaces a foreign-language
+or blank-cover scan as the top result for a classic with many editions —
+if a cover ever looks wrong once it's live, that's almost always why;
+just search again for your specific edition/translation.
+
+If you ever leave `cover` blank entirely, a small placeholder box (with
+the same book icon used for "currently reading") shows in its place
+instead of a broken image — nothing breaks, it just looks obviously
+unfinished until you fill it in.
+
+### "Currently reading" and ordering
 
 A book with `status: reading` shows a small book icon instead of a year
-in the list — that's automatic, you don't pick the icon yourself.
-Order matters only for sorting (newest at the top of the list) — it
-doesn't need to be exactly sequential, just increasing.
+in the list — that's automatic, you don't pick the icon yourself. `order`
+only controls sorting (newest at the top) — it doesn't need to be exactly
+sequential, just higher than whatever came before it chronologically.
+
+### Favorites
+
+The shelf of covers at the top of the page shows whichever books have a
+`favorite:` number set, in that order — `favorite: 1` first, `favorite:
+2` second, and so on. This is completely independent of `order` (which
+is about when you read something) — favorites is about which ones you'd
+recommend. To change your favorites: edit the `favorite:` field on the
+relevant book files (set it to `null` to remove one, or give a new book
+a number to add it). There's no fixed limit, but the shelf is one row
+that just gets narrower as you add more — four or five is about right
+before it gets cramped on a phone.
 
 ## 6. Previewing changes before publishing
 

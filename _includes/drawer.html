@@ -23,8 +23,8 @@
     </nav>
   </div>
   <div class="drawer-section">
-    <a class="tag resume-link" href="{{ '/assets/pritam-chandra-cv.pdf' | relative_url }}">Resume (PDF)</a>
-    <a class="tag reading-link" href="{{ '/reading/' | relative_url }}">{% include icon-book.html %}Reading List</a>
+    <a class="icon-link resume-link" href="{{ '/assets/pritam-chandra-cv.pdf' | relative_url }}">{% include icon-resume.html %}Resume</a>
+    <a class="icon-link reading-link" href="{{ '/reading/' | relative_url }}">{% include icon-book.html %}Reading List</a>
     <h2 style="font-family:var(--font-sans);font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.6rem;">Elsewhere</h2>
     <ul class="link-list" style="margin-bottom:0;">
       <li><a href="{{ site.data.social.scholar }}">Google Scholar</a></li>
@@ -56,7 +56,7 @@
     </ul>
   </div>
   <div class="drawer-section drawer-section-timeline">
-    <a class="tag reading-link" href="{{ '/reading/' | relative_url }}">{% include icon-book.html %}Reading List</a>
+    <a class="icon-link reading-link" href="{{ '/reading/' | relative_url }}">{% include icon-book.html %}Reading List</a>
     <h2 style="font-family:var(--font-sans);font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.7rem;">Timeline</h2>
     <ul class="timeline">
       {% for group in year_groups %}<li><a href="#y{{ group.name }}">{{ group.name }}</a></li>{% endfor %}

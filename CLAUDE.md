@@ -1302,3 +1302,42 @@ real, intentional site components, not scope creep to question.
   right aside and its drawer copy — positioned after Resume/before
   "Elsewhere" on the portfolio, and before "Timeline" on the blog home,
   per Pritam's explicit placement request.
+
+**UPDATE to the reading list, shortly after the section above was
+written:**
+- **Favorites shelf** — `.reading-favorites`, a row of up to a handful of
+  covers above the main list, populated by `favorite: 1`/`2`/`3`/...  on
+  individual `_reading/*.md` files (independent of `order`, which is
+  purely chronological). Plain flex with `flex: 1 1 0` on each item is
+  what keeps every favorite on one line at any width, phone included —
+  they shrink together rather than wrapping, so no separate mobile
+  layout was needed here (unlike `.gallery-float-*`, which does need
+  one, since that pattern intentionally changes from side-by-side to
+  stacked rather than just shrinking in place).
+- **Cover placeholder** — `.reading-cover-placeholder`, shown instead of
+  `.reading-cover`/a favorite's `<img>` whenever `cover` is blank in the
+  front matter, same idea as the portfolio's photo placeholder box, using
+  the same book icon as the "currently reading" marker.
+- **Sidebar link style, superseding this section's original "same small
+  bordered .tag pill as the post-title pills" description**: Pritam
+  asked for these plainer — icon + text, no box/border/background — so
+  Resume and Reading List are now `.icon-link` (see the class definition
+  near where `.resume-link` used to be defined), not `.tag`. Both class
+  names (`.resume-link`, `.reading-link`) are kept as secondary classes
+  alongside `.icon-link` purely as CSS hooks/history, not for any visual
+  effect of their own anymore. Resume's icon is `_includes/icon-resume.html`
+  (a plain document-with-folded-corner glyph, matching the book icon's
+  line-drawn style); its link text was also shortened from "Resume (PDF)"
+  to plain "Resume" as part of the same request.
+- **A real content bug, not just a style one**: the original Open
+  Library cover IDs picked for "The Brothers Karamazov" and "Devils" both
+  turned out to be scans of *Russian-language* editions (blank library
+  bindings, no illustration) rather than the specific English
+  translations named in the front matter — confirmed by actually opening
+  the images, not just checking that the URL returned a valid JPEG (it
+  did; a wrong-but-valid image doesn't show up as an HTTP error). Fixed
+  by searching Open Library by the specific English edition's ISBN
+  instead of a generic title/author query. Worth remembering if a future
+  cover ever looks "off" for a classic with many editions: the cover ID
+  resolving successfully is not the same as it being the right cover —
+  actually look at it.
