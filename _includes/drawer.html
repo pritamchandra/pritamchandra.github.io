@@ -1,0 +1,75 @@
+{% comment %}
+  Off-canvas drawer. Content mirrors whatever sidebar(s) this page type
+  has (CLAUDE.md §4: every sidebar's content needs a drawer copy). Posts
+  have no sidebar at all, so they get no drawer — base.js's drawer code
+  simply finds no .drawer element on those pages and no-ops.
+{% endcomment %}
+{% case page.layout %}
+
+{% when "home" %}
+<div class="drawer" aria-label="Contents">
+  <button class="drawer-close" data-action="close-drawer" aria-label="Close">&times;</button>
+  <div class="drawer-section">
+    <h2 style="font-family:var(--font-sans);font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.6rem;">Contents</h2>
+    <nav class="toc">
+      <ul style="list-style:none;padding:0;margin:0;">
+        <li style="margin-bottom:.55em;"><a href="#about">About</a></li>
+        <li style="margin-bottom:.55em;"><a href="#publications">Journal Publications</a></li>
+        <li style="margin-bottom:.55em;"><a href="#preprints">Preprints &amp; Working Papers</a></li>
+        <li style="margin-bottom:.55em;"><a href="#notes">Notes</a></li>
+        <li style="margin-bottom:.55em;"><a href="#service">Academic Service</a></li>
+        <li style="margin-bottom:.55em;"><a href="#teaching">Teaching Experience</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="drawer-section">
+    <a class="tag resume-link" href="{{ '/assets/pritam-chandra-cv.pdf' | relative_url }}">Resume (PDF)</a>
+    <h2 style="font-family:var(--font-sans);font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.6rem;">Elsewhere</h2>
+    <ul class="link-list" style="margin-bottom:0;">
+      <li><a href="{{ site.data.social.scholar }}">Google Scholar</a></li>
+      {% if site.data.social.github %}<li><a href="{{ site.data.social.github }}">GitHub</a></li>{% endif %}
+      {% if site.data.social.letterboxd %}<li><a href="{{ site.data.social.letterboxd }}">Letterboxd</a></li>{% endif %}
+      {% if site.data.social.youtube %}<li><a href="{{ site.data.social.youtube }}">YouTube</a></li>{% endif %}
+    </ul>
+  </div>
+</div>
+
+{% when "blog-home" %}
+{% include all-entries.html %}
+{% assign year_groups = all_entries | group_by_exp: "entry", "entry.date | date: '%Y'" %}
+{% assign all_tags_flat = all_entries | map: "tags" | join: "," | split: "," %}
+{% assign tag_groups = all_tags_flat | group_by_exp: "t", "t" | sort: "name" %}
+<div class="drawer" aria-label="Tags and timeline">
+  <button class="drawer-close" data-action="close-drawer" aria-label="Close">&times;</button>
+  <div class="drawer-section drawer-section-tags">
+    <div class="post-filter" role="group" aria-label="Filter posts">
+      <button type="button" data-filter="all" aria-pressed="true">All</button>
+      <button type="button" data-filter="collection" aria-pressed="false">Collections</button>
+      <button type="button" data-filter="page" aria-pressed="false">Pages</button>
+    </div>
+    <h2 style="font-family:var(--font-sans);font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.7rem;">Tags</h2>
+    <ul class="tag-cloud">
+      {% for g in tag_groups %}
+        <li><a href="{{ g.name | slugify | prepend: '/blog/tag/' | append: '/' | relative_url }}">{{ g.name | capitalize }}</a><span class="tag-count">{{ g.items.size }}</span></li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="drawer-section drawer-section-timeline">
+    <h2 style="font-family:var(--font-sans);font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.7rem;">Timeline</h2>
+    <ul class="timeline">
+      {% for group in year_groups %}<li><a href="#y{{ group.name }}">{{ group.name }}</a></li>{% endfor %}
+    </ul>
+  </div>
+</div>
+
+{% when "book" %}
+<div class="drawer" aria-label="Contents">
+  <button class="drawer-close" data-action="close-drawer" aria-label="Close">&times;</button>
+  <div class="drawer-section">
+    <h2 style="font-family:var(--font-sans);font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.7rem;">{{ page.book_title }}</h2>
+    {% assign book_slug = page.book_slug %}
+    {% include book-toc.html %}
+  </div>
+</div>
+
+{% endcase %}

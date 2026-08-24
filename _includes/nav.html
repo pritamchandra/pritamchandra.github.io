@@ -1,0 +1,43 @@
+{% comment %}
+  One shared nav bar for every page. What differs per page type (per
+  CLAUDE.md §4): whether the sidebar-toggle hamburger is shown at all
+  (only on pages that have a sidebar/drawer), where the site name links
+  to, and what the one cross-link says/points to.
+{% endcomment %}
+{% case page.layout %}
+  {% when "home" %}
+    {% assign show_toggle = true %}
+    {% assign sitename_href = "/" | relative_url %}
+    {% assign cross_text = "Blog" %}
+    {% assign cross_href = "/blog/" | relative_url %}
+  {% when "blog-home" %}
+    {% assign show_toggle = true %}
+    {% assign sitename_href = "/blog/" | relative_url %}
+    {% assign cross_text = "Website" %}
+    {% assign cross_href = "/" | relative_url %}
+  {% when "book" %}
+    {% assign show_toggle = true %}
+    {% assign sitename_href = "/blog/" | relative_url %}
+    {% assign cross_text = "All posts" %}
+    {% assign cross_href = "/blog/" | relative_url %}
+  {% else %}
+    {% assign show_toggle = false %}
+    {% assign sitename_href = "/blog/" | relative_url %}
+    {% assign cross_text = "All posts" %}
+    {% assign cross_href = "/blog/" | relative_url %}
+{% endcase %}
+<nav class="sitenav" aria-label="Site">
+  <div class="nav-cluster">
+    {% if show_toggle %}<button class="nav-btn icon-btn" data-action="toggle-sidebars" aria-pressed="false" title="Show or hide the sidebars">&#9776;</button>{% endif %}
+    <a class="nav-sitename" href="{{ sitename_href }}"><span class="full">Pritam Chandra</span><span class="short">PC</span></a>
+    <span class="nav-spacer"></span>
+    <a class="nav-link" href="{{ cross_href }}">{{ cross_text }}</a>
+    <div class="nav-tools">
+      <div class="size-ctl" role="group" aria-label="Text size">
+        <button class="nav-btn" data-action="size-dec" aria-label="Decrease text size">&minus;</button>
+        <button class="nav-btn" data-action="size-inc" aria-label="Increase text size">&plus;</button>
+      </div>
+      <button class="nav-btn icon-btn" data-action="toggle-theme" title="Toggle dark mode" aria-label="Toggle dark mode">&#9728;</button>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,12 @@
+{% comment %}
+  Native <audio> player, boxed — no custom player, per CLAUDE.md §4.
+  Usage: {% include audio-player.html src=page.audio duration=page.audio_duration instruments=page.audio_instruments caption=page.audio_caption %}
+{% endcomment %}
+<div class="player">
+  <div class="player-label"><span>Recording</span><span>{{ include.duration }} &middot; {{ include.instruments }}</span></div>
+  <audio controls preload="none">
+    <source src="{{ include.src | relative_url }}" type="audio/mp4">
+    Your browser does not support the audio element &mdash; <a href="{{ include.src | relative_url }}">download the recording</a> instead.
+  </audio>
+  <p class="player-caption">{{ include.caption }} <code>{{ include.src }}</code></p>
+</div>

@@ -1,0 +1,24 @@
+# Preprints & Working Papers, shown on the portfolio page.
+- year: 2026
+  title: "Eigenvalue Inequalities for Some Matrix Means"
+  authors: "Rajendra Bhatia, <strong>Pritam Chandra</strong>"
+  venue: "In submission at Acta Scientiarum Mathematicarum"
+  link: null  # TODO: Pritam — add the preprint link when available
+
+- year: 2026
+  title: "An Elementary Introduction to Smoothing Parameter Bounds"
+  authors: "<strong>Pritam Chandra</strong>"
+  venue: "Manuscript in preparation for the Cryptology ePrint Archive"
+  link: "/blog/2026/07/07/operator-fidelity-qpower-means/"  # links to the real math sample post on this site
+
+- year: 2025
+  title: "An Exposition on Fast Fourier Orthogonalization"
+  authors: "<strong>Pritam Chandra</strong>"
+  venue: "Manuscript in preparation for the Cryptology ePrint Archive"
+  link: null  # TODO: Pritam — add the preprint link when available
+
+- year: 2024
+  title: "Towards Analyzing Self-Attention via Linear Neural Networks"
+  authors: "<strong>Pritam Chandra</strong>, Ankit Garg, Neeraj Kayal, Kunal Mittal, Tanmay Sinha"
+  venue: "Under revision for the International Conference on Learning Representations (ICLR)"
+  link: null  # TODO: Pritam — add the preprint link when available

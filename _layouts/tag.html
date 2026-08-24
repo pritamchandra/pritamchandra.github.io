@@ -1,0 +1,30 @@
+---
+layout: default
+---
+<div class="cluster" style="padding-top: 2.6rem;">
+  <main class="prose" style="max-width: var(--content-width); margin: 0 auto;" id="main">
+
+    <header class="entry-head">
+      <h1>Tag: {{ page.tag | capitalize }}</h1>
+      <hr class="rule" style="margin-top:1em;">
+    </header>
+
+    {% include all-entries.html %}
+    {% assign matching = all_entries | where_exp: "e", "e.tags contains page.tag" %}
+    {% if matching.size == 0 %}
+      <p>Nothing tagged &ldquo;{{ page.tag }}&rdquo; yet.</p>
+    {% endif %}
+    {% for entry in matching %}
+      {% assign kind = "page" %}
+      {% if entry.layout == "book" %}{% assign kind = "collection" %}{% endif %}
+      <article class="post-entry">
+        <h2><a href="{{ entry.url | relative_url }}">{{ entry.title }}</a></h2>
+        <p class="entry-meta"><span class="entry-kind">{% if kind == "collection" %}Collection{% else %}Page{% endif %}</span><span class="tags">{% for t in entry.tags %}<a class="tag" href="{{ t | slugify | prepend: '/blog/tag/' | append: '/' | relative_url }}">{{ t }}</a>{% endfor %}</span> &middot; {{ entry.date | date: "%B %Y" }}</p>
+        <p class="entry-preview">{{ entry.preview }}</p>
+      </article>
+      {% unless forloop.last %}<hr class="rule">{% endunless %}
+    {% endfor %}
+
+    {% include footer.html %}
+  </main>
+</div>

@@ -1,0 +1,52 @@
+# Pritam Chandra — site configuration
+# Plain-English notes are in EDITING-GUIDE.md; this file is the technical
+# settings Jekyll reads on every build. See CLAUDE.md for the full spec.
+
+title: Pritam Chandra
+description: "Personal academic homepage of Pritam Chandra: mathematician working in matrix analysis and post-quantum cryptography."
+author: Pritam Chandra
+email: pritamchandra18@gmail.com
+
+# This repo is served at the account's root Pages address (pritamchandra.github.io),
+# so baseurl is deliberately empty — no sub-path. If a custom domain is added
+# later, update `url` here (and add a CNAME file) rather than baseurl.
+url: "https://pritamchandra.github.io"
+baseurl: ""
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+
+permalink: /blog/:year/:month/:day/:title/
+
+collections:
+  books:
+    output: false   # subchapters render only as part of the combined book
+                     # page (_layouts/book.html), never as their own URL
+
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+  - scope:
+      path: ""
+      type: "books"
+    values:
+      layout: "none"
+
+exclude:
+  - mockups/
+  - CLAUDE.md
+  - EDITING-GUIDE.md
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - node_modules/
+  - "*.log"
+
+# No GitHub Actions build and no Jekyll plugins beyond what GitHub Pages
+# ships by default — everything here (collections, where/sort/group_by,
+# date filters) is stock Jekyll/Liquid. See CLAUDE.md §1 for why.

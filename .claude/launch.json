@@ -1,0 +1,9 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "jekyll-site",
+      "url": "http://127.0.0.1:4000"
+    }
+  ]
+}

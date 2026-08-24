@@ -1,0 +1,29 @@
+{% comment %}
+  Renders the point-numbered table of contents for one book (e.g.
+  Confessions) — used identically by the static left sidebar and the
+  drawer copy on a book/collection page. Expects `book_slug` to be set
+  by the includer.
+  Chapter numbers/titles come from the book's own chapter data file
+  (_data/books/<slug>-chapters.yml — see CLAUDE.md §10.4), subchapter
+  titles/anchors come from the _books collection itself.
+{% endcomment %}
+{% assign chapters_data_key = book_slug | append: "-chapters" %}
+{% assign chapters_data = site.data.books[chapters_data_key].chapters %}
+{% assign subchapters = site.books | where: "book", book_slug | sort: "order" %}
+<div class="book-toc">
+  <ul>
+    {% for ch in chapters_data %}
+      <li>
+        <a href="#{{ ch.id }}"><span class="chapter-num">{{ ch.number }}</span><span class="chapter-title">{{ ch.title }}</span></a>
+        {% assign ch_subs = subchapters | where: "chapter", ch.number %}
+        {% if ch_subs.size > 0 %}
+        <ul class="toc-sub">
+          {% for sub in ch_subs %}
+            <li><a href="#{{ sub.slug }}"><span class="chapter-num">{{ ch.number }}.{{ sub.chapter_order }}</span><span class="chapter-title">{{ sub.title }}</span></a></li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+</div>

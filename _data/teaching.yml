@@ -1,0 +1,24 @@
+# Teaching Experience table, shown on the portfolio page.
+# Three columns only (Year, Course, Instructor) — deliberately kept simple
+# at every screen width, see CLAUDE.md §4.
+- year: 2026
+  course: "Probability and Statistics"
+  instructor: "Abhishek Khetan"
+- year: 2025
+  course: "Topics in Matrix Analysis"
+  instructor: "Rajendra Bhatia"
+- year: 2025
+  course: "Matrix Analysis"
+  instructor: "Rajendra Bhatia"
+- year: 2021
+  course: "Matrix Analysis"
+  instructor: "Rajendra Bhatia"
+- year: 2020
+  course: "Algorithm Design and Analysis"
+  instructor: "Subhash Bhalla"
+- year: 2020
+  course: "Linear Algebra"
+  instructor: "Kumarjit Saha"
+- year: 2019
+  course: "Discrete Mathematics"
+  instructor: "Goutam Paul"

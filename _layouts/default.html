@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% if page.layout == "home" %}Pritam Chandra — Mathematics{% else %}{{ page.title | strip_html }} — Pritam Chandra{% endif %}</title>
+<meta name="description" content="{{ page.description }}">
+<link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="drawer-scrim" data-action="close-drawer"></div>
+{% include nav.html %}
+{% include drawer.html %}
+{{ content }}
+<script src="{{ '/assets/js/main.js' | relative_url }}"></script>
+</body>
+</html>

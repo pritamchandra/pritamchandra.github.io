@@ -1,0 +1,13 @@
+{% comment %}
+  Included from inside each layout's own <main>...</main>, as its last
+  child — never once from default.html, since each layout's <main> closes
+  in a different place/structure (see CLAUDE.md §12). Every page except
+  the portfolio home also gets the "Jesu Juva" line.
+{% endcomment %}
+<footer class="sitefoot">
+  {% if page.layout == "home" %}
+  <p>&copy; 2026 Pritam Chandra.</p>
+  {% else %}
+  <p>&copy; 2026 Pritam Chandra. <em>Jesu Juva</em></p>
+  {% endif %}
+</footer>

@@ -1,0 +1,61 @@
+---
+layout: default
+---
+<div class="cluster" style="padding-top: 2.6rem;">
+  <div class="layout-2col">
+
+    <aside class="col-sidebar col-left sidebar-sticky">
+      <h2>Contents</h2>
+      {% assign book_slug = page.book_slug %}
+      {% include book-toc.html %}
+    </aside>
+
+    <main class="col-content prose" id="main">
+      <header class="entry-head">
+        <h1>{{ page.book_title }}</h1>
+        <p class="entry-meta">{{ page.subtitle }}</p>
+        <div class="tags">{% for t in page.tags %}<a class="tag" href="{{ t | slugify | prepend: '/blog/tag/' | append: '/' | relative_url }}">{{ t }}</a>{% endfor %}</div>
+        <hr class="rule" style="margin-top:1em;">
+      </header>
+
+      {% if page.note %}<p class="book-note">{{ page.note }}</p>{% endif %}
+
+      {{ content }}
+
+      {% assign chapters_data_key = page.book_slug | append: "-chapters" %}
+      {% assign chapters_data = site.data.books[chapters_data_key].chapters %}
+      {% assign subchapters = site.books | where: "book", page.book_slug | sort: "order" %}
+      {% for ch in chapters_data %}
+        {% assign ch_subs = subchapters | where: "chapter", ch.number %}
+        <section class="chapter" id="{{ ch.id }}">
+          <header class="chapter-head">
+            <span class="chapter-num">{{ ch.number }}</span>
+            <h2>{{ ch.title }}</h2>
+          </header>
+          {% if ch.intro %}<p class="chapter-intro">{{ ch.intro }}</p>{% endif %}
+
+          {% for sub in ch_subs %}
+            <section class="subchapter" id="{{ sub.slug }}">
+              <header class="subchapter-head">
+                <span class="subchapter-num">{{ ch.number }}.{{ sub.chapter_order }}</span>
+                <h3>{{ sub.title }}</h3>
+              </header>
+              {% if sub.epigraph %}
+              <div class="epigraph">
+                <p>&ldquo;{{ sub.epigraph.text }}&rdquo;</p>
+                <cite>{{ sub.epigraph.cite }}</cite>
+              </div>
+              {% endif %}
+              {{ sub.content }}
+              {% if sub.gloss %}<p class="chapter-gloss">{{ sub.gloss }}</p>{% endif %}
+            </section>
+            {% unless forloop.last %}<hr class="rule chapter-divider">{% endunless %}
+          {% endfor %}
+        </section>
+      {% endfor %}
+
+      {% include footer.html %}
+    </main>
+
+  </div>
+</div>

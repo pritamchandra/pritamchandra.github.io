@@ -1,0 +1,9 @@
+{% comment %}
+  Every "page kind" entry (ordinary posts) and "collection kind" entry
+  (a book's own index page), merged into one timeline sorted newest first.
+  Shared by the blog home and the tag archive pages. Jekyll shares Liquid
+  variable scope across `include` (unlike `render`), so `all_entries` is
+  available in whatever template includes this.
+{% endcomment %}
+{% assign book_pages = site.pages | where: "layout", "book" %}
+{% assign all_entries = site.posts | concat: book_pages | sort: "date" | reverse %}

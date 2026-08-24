@@ -1,0 +1,15 @@
+# Journal Publications, shown on the portfolio page.
+# Each entry is one block. To add a new one, copy a block and fill it in —
+# `link` can be left out (or set to null) until you have a real URL, and
+# the page will just show the title as plain text instead of a dead link.
+- year: 2026
+  title: "Cartesian Decomposition and Schatten Norms: On the Sharpness of Some Inequalities of Bhatia and Zhan"
+  authors: "<strong>Pritam Chandra</strong>"
+  venue: "Indian Journal of Pure and Applied Mathematics"
+  link: null  # TODO: Pritam — add the PDF/journal link when available
+
+- year: 2024
+  title: "Learning Arithmetic Formulas in the Presence of Noise: A General Framework and Applications to Unsupervised Learning"
+  authors: "<strong>Pritam Chandra</strong>, Ankit Garg, Neeraj Kayal, Kunal Mittal, Tanmay Sinha"
+  venue: "Innovations in Theoretical Computer Science (ITCS)"
+  link: null  # TODO: Pritam — add the PDF/journal link when available

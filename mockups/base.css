@@ -1,0 +1,624 @@
+/* ==========================================================================
+   PRITAM CHANDRA — SITE DESIGN SYSTEM
+   Shared design tokens + base styles for all pages.
+   See CLAUDE.md for full documentation of every decision made here.
+   ========================================================================== */
+
+/* ---- Fonts (Google Fonts — self-host these three families in production) */
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root{
+  /* --- typography --- */
+  --font-serif: 'Source Serif 4', 'Iowan Old Style', 'Palatino Linotype', Georgia, Cambria, 'Times New Roman', serif;
+  --font-sans: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+
+  --step-0: 1rem;          /* 18px base */
+  --step-1: 1.15rem;
+  --step-2: 1.35rem;
+  --step-3: 1.75rem;
+  --step-4: 2.15rem;
+  --step-mini: 0.82rem;
+
+  --leading: 1.7;
+  --leading-tight: 1.3;
+
+  /* --- layout --- */
+  --content-width: 640px;
+  --sidebar-width: 232px;
+  --sidebar-width-right: 168px;
+  --cluster-max: 1240px;
+  --gap: 2.75rem;
+  --gap-sm: 1.75rem;
+
+  --bp-tablet: 1000px;
+  --bp-mobile: 700px;
+
+  --radius: 2px; /* almost-sharp corners everywhere: primitive, not "app-like" */
+
+  /* --- LIGHT palette --- */
+  --bg: #faf7ee;
+  --bg-raised: #f2ecdc;
+  --bg-inset: #ece4cf;
+  --text: #1e1c15;
+  --text-muted: #6d6653;
+  --text-faint: #928a72;
+  --border: #d9d0b4;
+  --border-strong: #b7a97e;
+  --link: #1a4e93;
+  --link-visited: #6a3f96;
+  --accent: #7c3626;
+  --accent-2: #3c6349;
+  --shadow: rgba(30, 28, 21, 0.08);
+  --rule: #c8bd98;
+  --selection-bg: #d9cd9d;
+}
+
+:root{ color-scheme: light; }
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --bg: #171612;
+  --bg-raised: #201e18;
+  --bg-inset: #262319;
+  --text: #e9e2cd;
+  --text-muted: #a89c7c;
+  --text-faint: #7c7259;
+  --border: #3a3527;
+  --border-strong: #56503a;
+  --link: #82aee0;
+  --link-visited: #c19fe0;
+  --accent: #d18f74;
+  --accent-2: #82bb98;
+  --shadow: rgba(0, 0, 0, 0.35);
+  --rule: #47412e;
+  --selection-bg: #4a4429;
+}
+
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --bg: #171612;
+    --bg-raised: #201e18;
+    --bg-inset: #262319;
+    --text: #e9e2cd;
+    --text-muted: #a89c7c;
+    --text-faint: #7c7259;
+    --border: #3a3527;
+    --border-strong: #56503a;
+    --link: #82aee0;
+    --link-visited: #c19fe0;
+    --accent: #d18f74;
+    --accent-2: #82bb98;
+    --shadow: rgba(0, 0, 0, 0.35);
+    --rule: #47412e;
+    --selection-bg: #4a4429;
+  }
+}
+
+/* ---- reset -------------------------------------------------------------- */
+/* KaTeX's internal layout (matrices, vlists, delimiter scaling) depends on
+   the browser default box-sizing (content-box) for its own elements — a
+   universal border-box reset silently collapses matrix rows to one line
+   and misaligns stacked fractions/delimiters. Excluding .katex is required,
+   not optional. */
+*, *::before, *::after{ box-sizing: border-box; }
+.katex, .katex *{ box-sizing: content-box; }
+
+/* A display equation wider than the content column (very common on narrow
+   screens; not rare on desktop either, for a long inequality chain) must
+   never be allowed to widen the page itself — that's what makes a mobile
+   page feel "wobbly" (the whole viewport gains horizontal scroll because
+   one equation bled past its container). Instead, each .katex-display
+   becomes its own small horizontally-scrollable strip, contained to the
+   width of whatever holds it, starting from the equation's true LEFT
+   edge, with the rest reachable by scrolling right.
+   A first attempt at this used `display: flex; justify-content: center`
+   on .katex-display instead of KaTeX's own `text-align: center`, on the
+   theory that flexbox centering computes scrollable overflow correctly
+   on both sides where text-align doesn't. That's true, but it broke two
+   things at once, both from the same cause: making .katex a flex item
+   changed its WIDTH from "100% of .katex-display" (its normal block
+   behavior) to shrink-to-fit its own content. That shrink-to-fit width
+   is exactly what .katex-html (KaTeX's own nested block, also 100% of
+   ITS parent) then matched — and since KaTeX positions the \tag{} number
+   at `right: 0` of .katex-html, the number's "right edge of the
+   container" collapsed down to "right edge of the equation's own tight
+   box," landing the absolutely-positioned tag directly on top of the
+   equation's last few characters instead of out at the margin. Confirmed
+   by inspecting a real numbered equation at 390px: .katex-html's box
+   shrank to exactly the equation's own ~288px, and the tag's rect
+   (318–350px) overlapped the tail of that same box. Separately, the
+   *centering itself* also didn't scroll the way it needed to: the
+   default (unscrolled) position of a flex `justify-content: center`
+   overflow container shows the CENTERED view, with the equation's true
+   left edge already scrolled past and unreachable (scrollLeft can't go
+   negative) — exactly the "left side is cut off by default" bug this
+   was supposed to prevent, just relocated rather than fixed.
+   The actual fix doesn't use flexbox, and doesn't try to keep the
+   equation centered at all: it left-aligns the equation instead (the
+   same "fleqn" convention KaTeX itself ships a variant for — see
+   `.katex-display.fleqn` a few lines up in katex.css — not an
+   improvised hack). Left-aligned content that overflows only ever
+   overflows to the RIGHT, which plain `overflow-x: auto` has always
+   handled correctly and natively, no flexbox trick required: the
+   default scroll position already shows the equation's true left edge,
+   and scrolling right reveals the rest. This is a genuine visual change
+   from centered display equations to left-aligned ones (a deliberate,
+   named typesetting style, not a compromise) — don't try to restore
+   centering without re-solving both bugs above; they came directly from
+   the centering mechanism.
+
+   A second, separate bug survived this fix, only visible on a numbered
+   equation that is ALSO wide enough to overflow (e.g. a three-line
+   inequality with a \tag{}). Plain block .katex/.katex-html are always
+   exactly 100% of .katex-display's width — normal block behavior — no
+   matter how wide their (nowrap, so non-reflowing) inline content
+   actually renders; the content simply paints past the box's own edge
+   when it's wider than that 100%. KaTeX's \tag{} is `position: absolute;
+   right: 0` against .katex-html's box, i.e. pinned to the container's
+   right margin — which is exactly what you want when the equation FITS
+   (the number sits out at the margin, clear of the shorter left-aligned
+   content, the classic numbered-equation look) but is exactly wrong when
+   the equation OVERFLOWS: the container's right margin then falls
+   somewhere in the *middle* of the still-overflowing glyphs, not past
+   their end, so the tag lands directly on top of the equation's tail.
+   Confirmed on a real \tag{3} at 390px: content rendered to ~352.8px,
+   container was 324px, and the tag's box (336.65–368.4px) sat on top of
+   the last few characters.
+   The fix is to let .katex's width grow to whichever is larger of "the
+   container" or "the content's own natural width" — `width: max-content`
+   (shrink/grow to fit the nowrap content exactly) floored by `min-width:
+   100%` (never smaller than the container). A short equation is
+   unaffected (max-content < container, so min-width wins, width stays
+   100%, tag stays pinned at the margin as before). A long equation grows
+   the box to match its true rendered width, so \tag{}'s `right: 0` now
+   sits at the actual end of the content instead of the container's
+   fixed edge — scrollable together with the equation, inside the
+   horizontal strip, at its right end, exactly as spec'd ("the number
+   should be inside that space at the right end"). Apply this to .katex,
+   not .katex-html — .katex-html is a plain width:auto block inside it
+   and inherits whichever width .katex resolves to. */
+.katex-display{
+  overflow-x: auto; overflow-y: hidden;
+}
+.katex-display > .katex{
+  text-align: left;
+  width: max-content;
+  min-width: 100%;
+}
+/* The width:max-content fix above only grows .katex when the browser
+   already considers the equation's own natural width wider than the
+   column — but \tag{} is `position:absolute`, so it never occupies space
+   in that natural-width calculation at all. An equation whose glyphs
+   alone are, say, 95% of the column width "fits" by that measure, yet
+   still collides with the number sitting at the column's right margin,
+   because the tag and the tail of the equation are then fighting for the
+   same few pixels. Confirmed on \tag{3}: glyphs rendered to 308px inside
+   a 324px column (comfortably "non-overflowing"), but the tag itself is
+   ~32px wide and anchored flush with that same 324px edge — so its left
+   edge (at 324-32=292px) landed 16px inside the glyphs' own span.
+   Reserving padding-right on .katex-html, scoped to only equations that
+   actually have a .tag, fixes this — not by physically shifting where
+   the glyphs paint (nowrap inline content ignores padding; it isn't
+   wrap-constrained by it), but by inflating .katex-html's own preferred
+   (max-content) width, which is what the width:max-content rule above
+   measures on its parent .katex. Once glyphs + this reserved padding
+   together exceed the column width, .katex genuinely grows to fit both
+   — pulling .katex-html's right edge (where \tag{}'s `right:0` anchors)
+   out past the padding, clear of the glyphs, with the reserved gap
+   landing exactly between them. Equations with room to spare are
+   unaffected (still pinned at the margin, per the base rule above); a
+   near-full-width equation gets nudged into the horizontally-scrollable
+   state instead of overlapping — matching the spec that a numbered
+   equation's tag belongs "inside that [scrollable] space, at the right
+   end." Needs `:has()` (Safari 15.4+ / Chrome 105+ / Firefox 121+, fine
+   for this audience); a browser without it just skips the padding, so
+   the worst case there is the pre-existing exact-collision, not a new
+   one. */
+.katex-display:has(.tag) .katex-html{
+  padding-right: 2.6em;
+}
+html{ -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-behavior: smooth; }
+body{ margin: 0; }
+img, svg, audio, video{ max-width: 100%; }
+h1,h2,h3,h4,p,ul,ol,dl,figure,blockquote{ margin: 0; }
+a{ color: var(--link); }
+a:visited{ color: var(--link-visited); }
+::selection{ background: var(--selection-bg); }
+
+/* ---- base document -------------------------------------------------------- */
+body{
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-serif);
+  font-size: var(--step-0);
+  line-height: var(--leading);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color .2s ease, color .2s ease;
+}
+
+p{ margin: 0 0 1.15em; }
+p:last-child{ margin-bottom: 0; }
+
+h1,h2,h3,h4{
+  font-family: var(--font-serif);
+  font-weight: 600;
+  line-height: var(--leading-tight);
+  color: var(--text);
+}
+
+a{ text-decoration: underline; text-decoration-color: var(--border-strong); text-underline-offset: 2px; }
+a:hover{ text-decoration-color: currentColor; }
+
+/* thin horizontal rule — the single recurring "old internet" motif */
+.rule{ border: none; border-top: 1px solid var(--rule); margin: 0; }
+
+/* ---- top navigation bar -------------------------------------------------- */
+.sitenav{
+  position: sticky; top: 0; z-index: 40;
+  display: flex; align-items: center; gap: 1.1rem;
+  height: 52px;
+  padding: 0 1.25rem;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-sans);
+  transform: translateY(0);
+  transition: transform .25s ease, background-color .2s ease;
+}
+.sitenav.is-hidden{ transform: translateY(-100%); }
+
+.sitenav .nav-cluster{ max-width: var(--cluster-max); margin: 0 auto; width: 100%; display: flex; align-items: center; gap: 1.1rem; }
+
+.nav-btn{
+  appearance: none; border: 1px solid var(--border-strong); background: var(--bg-raised);
+  color: var(--text); font-family: var(--font-sans); font-size: .82rem;
+  padding: .32rem .65rem; border-radius: var(--radius); cursor: pointer;
+  line-height: 1; letter-spacing: .02em;
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 2.1rem; min-height: 2.1rem;
+}
+.nav-btn:hover{ background: var(--bg-inset); }
+.nav-btn[aria-pressed="true"]{ background: var(--bg-inset); border-color: var(--text-faint); }
+.nav-btn svg{ width: 1.05em; height: 1.05em; display:block; }
+
+/* icon-only theme toggle */
+.icon-btn{ font-size: 1rem; padding: .32rem; }
+
+/* text-size control: one segmented "−  +" pair instead of a discrete cycle */
+.size-ctl{ display:flex; border: 1px solid var(--border-strong); border-radius: var(--radius); overflow: hidden; }
+.size-ctl .nav-btn{ border: none; border-radius: 0; min-width: 2rem; }
+.size-ctl .nav-btn + .nav-btn{ border-left: 1px solid var(--border-strong); }
+.size-ctl .nav-btn:disabled{ opacity: .35; cursor: default; }
+.size-ctl .nav-btn:disabled:hover{ background: var(--bg-raised); }
+
+.nav-sitename{
+  font-family: var(--font-serif); font-weight: 600; font-size: 1.02rem;
+  text-decoration: none; color: var(--text); white-space: nowrap;
+}
+.nav-sitename .short{ display: none; }
+
+.nav-spacer{ flex: 1 1 auto; }
+.nav-link{ font-size: .88rem; text-decoration: none; color: var(--text); border-bottom: 1px solid var(--border-strong); white-space: nowrap; }
+.nav-link:hover{ border-color: currentColor; }
+
+.nav-tools{ display:flex; align-items:center; gap:.5rem; }
+
+/* Below ~480px, even the decluttered nav gets tight — collapse the site
+   name to initials. Every page follows this same rule (see CLAUDE.md). */
+@media (max-width: 480px){
+  .nav-sitename .full{ display: none; }
+  .nav-sitename .short{ display: inline; }
+  .sitenav .nav-cluster{ gap: .6rem; }
+  .sitenav{ padding: 0 .85rem; }
+}
+
+/* ---- page cluster / 3-column grid --------------------------------------- */
+.cluster{
+  max-width: var(--cluster-max);
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+.layout-3col{
+  display: grid;
+  grid-template-columns: var(--sidebar-width) minmax(0, 1fr) var(--sidebar-width-right);
+  column-gap: var(--gap);
+  align-items: start;
+}
+.layout-3col > .col-left{ grid-column: 1; grid-row: 1; }
+.layout-3col > .col-content{ grid-column: 2; grid-row: 1; }
+.layout-3col > .col-right{ grid-column: 3; grid-row: 1; }
+/* .col-left and .col-right are wrapped in a single .col-sidebar-wrap in
+   the markup (see portfolio-body.html / blog-body.html) purely so that,
+   below the 1000px breakpoint, the two can be merged into one ordinary
+   stacked block — see that breakpoint below for why. At this full
+   3-column width the wrapper must not exist as a box at all: `contents`
+   removes it from rendering and promotes col-left/col-right back to
+   being independent grid items in their own columns, exactly as if the
+   wrapper weren't there. */
+.layout-3col > .col-sidebar-wrap{ display: contents; }
+
+.layout-2col{
+  display: grid;
+  grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+  column-gap: var(--gap);
+  align-items: start;
+}
+
+.col-content{ min-width: 0; max-width: var(--content-width); }
+.col-sidebar{ min-width: 0; font-family: var(--font-sans); font-size: .86rem; }
+.col-sidebar h2{ font-family: var(--font-sans); font-size: .74rem; text-transform: uppercase; letter-spacing: .08em; color: var(--text-muted); font-weight: 600; margin-bottom: .6rem; }
+
+/* Sticky sidebars scroll within themselves once their content exceeds the
+   viewport (max-height + overflow-y), but the scrollbar itself is hidden
+   — the sidebar should still be able to scroll internally (e.g. a long
+   Contents list on a book page, or Tags+Timeline together once merged),
+   just without a visible scroll track competing with the page's own.
+   Three rules for cross-browser coverage (Firefox / older Edge / WebKit
+   &amp; Chromium) — content still scrolls via wheel/touch/keyboard, this
+   only suppresses the visual bar. */
+.sidebar-sticky{
+  position: sticky; top: 72px; max-height: calc(100vh - 90px); overflow-y: auto;
+  scrollbar-width: none; -ms-overflow-style: none;
+}
+.sidebar-sticky::-webkit-scrollbar{ display: none; }
+
+/* ---- prose ---------------------------------------------------------------- */
+.prose h1{ font-size: var(--step-4); margin-bottom: .5rem; }
+.prose h2{ font-size: var(--step-2); margin: 2.2em 0 .6em; padding-bottom: .35em; border-bottom: 1px solid var(--rule); }
+.prose h3{ font-size: var(--step-1); margin: 1.6em 0 .5em; font-style: italic; font-weight: 600; }
+.prose ul, .prose ol{ margin: 0 0 1.15em; padding-left: 1.4em; }
+.prose li{ margin-bottom: .35em; }
+.prose li:last-child{ margin-bottom: 0; }
+.prose strong{ font-weight: 700; }
+.prose em{ font-style: italic; }
+
+.prose blockquote{
+  margin: 1.6em 0;
+  padding: 0 3em;
+  font-style: oblique 10deg;
+  text-align: center;
+  color: var(--text-muted);
+}
+.prose blockquote cite{ display:block; margin-top:.6em; font-style: normal; font-family: var(--font-sans); font-size: .78rem; letter-spacing: .02em; }
+.prose blockquote cite::before{ content: "— "; }
+
+code, .mono{ font-family: var(--font-mono); font-size: .88em; }
+.prose code{ background: var(--bg-inset); padding: .1em .35em; border-radius: var(--radius); }
+.prose pre{ background: var(--bg-inset); border: 1px solid var(--border); padding: 1em 1.2em; overflow-x: auto; border-radius: var(--radius); margin: 1.3em 0; }
+.prose pre code{ background: none; padding: 0; }
+
+hr.divider{ border: none; text-align: center; margin: 2.6em auto; color: var(--text-faint); font-family: var(--font-sans); letter-spacing: .5em; }
+hr.divider::after{ content: "\2022 \2022 \2022"; }
+
+/* verse / lyrics — reused by collection pages and song posts */
+.verse{ font-size: 1.05em; white-space: pre-line; margin: 0 0 1.4em; }
+
+/* ---- tables (booktabs-style: horizontal rules only) ----------------------- */
+table{ border-collapse: collapse; width: 100%; margin: 1.4em 0; font-size: .92em; }
+caption{ text-align:left; font-family: var(--font-sans); font-size: .8rem; color: var(--text-muted); margin-bottom:.4em; }
+th, td{ text-align: left; padding: .5em .7em; border-bottom: 1px solid var(--border); vertical-align: top; }
+th{ font-family: var(--font-sans); font-weight: 600; font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; color: var(--text-muted); border-bottom: 2px solid var(--border-strong); }
+tbody tr:last-child td{ border-bottom: 2px solid var(--border-strong); }
+td:first-child, th:first-child{ padding-left: 0; }
+td:last-child, th:last-child{ padding-right: 0; }
+
+/* ---- theorem / lemma / proposition boxes (Tao-inspired) -------------------- */
+.thm{
+  margin: 1.6em 0;
+  padding: 1.05em 1.3em;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+}
+.thm-label{
+  font-family: var(--font-sans); font-weight: 600; font-size: .82rem;
+  text-transform: uppercase; letter-spacing: .05em; color: var(--accent);
+  margin-bottom: .4em; display:block;
+}
+.thm-body{ font-style: italic; }
+.thm-body p{ margin-bottom: .8em; }
+.proof{ margin: 1.2em 0 1.6em; padding-left: 1.3em; border-left: 2px solid var(--border); }
+.proof-label{ font-family: var(--font-sans); font-style: normal; font-weight: 600; font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; color: var(--text-muted); }
+.proof::after{ content: "\25A1"; float: right; margin-top: -1.4em; }
+
+/* ---- "primitive" callout boxes (quarto note/tip/warning, de-styled) --------- */
+.callout{
+  margin: 1.5em 0; border: 1px solid var(--border-strong); border-radius: var(--radius);
+}
+.callout-title{
+  font-family: var(--font-sans); font-weight: 700; font-size: .78rem; text-transform: uppercase;
+  letter-spacing: .06em; padding: .5em .9em; border-bottom: 1px solid var(--border-strong);
+  background: var(--bg-raised);
+}
+.callout-body{ padding: .9em .9em .95em; }
+.callout-body > *:last-child{ margin-bottom: 0; }
+.callout--note .callout-title{ color: var(--link); }
+.callout--warning .callout-title{ color: var(--accent); }
+.callout--tip .callout-title{ color: var(--accent-2); }
+
+/* ---- tags / pills ---------------------------------------------------------- */
+.tags{ display:flex; flex-wrap:wrap; gap:.45rem; font-family: var(--font-sans); }
+.tag{
+  display:inline-block; font-size: .74rem; letter-spacing:.02em; color: var(--text-muted);
+  border: 1px solid var(--border-strong); border-radius: var(--radius); padding: .12em .55em;
+  text-decoration: none; background: var(--bg-raised);
+}
+.tag:hover{ color: var(--text); border-color: var(--text-faint); }
+
+/* ---- post/article header (Tao-style) ---------------------------------------- */
+.entry-head{ margin-bottom: 2.2em; }
+.entry-head h1{ margin-bottom: .5rem; }
+.entry-meta{ font-family: var(--font-sans); font-size: .82rem; color: var(--text-muted); margin-bottom: .9em; }
+.entry-head .rule{ margin: 1em 0; }
+
+/* ---- footer ------------------------------------------------------------------ */
+/* Lives inside <main class="col-content">/<main class="prose"> (last child,
+   right before </main>), NOT as a sibling of .cluster/.layout-3col — so
+   its box, its rule, and its centering are all scoped to the main
+   content column's own width, same as everything else in the prose.
+   The sidebars simply end wherever their own content ends; they never
+   had a footer and still don't. No horizontal padding here (unlike most
+   other blocks with their own inset) — the point is that this rule
+   lines up flush with the rest of the prose, exactly like `hr.rule`
+   does, not indented further in from it. */
+.sitefoot{
+  margin-top: 4rem; padding: 1.6rem 0 3rem; border-top: 1px solid var(--border);
+  font-family: var(--font-sans); font-size: .8rem; color: var(--text-muted); text-align: center;
+}
+
+/* ---- utility toggle panel / off-canvas drawer -------------------------------- */
+.drawer-scrim{
+  position: fixed; inset: 0; background: rgba(20,18,12,.35); opacity: 0; pointer-events: none;
+  transition: opacity .2s ease; z-index: 45;
+}
+html.drawer-open .drawer-scrim{ opacity: 1; pointer-events: auto; }
+
+.drawer{
+  position: fixed; top: 0; bottom: 0; left: 0; width: min(300px, 84vw);
+  background: var(--bg); border-right: 1px solid var(--border);
+  transform: translateX(-100%); transition: transform .25s ease;
+  z-index: 46; overflow-y: auto; padding: 1.1rem 1.25rem 2rem;
+  font-family: var(--font-sans);
+}
+html.drawer-open .drawer{ transform: translateX(0); }
+.drawer-close{ float:right; background:none; border:none; font-size:1.1rem; color:var(--text-muted); cursor:pointer; }
+.drawer-section + .drawer-section{ margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+
+/* ---- skip link ---------------------------------------------------------------- */
+.skip-link{
+  position: absolute; left: -999px; top: 0; z-index: 100;
+  background: var(--text); color: var(--bg); padding: .6em 1em; font-family: var(--font-sans); font-size: .85rem;
+}
+.skip-link:focus{ left: 1rem; top: .5rem; }
+
+/* ---- manual "hide sidebars" toggle (works at any breakpoint) ------------------ */
+/* Deliberately does NOT touch grid-template-columns by default: the
+   sidebar tracks keep their defined widths (blank), so at the full
+   3-column width hiding the sidebars must never move the text — it just
+   leaves a blank track on each side, and because those two gutters are
+   roughly balanced the content column still reads as centered. Below
+   1000px there's only ever ONE sidebar column left on screen (the right
+   sidebar has already merged into it, or — for .layout-2col pages —
+   there was only ever one column to begin with), so hiding it leaves a
+   single dead gap on the left only, with the content shoved off-center
+   to the right. That narrower case needs its own override, which
+   collapses the now-empty track and re-centers the content column
+   instead of leaving the gap: see the `html.sb-hidden .layout-2col`
+   rule right below for pages that are 2-column at every width ≥700px,
+   and the matching `html.sb-hidden .layout-3col` override inside the
+   1000px media query below for pages that are only 2-column in that
+   700–1000px band. */
+html.sb-hidden .col-sidebar{ display: none !important; }
+
+/* .layout-2col pages (the collection/book pages) never have a 3-column
+   state to preserve in the first place — sidebar+content is the only
+   arrangement they ever show at ≥700px — so this override is not scoped
+   to a breakpoint, it just always applies once sb-hidden is set. */
+html.sb-hidden .layout-2col{ grid-template-columns: minmax(0, 1fr); }
+/* Width is held to exactly what the content column already measured
+   before the sidebar was hidden (track-width-minus-sidebar-and-gap,
+   the same arithmetic the two-column grid was doing), not just capped
+   at the page's max content width — "keep the text width the same, but
+   center it" was explicit: the column must not visibly grow wider just
+   because the space opened up. */
+html.sb-hidden .layout-2col > .col-content{
+  width: calc(100% - var(--sidebar-width) - var(--gap));
+  max-width: var(--content-width);
+  margin-left: auto; margin-right: auto;
+}
+
+/* ================= RESPONSIVE ================================================ */
+/* One collapse point (1000px): the right sidebar stops sitting beside the
+   content and instead joins the bottom of the LEFT sidebar's own column
+   (same narrow width, stacked below it) — it does not become a full-width
+   section and does not go into the drawer yet. This is the same behavior
+   on every page that has a right sidebar (portfolio, blog home, ...). */
+@media (max-width: 1000px){
+  .layout-3col{
+    grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+  }
+  /* Why the wrapper exists at all: with .col-left and .col-right placed
+     as two separate grid rows in column 1 (row 1 and row 2) alongside
+     .col-content spanning both of those rows in column 2, CSS Grid sizes
+     each row track from the TALLEST item touching that row, across every
+     column — including the spanning content column. Because the content
+     column is far taller than the left sidebar, that inflated row 1 to
+     the content's own height and shoved .col-right (row 2) down to
+     wherever the content column happened to end, instead of right below
+     .col-left. No combination of row-gap/margin/padding values can fix
+     that: the row track itself was oversized. The fix is structural —
+     stop sharing rows with the content column at all. Here the wrapper
+     becomes a real box and is the SOLE occupant of column 1's one and
+     only row, so its height (and therefore where .col-right sits) is
+     governed purely by its own two children, never by the content
+     column's height. */
+  /* The wrapper itself is the sticky unit at this width — not the two
+     asides independently. An earlier draft made both col-left and
+     col-right (still each carrying .sidebar-sticky) plain static/
+     normal-flow here, on the theory that two *independently* sticky
+     panels stacked in one column would drift apart from each other as
+     the page scrolled — which is true, but the fix overcorrected: it
+     made the whole merged sidebar scroll away with the body instead,
+     when Pritam's intent was for the merged sidebar to behave exactly
+     like the ≥1000px sidebars do — pinned in place, scrolling only
+     within itself if it's taller than the viewport. Making the WRAPPER
+     sticky (one unit, both asides just sitting inside it in normal
+     flow) gets both things at once: nothing drifts apart, and the pair
+     stops scrolling with the body. */
+  .layout-3col > .col-sidebar-wrap{
+    display: block; grid-column: 1; grid-row: 1; min-width: 0;
+    position: sticky; top: 72px; max-height: calc(100vh - 90px); overflow-y: auto;
+    scrollbar-width: none; -ms-overflow-style: none;
+  }
+  .layout-3col > .col-sidebar-wrap::-webkit-scrollbar{ display: none; }
+  .layout-3col > .col-content{ grid-column: 2; grid-row: 1; }
+  /* Same gap as two stacked .drawer-section blocks (margin-top 2rem +
+     padding-top 1.5rem + a rule between) — so the transition from the
+     left sidebar's own content into the right sidebar's reads the same
+     way here as it does in the drawer, not as a bigger, separate gap. */
+  .col-sidebar-wrap > .col-right{
+    margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border);
+  }
+  /* col-left/col-right are no longer sticky as individuals — the
+     wrapper above is the one and only sticky/scrolling element now, so
+     neutralize their own .sidebar-sticky behavior to avoid a scroller-
+     inside-a-scroller. (Descendant selectors, not direct-child, since
+     col-left/col-right now sit one level deeper inside
+     .col-sidebar-wrap.) */
+  .layout-3col .col-left.sidebar-sticky,
+  .layout-3col .col-right.sidebar-sticky{
+    position: static; max-height: none; overflow: visible;
+  }
+  /* Below 1000px there's only the one merged sidebar column left (see
+     the long comment by `html.sb-hidden .col-sidebar` above) — hiding it
+     would otherwise leave .col-sidebar-wrap's now-empty track reserved
+     and blank, pushing .col-content off-center to the right. Collapse
+     that track and center the content column in the freed space instead. */
+  html.sb-hidden .layout-3col{ grid-template-columns: minmax(0, 1fr); }
+  /* Same "keep the width, just center it" rule as .layout-2col above —
+     see that rule's comment. */
+  html.sb-hidden .layout-3col > .col-content{
+    grid-column: 1;
+    width: calc(100% - var(--sidebar-width) - var(--gap));
+    max-width: var(--content-width);
+    margin-left: auto; margin-right: auto;
+  }
+}
+
+/* A second collapse point (700px): both sidebars (now stacked together in
+   one column) move into the off-canvas drawer, and the wide desktop
+   margins give way to standard mobile margins. */
+@media (max-width: 700px){
+  :root{ --content-width: 100%; --gap: 1.25rem; }
+  .layout-3col, .layout-2col{ grid-template-columns: minmax(0,1fr); row-gap: 0; }
+  .layout-3col > .col-left, .layout-3col > .col-right,
+  .layout-3col > .col-sidebar-wrap, .layout-2col > .col-sidebar{ display: none; }
+  .layout-3col > .col-content{ grid-column: 1; grid-row: 1; }
+  /* Slightly more breathing room than the tightest possible mobile inset
+     — was 1.1rem, nudged up a touch so text isn't flush against the
+     screen edge on a phone. Still deliberately tighter than the desktop
+     .cluster padding (1.25rem), just not as tight as before. */
+  .cluster{ padding: 0 1.35rem; }
+  .prose blockquote{ padding: 0 1.1em; }
+}

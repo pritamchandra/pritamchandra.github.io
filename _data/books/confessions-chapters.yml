@@ -1,0 +1,17 @@
+# Chapter-level title/intro text for the "Confessions" collection.
+# One entry per chapter — this is the "separate small file per book"
+# approach (rather than putting the title/intro on the first poem's file),
+# chosen so reordering poems within a chapter never silently loses the
+# chapter's own title. See CLAUDE.md §10.4.
+#
+# `intro` is optional — leave it out (or blank) for a chapter with no
+# framing text of its own.
+chapters:
+  - number: "I"
+    id: "i"
+    title: "Before"
+    intro: "Three pieces written while I still thought doubt was something to resolve rather than live inside."
+  - number: "II"
+    id: "ii"
+    title: "After"
+    intro: "Two pieces written once I'd stopped expecting an answer and started paying attention instead."

@@ -1,0 +1,127 @@
+---
+layout: default
+---
+<div class="cluster" style="padding-top: 2.6rem;">
+  <div class="layout-3col">
+
+    <div class="col-sidebar-wrap">
+    <aside class="col-sidebar col-left sidebar-sticky">
+      <h2>Contents</h2>
+      <nav class="toc">
+        <ul style="list-style:none;padding:0;margin:0 0 2rem;">
+          <li style="margin-bottom:.55em;"><a href="#about">About</a></li>
+          <li style="margin-bottom:.55em;"><a href="#publications">Journal Publications</a></li>
+          <li style="margin-bottom:.55em;"><a href="#preprints">Preprints &amp; Working Papers</a></li>
+          <li style="margin-bottom:.55em;"><a href="#notes">Notes</a></li>
+          <li style="margin-bottom:.55em;"><a href="#service">Academic Service</a></li>
+          <li style="margin-bottom:.55em;"><a href="#teaching">Teaching Experience</a></li>
+        </ul>
+      </nav>
+      <h2>Interests</h2>
+      <p style="font-size:.86rem; color:var(--text-muted); line-height:1.6;">Matrix analysis &middot; operator inequalities &middot; post-quantum cryptography &middot; machine learning theory</p>
+    </aside>
+
+    <aside class="col-sidebar col-right sidebar-sticky">
+      <div class="portrait" aria-hidden="true">PC</div>
+      <p class="portrait-cap">Photograph &mdash; replace with <code>/assets/img/author-photo.jpg</code></p>
+      <a class="tag resume-link" href="{{ '/assets/pritam-chandra-cv.pdf' | relative_url }}">Resume (PDF)</a>
+      <h2>Elsewhere</h2>
+      <ul class="link-list">
+        <li><a href="{{ site.data.social.scholar }}">Google Scholar</a></li>
+        {% if site.data.social.github %}<li><a href="{{ site.data.social.github }}">GitHub</a></li>{% endif %}
+        {% if site.data.social.letterboxd %}<li><a href="{{ site.data.social.letterboxd }}">Letterboxd</a></li>{% endif %}
+        {% if site.data.social.youtube %}<li><a href="{{ site.data.social.youtube }}">YouTube</a></li>{% endif %}
+      </ul>
+    </aside>
+    </div>
+
+    <main class="col-content prose" id="main">
+      <header class="entry-head">
+        <h1>Pritam Chandra</h1>
+        <p class="entry-meta">pritamchandra18[at]gmail[dot]com</p>
+        <hr class="rule">
+      </header>
+
+      <section id="about">
+        {{ content }}
+      </section>
+
+      <section id="publications">
+        <h2>Journal Publications</h2>
+        <ul class="pub-list">
+          {% for pub in site.data.publications %}
+          <li>
+            <span class="pub-year">{{ pub.year }}</span>
+            <div>
+              {% if pub.link %}<a class="pub-title" href="{% if pub.link contains 'http' %}{{ pub.link }}{% else %}{{ pub.link | relative_url }}{% endif %}">{{ pub.title }}</a>{% else %}<span class="pub-title">{{ pub.title }}</span>{% endif %}
+              <p class="pub-authors">{{ pub.authors }}</p>
+              <p class="pub-venue">{{ pub.venue }}</p>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+        <p class="pub-note">Full list on <a href="{{ site.data.social.scholar }}">Google Scholar</a>.</p>
+      </section>
+
+      <section id="preprints">
+        <h2>Preprints &amp; Working Papers</h2>
+        <ul class="pub-list">
+          {% for pub in site.data.preprints %}
+          <li>
+            <span class="pub-year">{{ pub.year }}</span>
+            <div>
+              {% if pub.link %}<a class="pub-title" href="{% if pub.link contains 'http' %}{{ pub.link }}{% else %}{{ pub.link | relative_url }}{% endif %}">{{ pub.title }}</a>{% else %}<span class="pub-title">{{ pub.title }}</span>{% endif %}
+              <p class="pub-authors">{{ pub.authors }}</p>
+              <p class="pub-venue">{{ pub.venue }}</p>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </section>
+
+      <section id="notes">
+        <h2>Select Notes</h2>
+        <ul class="pub-list">
+          {% for n in site.data.notes %}
+          <li>
+            <span class="pub-year">{{ n.year }}</span>
+            <div>
+              {% if n.link %}<a class="pub-title" href="{% if n.link contains 'http' %}{{ n.link }}{% else %}{{ n.link | relative_url }}{% endif %}">{{ n.title }}</a>{% else %}<span class="pub-title">{{ n.title }}</span>{% endif %}
+              <p class="pub-venue">{{ n.venue }}</p>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </section>
+
+      <section id="service">
+        <h2>Academic Service</h2>
+        <ul class="service-list">
+          {% for s in site.data.service %}
+          <li>
+            <span class="pub-year">{{ s.year }}</span>
+            <p style="margin:0;">{{ s.description }}</p>
+          </li>
+          {% endfor %}
+        </ul>
+      </section>
+
+      <section id="teaching">
+        <h2>Teaching Experience</h2>
+        <table class="teaching-table">
+          <thead>
+            <tr><th class="col-year">Year</th><th>Course</th><th>Instructor</th></tr>
+          </thead>
+          <tbody>
+            {% for t in site.data.teaching %}
+            <tr><td class="col-year">{{ t.year }}</td><td>{{ t.course }}</td><td>{{ t.instructor }}</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </section>
+
+      {% include footer.html %}
+    </main>
+
+  </div>
+</div>
