@@ -1,0 +1,18 @@
+---
+layout: default
+---
+<div class="cluster" style="padding-top: 2.6rem;">
+  <main class="prose" style="max-width: var(--content-width); margin: 0 auto;" id="main">
+
+    <header class="entry-head">
+      <h1>{{ page.title }}</h1>
+      <p class="entry-meta">{{ page.author }}{% if page.year %} &middot; finished {{ page.year }}{% endif %}</p>
+      <div class="tags"><a class="tag" href="{{ page.goodreads }}">Goodreads</a></div>
+      <hr class="rule" style="margin-top:1em;">
+    </header>
+
+    {{ content }}
+
+    {% include footer.html %}
+  </main>
+</div>

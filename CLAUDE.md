@@ -1266,3 +1266,39 @@ real, intentional site components, not scope creep to question.
   gallery-*.svg`), matching the existing fish-hero-art style from
   `blog-home.html`, specifically so the *images* stay self-hosted even
   though the one video doesn't.
+- **Reading list** (`/reading/`, `_reading/` collection, `_layouts/
+  reading.html` + `_layouts/reading-review.html`) — a diary-style list of
+  books, requested directly by Pritam, modeled loosely on Letterboxd's
+  "diary" view but deliberately de-featured to match this site's
+  primitive aesthetic: no star ratings, no colored icons, just year (or a
+  small book icon for "currently reading"), cover, title/author, and an
+  optional review link. Each book is **both** a row of table data *and*,
+  optionally, a full review page — one file in `_reading/` serves both
+  purposes; if its Markdown body is non-empty, the collection is
+  `output: true` so it gets a real page at `/reading/<slug>/`, and the
+  list's "Review" link (and only then) points there. Deliberately **not**
+  a real `<table>` — `.reading-row` is a 4-column CSS grid
+  (year/cover/title+author/review) that collapses to 3 columns below
+  480px (review link moves under the title instead of getting squeezed
+  into its own column) — a literal table would need either a fixed
+  layout that breaks on a phone or a horizontal-scroll escape hatch, and
+  neither reads as well as this for a short diary list. Cover images are
+  hotlinked from Open Library's cover service (`covers.openlibrary.org`)
+  rather than self-hosted — a deliberate, explicit exception Pritam asked
+  for directly ("pulled from the internet"), unlike the KaTeX/font
+  self-hosting rule elsewhere on the site; a personal reading list that
+  might eventually hold hundreds of entries isn't practical to self-host
+  images for one at a time. The `goodreads` field is kept per-book as the
+  reference link (the cover links out to it) and as the intended source
+  Pritam pastes to have a future Claude Code session look up a new book's
+  cover/author — see EDITING-GUIDE.md §5. **Never invent a `year` or
+  `status`** for a book — these are genuinely personal facts (when Pritam
+  actually finished something) that only he knows; leave `year: null`
+  with a `# TODO` rather than guessing, exactly like the pending-link
+  fields elsewhere in `_data/`. The "Reading List" sidebar link
+  (`.reading-link`, styled like `.resume-link`) appears in **four**
+  places total, per the standing sidebar rule (§4): the portfolio's
+  static right aside and its drawer copy, and the blog home's static
+  right aside and its drawer copy — positioned after Resume/before
+  "Elsewhere" on the portfolio, and before "Timeline" on the blog home,
+  per Pritam's explicit placement request.

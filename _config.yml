@@ -24,6 +24,10 @@ collections:
   books:
     output: false   # subchapters render only as part of the combined book
                      # page (_layouts/book.html), never as their own URL
+  reading:
+    output: true    # each book DOES get its own page — that's where its
+                     # full review lives, when it has one (see reading.html)
+    permalink: /reading/:path/
 
 defaults:
   - scope:
@@ -36,6 +40,11 @@ defaults:
       type: "books"
     values:
       layout: "none"
+  - scope:
+      path: ""
+      type: "reading"
+    values:
+      layout: "reading-review"
 
 exclude:
   - mockups/

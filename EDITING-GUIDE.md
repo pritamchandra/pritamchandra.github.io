@@ -371,7 +371,54 @@ That's it — once these files exist, the book automatically shows up on the
 blog home's timeline, gets a working table of contents, and its tags
 become real links.
 
-## 5. Previewing changes before publishing
+## 5. Adding a book to your reading list
+
+Your reading list lives at `pritamchandra.github.io/reading/` and each
+book is one file in `_reading/`, named however you like, e.g.:
+
+```
+_reading/the-name-of-the-wind.md
+```
+
+```yaml
+---
+title: "The Name of the Wind"
+author: "Patrick Rothfuss"
+cover: "https://covers.openlibrary.org/b/isbn/9780756404079-M.jpg"
+goodreads: "https://www.goodreads.com/book/show/186074.The_Name_of_the_Wind"
+year: 2027          # the year you finished it — leave as `null` while reading
+status: null         # set to `reading` (no quotes) while you're partway through, instead of a year
+order: 9             # one higher than whatever your last book's order was
+---
+Your review goes here, if you want to write one — completely optional,
+ordinary Markdown. Leave this blank (just the front matter, nothing
+below the second `---`) for a book you don't want to write about; it'll
+still show up in the list with no "Review" link next to it.
+```
+
+**The easiest way to fill in `cover`, `title`, and `author`**: find the
+book on Goodreads, copy its URL, and just ask me (Claude Code) in a chat
+message to add it — paste the Goodreads link plus the year (or "still
+reading") and I'll look up the cover image and pull the author's name for
+you, then write the file myself. This isn't something the site does
+automatically on its own (a plain Jekyll site like this one can't reach
+out to the internet while it's building) — it's a "ask Claude to do it"
+step each time you add a book, same as asking me to add a blog post.
+
+If you'd rather do it by hand: the `cover` field just needs to be a URL
+to an image. [Open Library's cover
+service](https://covers.openlibrary.org) is a reliable free source —
+search for your book at [openlibrary.org](https://openlibrary.org), open
+its page, and the image URL follows the pattern
+`https://covers.openlibrary.org/b/id/<some number>-M.jpg` (right-click
+the cover on the book's page → "Copy Image Address" gets you this).
+
+A book with `status: reading` shows a small book icon instead of a year
+in the list — that's automatic, you don't pick the icon yourself.
+Order matters only for sorting (newest at the top of the list) — it
+doesn't need to be exactly sequential, just increasing.
+
+## 6. Previewing changes before publishing
 
 You'll need [Ruby](https://www.ruby-lang.org) and Jekyll installed once —
 if you're not sure whether you have them, open Terminal and run:
@@ -395,7 +442,7 @@ window running while you look around; press Ctrl+C to stop it. Every time
 you save a file, refresh the browser to see the change — no need to
 restart the server.
 
-## 6. Publishing
+## 7. Publishing
 
 This site is a **git repository** connected to GitHub — GitHub is where
 the live copy lives, and `git` is how you send your changes there.

@@ -971,3 +971,61 @@ sup[id^="fnref"]{ scroll-margin-top: 80px; }
 }
 .gallery-video .video-frame iframe{ position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 .gallery-video figcaption{ font-family: var(--font-sans); font-size: .78rem; color: var(--text-faint); margin-top: .5em; }
+
+/* ============================================================
+   Reading list — added post-launch (not part of the original five
+   mockups). A diary-style list of books, deliberately NOT a real
+   <table> — a real table needs either a fixed layout that breaks on
+   a phone or a horizontal-scroll escape hatch, and this reads fine
+   as a sequence of rows instead. Same "primitive" treatment as the
+   rest of the site: hairline rules between rows, no card shadows.
+   ============================================================ */
+
+.reading-count{ font-family: var(--font-sans); font-size: .8rem; color: var(--text-faint); margin: 0 0 1.8rem; }
+
+.reading-list{ margin: 0; }
+.reading-row{
+  display: grid;
+  grid-template-columns: 2.1em 2.6em 1fr auto;
+  column-gap: .9em;
+  align-items: start;
+  padding: 1em 0;
+  border-bottom: 1px solid var(--border);
+}
+.reading-row:first-child{ padding-top: 0; }
+.reading-row:last-child{ border-bottom: none; }
+
+.reading-year{
+  font-family: var(--font-sans); font-size: .8rem; color: var(--text-muted);
+  padding-top: .35em; text-align: right; line-height: 1.3;
+}
+.reading-year .icon-book{ width: 1.1em; height: 1.1em; display: block; margin-left: auto; color: var(--accent-2); }
+
+.reading-cover-link{ display: block; }
+.reading-cover{
+  width: 100%; aspect-ratio: 2 / 3; object-fit: cover;
+  border: 1px solid var(--border-strong); background: var(--bg-raised); display: block;
+}
+
+.reading-info{ min-width: 0; }
+.reading-title{ display: block; font-weight: 600; }
+.reading-author{ font-family: var(--font-sans); font-size: .8rem; color: var(--text-muted); margin-top: .25em; }
+
+.reading-review{
+  font-family: var(--font-sans); font-size: .78rem; padding-top: .4em; text-align: right; white-space: nowrap;
+}
+.reading-review a{ text-decoration: none; }
+.reading-review a:hover{ text-decoration: underline; }
+
+/* Below ~480px there's only room for three columns comfortably — move
+   the review link under the title/author instead of giving it a
+   fourth column, rather than letting the row get cramped. */
+@media (max-width: 480px){
+  .reading-row{ grid-template-columns: 1.8em 2.2em 1fr; }
+  .reading-review{ grid-column: 3; text-align: left; padding-top: .3em; }
+}
+
+/* The "Reading List" sidebar link — same small bordered-pill treatment
+   as .resume-link, so the two promoted single links read as one family. */
+.reading-link{ display: inline-flex; align-items: center; gap: .45em; margin: 0 0 1.3rem; }
+.reading-link .icon-book{ width: 1em; height: 1em; flex: 0 0 auto; }

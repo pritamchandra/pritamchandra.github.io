@@ -1,0 +1,37 @@
+---
+layout: default
+---
+{% assign books = site.reading | sort: "order" | reverse %}
+<div class="cluster" style="padding-top: 2.6rem;">
+  <main class="prose" style="max-width: var(--content-width); margin: 0 auto;" id="main">
+
+    <p class="reading-count">{{ books.size }} books</p>
+
+    <div class="reading-list">
+      {% for book in books %}
+        {% assign review = book.content | strip %}
+        <article class="reading-row">
+          <div class="reading-year">
+            {% if book.status == "reading" %}
+              <span title="Currently reading">{% include icon-book.html %}</span>
+            {% else %}
+              {{ book.year | default: "—" }}
+            {% endif %}
+          </div>
+          <a class="reading-cover-link" href="{{ book.goodreads }}">
+            <img class="reading-cover" src="{{ book.cover }}" alt="Cover of {{ book.title }}" loading="lazy">
+          </a>
+          <div class="reading-info">
+            <span class="reading-title">{{ book.title }}</span>
+            <div class="reading-author">{{ book.author }}</div>
+          </div>
+          <div class="reading-review">
+            {% if review != "" %}<a href="{{ book.url | relative_url }}">Review</a>{% endif %}
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+
+    {% include footer.html %}
+  </main>
+</div>
