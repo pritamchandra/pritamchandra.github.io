@@ -20,6 +20,11 @@
     {% assign sitename_href = "/blog/" | relative_url %}
     {% assign cross_text = "All posts" %}
     {% assign cross_href = "/blog/" | relative_url %}
+  {% when "reading" %}
+    {% assign show_toggle = true %}
+    {% assign sitename_href = "/" | relative_url %}
+    {% assign cross_text = "Blog" %}
+    {% assign cross_href = "/blog/" | relative_url %}
   {% else %}
     {% assign show_toggle = false %}
     {% assign sitename_href = "/blog/" | relative_url %}

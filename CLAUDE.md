@@ -1341,3 +1341,65 @@ written:**
   cover ever looks "off" for a classic with many editions: the cover ID
   resolving successfully is not the same as it being the right cover —
   actually look at it.
+
+**UPDATE, another round of direct requests from Pritam:**
+- **Reading List moved into the portfolio's "Elsewhere" link list** (after
+  GitHub, before Letterboxd), styled as a plain link like its neighbors —
+  no icon there anymore. It's `.icon-link` (with the book icon) only in
+  the two sidebar-header positions described below now; inside
+  `.link-list` it's a bare `<a>`, matching Scholar/GitHub/Letterboxd/
+  YouTube exactly.
+- **Resume now appears twice in the portfolio's markup** —
+  `.resume-link-desktop` in its original spot (inside `.col-right`,
+  above "Elsewhere") and `.resume-link-merged` as the first child of
+  `.col-left`, before "Contents". Only one is shown at a time via CSS,
+  toggled at the 1000px breakpoint: below it, Resume needs to appear at
+  the very top of the merged single sidebar column, ahead of Contents,
+  per Pritam's explicit request — and since CSS Grid item promotion
+  can't relocate one element between two different DOM parents at
+  different breakpoints, two copies plus a display toggle was the actual
+  fix, not a layout trick. **Real bug hit while building this, worth
+  remembering**: the two toggle rules (base "hidden" state and the
+  `@media (max-width: 1000px)` override) have equal CSS specificity
+  (both single-class selectors), so which one wins is decided by *source
+  order in the file*, not by which one is "more specific" to the
+  situation or which one is inside a media query — a later plain rule
+  beats an earlier `@media`-wrapped one regardless of viewport. Both
+  rules now live directly next to each other (right by `.icon-link`'s
+  own definition) specifically so this can't silently regress again by
+  something else getting inserted between them.
+- **Reading List moved to the blog home's LEFT sidebar** (both the
+  static aside and its drawer copy), with its icon kept this time —
+  sits directly below the All/Collections/Pages filter's divider line,
+  above "Tags". The right sidebar there is now just "Timeline" again,
+  matching the original mockup's simplicity.
+- **The reading list page grew its own left sidebar** — `.layout-2col`,
+  same `sidebar-sticky`/drawer/hamburger pattern as the book/collection
+  pages (added `"reading"` as a case in both `nav.html` and
+  `drawer.html`) — holding a Timeline of years (`site.reading`'s `year`
+  values, `compact`ed so "currently reading" books with no year don't
+  produce a stray blank entry, `uniq`+`sort`+`reverse`d). These are
+  **filter buttons, not anchor links** (`data-reading-year="2026"` etc.,
+  mirroring the blog home's `data-filter` pattern) — clicking one hides
+  the favorites shelf, the "N books" count, and every row whose
+  `data-year` doesn't match, leaving only that year's books; "All"
+  restores everything. **Another real bug hit here, same root cause as
+  above but a different symptom**: `.reading-row{ display: grid }` and
+  `.reading-favorites{ display: flex }` both have an explicit `display`
+  declared, which is equal specificity to the browser's own built-in
+  `[hidden]{ display: none }` rule — since a page's own stylesheet loads
+  after the browser's default one, the page's `display: grid` was
+  silently winning over `[hidden]`, so `row.hidden = true` in JS did
+  nothing visually at all. Fixed with explicit `.reading-row[hidden]{
+  display: none; }` / `.reading-favorites[hidden]{ display: none; }`
+  rules — needed on **any** element in this codebase that both uses the
+  `hidden` attribute for show/hide *and* carries its own `display`
+  override (grid/flex/inline-flex/etc.) in the stylesheet; a plain
+  block-level element with no such override doesn't need this, since
+  nothing competes with `[hidden]` there.
+- **Margins below the full 3-column width**: `.cluster`'s left/right
+  padding is now 1.5× larger any time the page can't show the full
+  3-column layout — 1.875rem from 700–1000px (was the same 1.25rem as
+  desktop), 2.025rem below 700px (was a flat 1.35rem). Applies to every
+  page via the shared `.cluster` class, `.layout-2col` pages included,
+  not just `.layout-3col` ones — Pritam's explicit "universally" scope.

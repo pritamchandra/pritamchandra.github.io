@@ -6,6 +6,7 @@ layout: default
 
     <div class="col-sidebar-wrap">
     <aside class="col-sidebar col-left sidebar-sticky">
+      <a class="icon-link resume-link resume-link-merged" href="{{ '/assets/pritam-chandra-cv.pdf' | relative_url }}">{% include icon-resume.html %}Resume</a>
       <h2>Contents</h2>
       <nav class="toc">
         <ul style="list-style:none;padding:0;margin:0 0 2rem;">
@@ -24,12 +25,12 @@ layout: default
     <aside class="col-sidebar col-right sidebar-sticky">
       <div class="portrait" aria-hidden="true">PC</div>
       <p class="portrait-cap">Photograph &mdash; replace with <code>/assets/img/author-photo.jpg</code></p>
-      <a class="icon-link resume-link" href="{{ '/assets/pritam-chandra-cv.pdf' | relative_url }}">{% include icon-resume.html %}Resume</a>
-      <a class="icon-link reading-link" href="{{ '/reading/' | relative_url }}">{% include icon-book.html %}Reading List</a>
+      <a class="icon-link resume-link resume-link-desktop" href="{{ '/assets/pritam-chandra-cv.pdf' | relative_url }}">{% include icon-resume.html %}Resume</a>
       <h2>Elsewhere</h2>
       <ul class="link-list">
         <li><a href="{{ site.data.social.scholar }}">Google Scholar</a></li>
         {% if site.data.social.github %}<li><a href="{{ site.data.social.github }}">GitHub</a></li>{% endif %}
+        <li><a href="{{ '/reading/' | relative_url }}">Reading List</a></li>
         {% if site.data.social.letterboxd %}<li><a href="{{ site.data.social.letterboxd }}">Letterboxd</a></li>{% endif %}
         {% if site.data.social.youtube %}<li><a href="{{ site.data.social.youtube }}">YouTube</a></li>{% endif %}
       </ul>

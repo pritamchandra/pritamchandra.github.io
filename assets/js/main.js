@@ -166,6 +166,36 @@
     });
   }
 
+  /* ---------- reading list: filter by year ---------- */
+  /* Present in duplicate (static left sidebar + drawer copy), same
+     wiring approach as the blog home's post filter above. Selecting a
+     year clears the favorites shelf and the "N books" count too, not
+     just the list — Pritam's explicit request ("clear the page of
+     other books, including favorites") — leaving only that year's rows. */
+  var yearBtns = document.querySelectorAll('[data-reading-year]');
+  if (yearBtns.length){
+    var readingRows = document.querySelectorAll('.reading-row');
+    var favoritesEls = document.querySelectorAll('.reading-favorites-label, .reading-favorites');
+    var readingCount = document.querySelector('.reading-count');
+    var applyYearFilter = function(year){
+      var showAll = year === 'all';
+      favoritesEls.forEach(function(el){ el.hidden = !showAll; });
+      if (readingCount) readingCount.hidden = !showAll;
+      readingRows.forEach(function(row){
+        row.hidden = !showAll && row.getAttribute('data-year') !== year;
+      });
+      yearBtns.forEach(function(b){
+        b.setAttribute('aria-pressed', String(b.getAttribute('data-reading-year') === year));
+      });
+    };
+    yearBtns.forEach(function(b){
+      b.addEventListener('click', function(){
+        applyYearFilter(b.getAttribute('data-reading-year'));
+        root.classList.remove('drawer-open');
+      });
+    });
+  }
+
   /* ---------- render math with KaTeX, if present on the page ---------- */
   if (window.renderMathInElement){
     renderMathInElement(document.body, {

@@ -24,11 +24,11 @@
   </div>
   <div class="drawer-section">
     <a class="icon-link resume-link" href="{{ '/assets/pritam-chandra-cv.pdf' | relative_url }}">{% include icon-resume.html %}Resume</a>
-    <a class="icon-link reading-link" href="{{ '/reading/' | relative_url }}">{% include icon-book.html %}Reading List</a>
     <h2 style="font-family:var(--font-sans);font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.6rem;">Elsewhere</h2>
     <ul class="link-list" style="margin-bottom:0;">
       <li><a href="{{ site.data.social.scholar }}">Google Scholar</a></li>
       {% if site.data.social.github %}<li><a href="{{ site.data.social.github }}">GitHub</a></li>{% endif %}
+      <li><a href="{{ '/reading/' | relative_url }}">Reading List</a></li>
       {% if site.data.social.letterboxd %}<li><a href="{{ site.data.social.letterboxd }}">Letterboxd</a></li>{% endif %}
       {% if site.data.social.youtube %}<li><a href="{{ site.data.social.youtube }}">YouTube</a></li>{% endif %}
     </ul>
@@ -48,6 +48,7 @@
       <button type="button" data-filter="collection" aria-pressed="false">Collections</button>
       <button type="button" data-filter="page" aria-pressed="false">Pages</button>
     </div>
+    <a class="icon-link reading-link" href="{{ '/reading/' | relative_url }}">{% include icon-book.html %}Reading List</a>
     <h2 style="font-family:var(--font-sans);font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.7rem;">Tags</h2>
     <ul class="tag-cloud">
       {% for g in tag_groups %}
@@ -56,7 +57,6 @@
     </ul>
   </div>
   <div class="drawer-section drawer-section-timeline">
-    <a class="icon-link reading-link" href="{{ '/reading/' | relative_url }}">{% include icon-book.html %}Reading List</a>
     <h2 style="font-family:var(--font-sans);font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.7rem;">Timeline</h2>
     <ul class="timeline">
       {% for group in year_groups %}<li><a href="#y{{ group.name }}">{{ group.name }}</a></li>{% endfor %}
@@ -71,6 +71,23 @@
     <h2 style="font-family:var(--font-sans);font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.7rem;">{{ page.book_title }}</h2>
     {% assign book_slug = page.book_slug %}
     {% include book-toc.html %}
+  </div>
+</div>
+
+{% when "reading" %}
+{% assign reading_books = site.reading | sort: "order" | reverse %}
+{% assign reading_years = reading_books | map: "year" | compact | uniq | sort | reverse %}
+<div class="drawer" aria-label="Timeline">
+  <button class="drawer-close" data-action="close-drawer" aria-label="Close">&times;</button>
+  <div class="drawer-section">
+    <h2 style="font-family:var(--font-sans);font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.7rem;">Timeline</h2>
+    <ul class="timeline">
+      <li><button type="button" data-reading-year="all" aria-pressed="true">All</button></li>
+      {% for y in reading_years %}
+        {% assign year_books = reading_books | where: "year", y %}
+        <li><button type="button" data-reading-year="{{ y }}" aria-pressed="false">{{ y }}</button><span class="tag-count">{{ year_books.size }}</span></li>
+      {% endfor %}
+    </ul>
   </div>
 </div>
 

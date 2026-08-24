@@ -562,6 +562,12 @@ html.sb-hidden .layout-2col > .col-content{
    section and does not go into the drawer yet. This is the same behavior
    on every page that has a right sidebar (portfolio, blog home, ...). */
 @media (max-width: 1000px){
+  /* Below the full 3-column width, every page shows at most 2 visible
+     columns (down to 1 below 700px) — give the page edges a bit more
+     breathing room here than the full-width desktop margin (1.5× the
+     1.25rem desktop .cluster padding). Applies to every page type
+     (.layout-3col and .layout-2col alike), since .cluster is shared. */
+  .cluster{ padding: 0 1.875rem; }
   .layout-3col{
     grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
   }
@@ -642,11 +648,11 @@ html.sb-hidden .layout-2col > .col-content{
   .layout-3col > .col-left, .layout-3col > .col-right,
   .layout-3col > .col-sidebar-wrap, .layout-2col > .col-sidebar{ display: none; }
   .layout-3col > .col-content{ grid-column: 1; grid-row: 1; }
-  /* Slightly more breathing room than the tightest possible mobile inset
-     — was 1.1rem, nudged up a touch so text isn't flush against the
-     screen edge on a phone. Still deliberately tighter than the desktop
-     .cluster padding (1.25rem), just not as tight as before. */
-  .cluster{ padding: 0 1.35rem; }
+  /* 1.5× the 700-1000px band's 1.875rem margin above (same "below-3-
+     column" rule, just the narrower of the two bands) — was a flat
+     1.35rem before that rule existed; keep the ratio, not the old
+     absolute value, if the desktop margin ever changes again. */
+  .cluster{ padding: 0 2.025rem; }
   .prose blockquote{ padding: 0 1.1em; }
 }
 
@@ -674,7 +680,7 @@ html.sb-hidden .layout-2col > .col-content{
 /* Resume / Reading List sidebar links — originally styled as small
    bordered .tag pills (reusing the post-title pill look); Pritam later
    asked for these plainer — icon + text, no box — so they're their own
-   class now instead of .tag. Both sit above "Elsewhere"/"Timeline". */
+   class now instead of .tag. */
 .icon-link{
   display: inline-flex; align-items: center; gap: .5em;
   font-family: var(--font-sans); font-size: .86rem; color: var(--text);
@@ -682,6 +688,27 @@ html.sb-hidden .layout-2col > .col-content{
 }
 .icon-link:hover{ color: var(--link); text-decoration: underline; text-decoration-color: var(--border-strong); }
 .icon-link svg{ width: 1.05em; height: 1.05em; flex: 0 0 auto; color: var(--text-muted); }
+
+/* Resume appears twice in the markup — once in its normal desktop
+   position (inside .col-right, above "Elsewhere"), once duplicated as
+   the first child of .col-left — for when the right sidebar merges
+   under the left one below 1000px, where Pritam wants Resume at the
+   very top, before Contents, instead of staying pinned further down.
+   Only one copy is ever visible. These two rules MUST stay in this
+   relative order (plain default first, @media override second) — both
+   sides have equal selector specificity, so if this block were ever
+   split apart and the override ended up earlier in the file than some
+   other declaration of the same property, the cascade would silently
+   pick the wrong one regardless of viewport (this happened once during
+   development: the base "hidden" rule was defined further down the
+   file than the @media override that was supposed to beat it, so the
+   base rule always won). Keeping both rules for both classes together
+   in one place, in one obvious order, is what actually prevents that. */
+.resume-link-merged{ display: none; }
+@media (max-width: 1000px){
+  .resume-link-desktop{ display: none; }
+  .resume-link-merged{ display: inline-flex; }
+}
 
 .pub-list{ list-style:none; margin:0 0 .5em; padding:0; }
 .pub-list li{
@@ -745,8 +772,17 @@ html.sb-hidden .layout-2col > .col-content{
 
 .timeline{ list-style:none; margin:0; padding:0; }
 .timeline li{ margin-bottom: .7em; }
-.timeline a{ text-decoration:none; font-family: var(--font-serif); font-size: 1.05rem; border-bottom:1px solid var(--border-strong); }
-.timeline a:hover{ border-color:currentColor; }
+/* .timeline holds real anchor links on the blog home (scrolls to a year
+   heading) but plain filter buttons on the reading list (no page
+   section to scroll to, just show/hide rows) — same visual treatment
+   either way, via the shared rule below. */
+.timeline a, .timeline button{
+  appearance: none; background: none; padding: 0; cursor: pointer;
+  text-decoration:none; font-family: var(--font-serif); font-size: 1.05rem; color: var(--text);
+  border: none; border-bottom:1px solid var(--border-strong);
+}
+.timeline a:hover, .timeline button:hover{ border-bottom-color:currentColor; }
+.timeline button[aria-pressed="true"]{ color: var(--accent-2); border-bottom-color: currentColor; font-weight: 600; }
 .timeline .tag-count{ font-family: var(--font-sans); margin-left: .4em; }
 
 /* One line only, below the year — this is still a .prose h2, so it
@@ -995,6 +1031,7 @@ sup[id^="fnref"]{ scroll-margin-top: 80px; }
    rather than reflowing. */
 .reading-favorites-label{ font-family: var(--font-sans); font-size: .74rem; text-transform: uppercase; letter-spacing: .08em; color: var(--text-muted); margin: 0 0 .7rem; }
 .reading-favorites{ display: flex; gap: .7em; margin: 0 0 2.2rem; }
+.reading-favorites[hidden]{ display: none; }
 .reading-favorite{ flex: 1 1 0; min-width: 0; display: block; }
 .reading-favorite img{
   width: 100%; aspect-ratio: 2 / 3; object-fit: cover;
@@ -1012,6 +1049,11 @@ sup[id^="fnref"]{ scroll-margin-top: 80px; }
   padding: 1em 0;
   border-bottom: 1px solid var(--border);
 }
+/* [hidden] and an explicit `display` on the same element are equal
+   specificity — without this, the year filter's `row.hidden = true`
+   silently does nothing, since this rule's `display: grid` (loaded
+   after the browser's own `[hidden]{ display: none }` default) wins. */
+.reading-row[hidden]{ display: none; }
 .reading-row:first-child{ padding-top: 0; }
 .reading-row:last-child{ border-bottom: none; }
 

@@ -3,55 +3,71 @@ layout: default
 ---
 {% assign books = site.reading | sort: "order" | reverse %}
 {% assign favorites = site.reading | where_exp: "b", "b.favorite" | sort: "favorite" %}
+{% assign years = books | map: "year" | compact | uniq | sort | reverse %}
 <div class="cluster" style="padding-top: 2.6rem;">
-  <main class="prose" style="max-width: var(--content-width); margin: 0 auto;" id="main">
+  <div class="layout-2col">
 
-    {% if favorites.size > 0 %}
-      <p class="reading-favorites-label">Favorites</p>
-      <div class="reading-favorites">
-        {% for book in favorites %}
-          <a class="reading-favorite" href="{{ book.goodreads }}" title="{{ book.title }}">
-            {% if book.cover %}
-              <img src="{{ book.cover }}" alt="Cover of {{ book.title }}" loading="lazy">
-            {% else %}
-              <span class="reading-cover-placeholder">{% include icon-book.html %}</span>
-            {% endif %}
-          </a>
+    <aside class="col-sidebar col-left sidebar-sticky">
+      <h2>Timeline</h2>
+      <ul class="timeline">
+        <li><button type="button" data-reading-year="all" aria-pressed="true">All</button></li>
+        {% for y in years %}
+          {% assign year_books = books | where: "year", y %}
+          <li><button type="button" data-reading-year="{{ y }}" aria-pressed="false">{{ y }}</button><span class="tag-count">{{ year_books.size }}</span></li>
+        {% endfor %}
+      </ul>
+    </aside>
+
+    <main class="col-content prose" id="main">
+
+      {% if favorites.size > 0 %}
+        <p class="reading-favorites-label">Favorites</p>
+        <div class="reading-favorites">
+          {% for book in favorites %}
+            <a class="reading-favorite" href="{{ book.goodreads }}" title="{{ book.title }}">
+              {% if book.cover %}
+                <img src="{{ book.cover }}" alt="Cover of {{ book.title }}" loading="lazy">
+              {% else %}
+                <span class="reading-cover-placeholder">{% include icon-book.html %}</span>
+              {% endif %}
+            </a>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <p class="reading-count">{{ books.size }} books</p>
+
+      <div class="reading-list">
+        {% for book in books %}
+          {% assign review = book.content | strip %}
+          <article class="reading-row" data-year="{{ book.year }}">
+            <div class="reading-year">
+              {% if book.status == "reading" %}
+                <span title="Currently reading">{% include icon-book.html %}</span>
+              {% else %}
+                {{ book.year | default: "—" }}
+              {% endif %}
+            </div>
+            <a class="reading-cover-link" href="{{ book.goodreads }}">
+              {% if book.cover %}
+                <img class="reading-cover" src="{{ book.cover }}" alt="Cover of {{ book.title }}" loading="lazy">
+              {% else %}
+                <span class="reading-cover-placeholder" aria-label="No cover yet">{% include icon-book.html %}</span>
+              {% endif %}
+            </a>
+            <div class="reading-info">
+              <span class="reading-title">{{ book.title }}</span>
+              <div class="reading-author">{{ book.author }}</div>
+            </div>
+            <div class="reading-review">
+              {% if review != "" %}<a href="{{ book.url | relative_url }}">Review</a>{% endif %}
+            </div>
+          </article>
         {% endfor %}
       </div>
-    {% endif %}
 
-    <p class="reading-count">{{ books.size }} books</p>
+      {% include footer.html %}
+    </main>
 
-    <div class="reading-list">
-      {% for book in books %}
-        {% assign review = book.content | strip %}
-        <article class="reading-row">
-          <div class="reading-year">
-            {% if book.status == "reading" %}
-              <span title="Currently reading">{% include icon-book.html %}</span>
-            {% else %}
-              {{ book.year | default: "—" }}
-            {% endif %}
-          </div>
-          <a class="reading-cover-link" href="{{ book.goodreads }}">
-            {% if book.cover %}
-              <img class="reading-cover" src="{{ book.cover }}" alt="Cover of {{ book.title }}" loading="lazy">
-            {% else %}
-              <span class="reading-cover-placeholder" aria-label="No cover yet">{% include icon-book.html %}</span>
-            {% endif %}
-          </a>
-          <div class="reading-info">
-            <span class="reading-title">{{ book.title }}</span>
-            <div class="reading-author">{{ book.author }}</div>
-          </div>
-          <div class="reading-review">
-            {% if review != "" %}<a href="{{ book.url | relative_url }}">Review</a>{% endif %}
-          </div>
-        </article>
-      {% endfor %}
-    </div>
-
-    {% include footer.html %}
-  </main>
+  </div>
 </div>
