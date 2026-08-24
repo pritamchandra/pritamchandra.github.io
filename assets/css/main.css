@@ -677,10 +677,9 @@ html.sb-hidden .layout-2col > .col-content{
 .link-list a{ text-decoration:none; border-bottom:1px solid var(--border-strong); }
 .link-list a:hover{ border-color:currentColor; }
 
-/* Resume / Reading List sidebar links — originally styled as small
-   bordered .tag pills (reusing the post-title pill look); Pritam later
-   asked for these plainer — icon + text, no box — so they're their own
-   class now instead of .tag. */
+/* Reading List sidebar link — icon + text, no box (Pritam's explicit
+   call for this one specifically). Resume went the other way — see
+   .tag.resume-link below, back to a bordered pill like a topic tag. */
 .icon-link{
   display: inline-flex; align-items: center; gap: .5em;
   font-family: var(--font-sans); font-size: .86rem; color: var(--text);
@@ -688,6 +687,25 @@ html.sb-hidden .layout-2col > .col-content{
 }
 .icon-link:hover{ color: var(--link); text-decoration: underline; text-decoration-color: var(--border-strong); }
 .icon-link svg{ width: 1.05em; height: 1.05em; flex: 0 0 auto; color: var(--text-muted); }
+
+/* Resume — a plain .tag pill (same box as a topic tag under a post
+   title), sized to its content rather than stretched, with the icon
+   sitting inside the box alongside the text. .tag itself is
+   display:inline-block; flex here is just to center the icon and text
+   on one baseline within that box. */
+.tag.resume-link{ display: inline-flex; align-items: center; gap: .4em; text-decoration: none; }
+.tag.resume-link svg{ width: .95em; height: .95em; flex: 0 0 auto; }
+/* Desktop sidebar: match the gap already under the Contents list above
+   it, so the space before Resume equals the space after it (before
+   "Interests") — see .col-left .resume-link below for why 2rem
+   specifically, not a generic margin baked into .resume-link itself. */
+.col-left .resume-link{ margin: 0 0 2rem; }
+/* Drawer copy: the .tag's own .74rem reads as noticeably smaller than
+   the plain 1rem sans links around it in the drawer (Contents/Elsewhere
+   list items have no such override) — bump it back up to match, and
+   give it real breathing room above/below instead of sitting flush
+   against the Contents list right above it. */
+.drawer .resume-link{ font-size: 1rem; margin: 1.2rem 0 1.4rem; }
 
 .pub-list{ list-style:none; margin:0 0 .5em; padding:0; }
 .pub-list li{

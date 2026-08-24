@@ -1445,3 +1445,36 @@ made this work:
   wants "sidebar content, but only ever as a drawer, at any width"
   again, this is the mechanism to reuse: no grid column, plus
   `data-drawer-always` on that page's nav case.
+
+**UPDATE, Resume's style reverted back to a box** (superseding the
+"plain icon + text, no box" note above — that change stood for exactly
+one round before Pritam asked for the box back): Resume is `.tag
+resume-link` again, not `.icon-link` — literally the same pill as a
+topic tag under a post title, sized to its own content rather than
+stretched across the sidebar, with the icon now living inside that box
+instead of beside a boxless link. Reading List is unaffected — it's
+still `.icon-link` (no box), since this request was specifically about
+Resume only. Two spacing details worth knowing if this area gets
+touched again:
+- **Desktop sidebar**: `.col-left .resume-link{ margin: 0 0 2rem; }`
+  exists specifically so the gap above Resume (under the Contents list)
+  equals the gap below it (above "Interests") — both 2rem, matching the
+  Contents `<ul>`'s own existing `margin: 0 0 2rem` inline style. This
+  was a direct, explicit request ("the first gap is smaller, make it
+  the same") — don't let a future change to the `.tag` component's own
+  margin (it doesn't currently have one) silently reintroduce a
+  mismatch here.
+- **Drawer**: `.drawer .resume-link{ font-size: 1rem; margin: 1.2rem 0
+  1.4rem; }` overrides `.tag`'s own `.74rem` — inside the drawer, Resume
+  sits among plain `1rem` sans links (the Contents/Elsewhere list items
+  have no size override), so the bare `.tag` size read as noticeably
+  smaller than its neighbors; sized back up to match. The drawer's
+  Contents section also now includes "Interests" (heading + the same
+  paragraph as the static sidebar) — it never did before this round.
+  Pritam's framing is worth remembering for any *future* sidebar
+  content, not just this one fix: **the drawer's content should always
+  equal the union of both static sidebars** (i.e., exactly what the
+  700–1000px merged single column shows), just presented as a popover
+  instead of a static column. If a new right-sidebar item is ever added
+  to a `.layout-3col` page, it needs a matching drawer copy for this
+  reason, same as every other sidebar item on the site already does.
