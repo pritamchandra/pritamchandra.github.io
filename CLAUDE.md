@@ -1009,6 +1009,50 @@ from an equation. Also checked at 1400px (desktop) to confirm the
 `:has(.tag)` padding doesn't do anything unwanted when there's plenty of
 room — it doesn't; equations well under the column width are untouched.
 
+**UPDATE, post-launch (superseding point 1 above):** Pritam asked for this
+reversed — a display equation that *fits* within the column must be
+centered, not flush-left; only an equation that genuinely overflows should
+switch to flush-left + scrollable. The unconditional `text-align: left`
+above was flattening every equation to the left margin, fitting or not,
+which reads wrong for the common case (most equations are short). The
+underlying reason `text-align: left` existed at all — centering an
+*overflowing* box starts the default scroll position in the middle of the
+content, with the true left edge already scrolled past and unreachable
+(`scrollLeft` can't go negative) — is still real and still needs
+avoiding, so the fix can't simply revert to bare `text-align: center`
+either. The actual fix: leave KaTeX's own default (`text-align: center`
+on `.katex-display > .katex`, from `katex.css`) untouched, and add
+`text-align: left` only inside a new `.katex-display.katex-overflowing`
+rule. Nothing in the DOM knows ahead of time whether a given equation
+will overflow — that depends on the rendered width of specific glyphs at
+a specific column width — so this can't be done in CSS alone; `main.js`
+measures each `.katex-display` right after `renderMathInElement` runs
+(`scrollWidth > clientWidth`) and adds `.katex-overflowing` only when
+true. Two more things had to be handled for this to actually work,
+not just on first load:
+- **A window resize alone isn't enough to catch every case.** The
+  text-size `−`/`+` control changes `root.style.fontSize`, which changes
+  every equation's rendered pixel width without the window itself
+  resizing — a plain `resize` listener misses this entirely, silently
+  leaving newly-overflowing equations centered (reintroducing the exact
+  bug this whole section exists to prevent). Re-checking is instead done
+  with a `ResizeObserver`.
+- **The `ResizeObserver` must watch `.katex` (the inner element), not
+  `.katex-display` (the outer one).** `.katex-display` has
+  `overflow-x: auto`, so its own box is clipped to the column width no
+  matter how wide its *content* gets — a `ResizeObserver` on it silently
+  never fires from content-only growth (confirmed by testing: watching
+  `.katex-display` missed every equation that crossed the overflow
+  threshold from a text-size change alone, even though `scrollWidth` had
+  visibly changed). `.katex` itself has `width: max-content; min-width:
+  100%` (point 2 above, unchanged) — its own box only actually grows
+  once content exceeds the column, which is exactly the transition that
+  needs catching, so that's the element to observe.
+
+The `:has(.tag)` padding-right rule (point 3 above) needed no change —
+it's about reserving width, not alignment, and keeps working the same
+regardless of which equations end up centered vs. left-aligned.
+
 ## 8. One deliberate gap: add localStorage in production
 
 **The mockups keep theme / text-size / sidebar-hidden state in memory
@@ -1174,3 +1218,51 @@ exercise — please preserve, don't "improve":
   footer; blog home, the collection/book pages, and both standalone posts
   all get the "Jesu Juva" line. This is a deliberate per-page-type split,
   not an inconsistency to "fix" by making all five match.
+
+## 13. Components added after launch (not in the original five mockups)
+
+These were added in response to direct requests from Pritam after the
+initial build, not present in `portfolio.html`/`blog-home.html`/etc. —
+listed here so a future session (human or Claude Code) knows they're
+real, intentional site components, not scope creep to question.
+
+- **Display-math centering** (§7's own "UPDATE" note has the full
+  history) — a display equation that fits its column is centered; only
+  one that overflows switches to flush-left + scrollable. This
+  *supersedes* §7's original "every display equation is unconditionally
+  left-aligned" fix — don't revert to that.
+- **A kramdown + inline-math gotcha beyond the `_` one §7 already
+  documents**: a bare `*` or `|` character inside `$...$` inline math can
+  get misread as emphasis or a table, respectively — confirmed by direct
+  testing, independent of the `input: GFM` setting in `_config.yml` (both
+  plain kramdown and the GFM parser do this). `\[ ... \]` inside a raw
+  `<div>` block is unaffected (raw HTML blocks are fully opaque to
+  kramdown), so this only matters for bare inline math directly in prose.
+  The fix is the same idiom LaTeX itself prefers anyway: `\ast` instead
+  of a literal `*`, `\lvert ... \rvert` instead of literal `|...|`. See
+  EDITING-GUIDE.md §3 for the Pritam-facing version of this.
+- **`.references` / `.ref-link`** — a plain numbered bibliography
+  (`<ol>` + `id="ref-1"` anchors, linked from the text via `<a
+  class="ref-link" href="#ref-1">[1]</a>`), hand-written HTML, no new
+  Liquid. See `_posts/2026-08-10-von-neumann-trace-inequality-notes.md`.
+- **Footnotes** — kramdown's own native `[^1]` / `[^1]: ...` syntax,
+  which needs no new template code at all; the CSS additions
+  (`.footnotes`, `.footnote`, `.reversefootnote`) just restyle kramdown's
+  own default output classes to match the site.
+- **`.gallery-full` / `.gallery-float-left` / `.gallery-float-right` /
+  `.gallery-video`** — three image/video layouts for post content: a
+  full-column image, a smaller image with text wrapping around it
+  (switches to full-width/stacked below 700px, same breakpoint as
+  everything else), and a boxed 16:9 responsive video embed. Floats are
+  cleared before `.prose h2`/`h3`/`.gallery-full`/`.gallery-video`, so a
+  wrapped image can never bleed into unrelated content below it. Video is
+  the one deliberate exception to the site's self-hosting-over-CDN
+  preference (§1, §7, §12) — a video file is too large to reasonably
+  self-host on a personal blog, so an external embed
+  (`youtube-nocookie.com`, not the regular tracking-cookie domain) is the
+  accepted approach here, unlike the KaTeX/font situation. See
+  `_posts/2026-08-17-spirals-and-seeds-a-small-gallery.md` — its three
+  illustrations are original self-hosted SVG line art (`assets/img/
+  gallery-*.svg`), matching the existing fish-hero-art style from
+  `blog-home.html`, specifically so the *images* stay self-hosted even
+  though the one video doesn't.

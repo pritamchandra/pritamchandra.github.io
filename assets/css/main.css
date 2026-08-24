@@ -191,9 +191,27 @@
   overflow-x: auto; overflow-y: hidden;
 }
 .katex-display > .katex{
-  text-align: left;
   width: max-content;
   min-width: 100%;
+}
+/* UPDATE (post-launch, per Pritam): a display equation that FITS within
+   the column must stay centered — KaTeX's own default (.katex-display >
+   .katex { text-align: center }, from katex.css, left untouched above)
+   already does this correctly on its own, since width:max-content only
+   grows past min-width:100% when the content genuinely doesn't fit.
+   Only an equation that actually overflows should switch to flush-left:
+   centering an overflowing box starts the default scroll position in
+   the MIDDLE of the equation, with the true left edge already scrolled
+   past and unreachable (scrollLeft can't go negative) — the exact bug
+   this section's history above describes. The original fix sidestepped
+   that by making EVERY equation left-aligned unconditionally, which also
+   flattened short/fitting equations to the left margin — not wanted.
+   The real fix needs to know, per equation, whether it actually
+   overflows, which CSS alone can't test — main.js measures each
+   .katex-display after KaTeX renders (scrollWidth > clientWidth) and
+   adds this class only when true; only then does left-alignment apply. */
+.katex-display.katex-overflowing > .katex{
+  text-align: left;
 }
 /* The width:max-content fix above only grows .katex when the browser
    already considers the equation's own natural width wider than the
@@ -881,3 +899,75 @@ html.sb-hidden .layout-2col > .col-content{
   font-family: var(--font-mono); font-size: .82rem; letter-spacing: .03em;
   color: var(--text-muted); margin: 0 0 .5em;
 }
+
+/* ============================================================
+   References & footnotes — added post-launch (not part of the
+   original five mockups). Simple, numbered, matching the rest of
+   the "primitive" design language: no icons, no color-coding,
+   hairline rules, sans-serif for the small/muted chrome text.
+   Footnotes use kramdown's own native [^1] syntax (see the
+   .footnotes/.footnote/.reversefootnote class names below, which
+   are kramdown's defaults, not invented here) — this is styling
+   only, no new Liquid/HTML mechanism. References are a plain
+   hand-written <ol> with anchor ids; see EDITING-GUIDE.md.
+   ============================================================ */
+
+.ref-link{ text-decoration: none; font-size: .9em; }
+.ref-link:hover{ text-decoration: underline; }
+
+.references{ margin: 2.4em 0; }
+.references h2{ font-size: var(--step-2); margin: 2.2em 0 .6em; padding-bottom: .35em; border-bottom: 1px solid var(--rule); }
+.references ol{ list-style: none; counter-reset: refs; margin: 0; padding: 0; font-size: .92em; }
+.references li{ counter-increment: refs; margin-bottom: .7em; padding-left: 2.2em; position: relative; scroll-margin-top: 80px; }
+.references li::before{
+  content: "[" counter(refs) "]"; position: absolute; left: 0;
+  color: var(--text-muted); font-family: var(--font-sans); font-size: .82em;
+}
+
+.footnotes{
+  margin-top: 3em; padding-top: 1.5em; border-top: 1px solid var(--border);
+  font-family: var(--font-sans); font-size: .84rem; color: var(--text-muted);
+}
+.footnotes ol{ padding-left: 1.4em; margin: 0; }
+.footnotes li{ margin-bottom: .6em; scroll-margin-top: 80px; }
+.footnotes li:last-child{ margin-bottom: 0; }
+.footnotes p{ margin: 0; display: inline; }
+.footnote{ text-decoration: none; }
+.reversefootnote{ text-decoration: none; margin-left: .3em; }
+sup[id^="fnref"]{ scroll-margin-top: 80px; }
+
+/* ============================================================
+   Gallery / media layouts — added post-launch (not part of the
+   original five mockups). Three patterns: a full-linewidth image,
+   a smaller image floated left/right with text wrapping around it,
+   and a boxed, responsive video embed (same "boxed, primitive"
+   treatment as .player for audio). See EDITING-GUIDE.md.
+   ============================================================ */
+
+.gallery-full{ margin: 1.8em 0; }
+.gallery-full img, .gallery-full svg{ width: 100%; height: auto; display: block; border: 1px solid var(--border); }
+.gallery-full figcaption{ font-family: var(--font-sans); font-size: .78rem; color: var(--text-faint); margin-top: .5em; text-align: center; }
+
+.gallery-float-left, .gallery-float-right{ width: 42%; }
+.gallery-float-left{ float: left; margin: .3em 1.6em 1.2em 0; }
+.gallery-float-right{ float: right; margin: .3em 0 1.2em 1.6em; }
+.gallery-float-left img, .gallery-float-right img,
+.gallery-float-left svg, .gallery-float-right svg{ width: 100%; height: auto; display: block; border: 1px solid var(--border); }
+.gallery-float-left figcaption, .gallery-float-right figcaption{
+  font-family: var(--font-sans); font-size: .74rem; color: var(--text-faint); margin-top: .4em;
+}
+/* A floated image must never bleed into the next heading/section —
+   clear it first. Harmless on pages with no floats at all. */
+.prose h2, .prose h3, .gallery-full, .gallery-video{ clear: both; }
+
+@media (max-width: 700px){
+  .gallery-float-left, .gallery-float-right{ float: none; width: 100%; margin: 1.2em 0; }
+}
+
+.gallery-video{ margin: 1.8em 0; }
+.gallery-video .video-frame{
+  position: relative; width: 100%; padding-top: 56.25%; /* 16:9 */
+  background: var(--bg-inset); border: 1px solid var(--border-strong);
+}
+.gallery-video .video-frame iframe{ position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.gallery-video figcaption{ font-family: var(--font-sans); font-size: .78rem; color: var(--text-faint); margin-top: .5em; }

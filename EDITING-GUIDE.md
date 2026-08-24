@@ -131,15 +131,34 @@ passes through untouched:
 ```
 
 **If you want math**, inline math is just `$...$` right in your sentence,
-e.g. `the matrix $A$ is positive definite`. For a standalone, centered
-equation, wrap it in a plain `<div>` like this (the `<div>` is required —
-without it, Markdown can accidentally mangle the backslashes):
+e.g. `the matrix $A$ is positive definite`. A standalone equation on its
+own line is automatically **centered** if it fits within the text column,
+and becomes **left-aligned with its own horizontal scrollbar** if it's too
+wide — you don't need to do anything for either case, it's handled
+automatically. Wrap it in a plain `<div>` like this (the `<div>` is
+required — without it, Markdown can accidentally mangle the backslashes):
 
 ```html
 <div>
 \[ F(A,B) = \left(A^{1/2} B A^{1/2}\right)^{1/2} \]
 </div>
 ```
+
+**One real gotcha inside `$...$` inline math** (not inside a `<div>` —
+those are always safe): avoid a bare `*` or `|` character. Markdown reads
+`*` as "start/end italics" and `|` as "this might be a table," even
+inside math, which can silently mangle the equation. Use the LaTeX word
+form instead — `\ast` instead of `*`, and `\lvert ... \rvert` instead of
+`|...|` for absolute value bars:
+
+```
+Wrong:  $|A^*B|$
+Right:  $\lvert A^\ast B \rvert$
+```
+
+If you ever see stray asterisks, an unrendered `$`, or a table appear out
+of nowhere near a piece of inline math, this is almost always why — check
+for a bare `*` or `|` first.
 
 **If you want lyrics or a poem-style block**, wrap it in a `<p
 class="verse">` tag directly — this preserves your line breaks exactly as
@@ -162,6 +181,92 @@ inside a raw block like this.
 ```liquid
 {% include audio-player.html src="/assets/audio/your-file.m4a" duration="3:42" instruments="guitar, voice" caption="Recorded at home." %}
 ```
+
+**If you want images** (see "Spirals and Seeds: A Small Gallery" for a
+full example), there are three layouts, all plain HTML you paste directly
+into your Markdown:
+
+A full-width image, spanning the whole text column:
+
+```html
+<figure class="gallery-full">
+  <img src="/assets/img/your-image.jpg" alt="A short description for accessibility/screen readers">
+  <figcaption>An optional caption, shown small and centered underneath.</figcaption>
+</figure>
+```
+
+A smaller image with text wrapping around it — use `gallery-float-left`
+or `gallery-float-right` depending on which side you want it on:
+
+```html
+<figure class="gallery-float-right">
+  <img src="/assets/img/your-image.jpg" alt="A short description">
+  <figcaption>An optional caption.</figcaption>
+</figure>
+```
+Put this figure right before the paragraph you want it to sit alongside
+— the text will flow around it automatically. On a phone, it automatically
+switches to full-width and stacks above the text instead (there's no room
+to wrap around on a narrow screen). Save your image file into
+`assets/img/` first, then point `src` at it, e.g.
+`/assets/img/your-image.jpg`.
+
+**If you want video**, embed it — self-hosting a video file isn't
+practical for a personal blog the way self-hosting audio is (video files
+are much larger), so this is the one place on the site where an external
+embed (YouTube, Vimeo) is the normal, expected approach rather than
+something to avoid:
+
+```html
+<figure class="gallery-video">
+  <div class="video-frame">
+    <iframe src="https://www.youtube-nocookie.com/embed/YOUR-VIDEO-ID" title="A short title" allowfullscreen loading="lazy"></iframe>
+  </div>
+  <figcaption>An optional caption, e.g. attribution/license.</figcaption>
+</figure>
+```
+Use `youtube-nocookie.com` (not the regular `youtube.com` embed URL) —
+it's YouTube's own privacy-friendlier embed domain, doesn't set tracking
+cookies until someone actually presses play. The video ID is the part
+after `watch?v=` in a normal YouTube URL.
+
+**If you want references (a numbered bibliography)**, write a plain
+numbered list at the end of your post, and link to each entry from the
+text with a small `[1]`-style tag:
+
+```html
+In the text: this is a known result <a class="ref-link" href="#ref-1">[1]</a>.
+
+At the end of the post:
+<section class="references">
+  <h2>References</h2>
+  <ol>
+    <li id="ref-1">Author, A. (Year). <em>Title of the work</em>. Publisher.</li>
+    <li id="ref-2">Another Author, B. (Year). Title of a paper. <em>Journal Name</em>, volume, pages.</li>
+  </ol>
+</section>
+```
+The `id="ref-1"` on each list item has to match the `href="#ref-1"` on
+its in-text link, and the numbering is automatic (just the position in
+the list) — you never type the number `1` yourself, only the matching
+`ref-1`/`ref-2`/... ids.
+
+**If you want footnotes**, these use Markdown's own built-in footnote
+syntax — no HTML needed at all. Write `[^1]` right where you want the
+little numbered marker to appear in your sentence, then anywhere else in
+the same file (the bottom is the natural place) write what it says:
+
+```markdown
+This claim needs a little more support than I can give it here.[^1]
+
+[^1]: Here's the fuller explanation, as long as you like.
+```
+Jekyll collects every `[^...]` in the post automatically into a numbered
+list at the very bottom, each with a small arrow that jumps back to where
+you were reading — you don't build any of that by hand, just write the
+`[^1]` marker and its matching `[^1]: text` definition. See "Von
+Neumann's Trace Inequality" for a working example of both references and
+footnotes side by side.
 
 ## 4. Adding a new collection (a multi-chapter "book," like Confessions)
 

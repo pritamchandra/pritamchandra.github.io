@@ -177,5 +177,40 @@
       ],
       throwOnError: false
     });
+    /* A display equation that fits should stay centered (KaTeX's own
+       default); only one that genuinely overflows its column switches to
+       flush-left + scrollable — see the .katex-overflowing rule in
+       main.css for why this can't be done with CSS alone. This has to be
+       re-checked any time an equation's rendered width relative to its
+       column could change — not just a window resize (sidebars merging
+       away below 1000px), but also the nav's text-size +/- control,
+       which changes root.style.fontSize and therefore every equation's
+       pixel width without firing a window "resize" event at all.
+       ResizeObserver has to watch the INNER .katex element, not
+       .katex-display itself: .katex-display clips overflow
+       (overflow-x:auto), so ITS OWN box stays pinned to the column width
+       no matter how wide its content gets — a ResizeObserver on it never
+       fires from content-only growth. .katex has width:max-content, so
+       its own box genuinely grows/shrinks with the rendered equation,
+       which is what needs watching. Confirmed by testing: observing
+       .katex-display missed every case where an equation crossed the
+       overflow threshold purely from a text-size change, since the
+       column (.katex-display's own box) never itself resized. */
+    var markOne = function(katexEl){
+      var d = katexEl.closest(".katex-display");
+      if (d) d.classList.toggle("katex-overflowing", d.scrollWidth > d.clientWidth + 1);
+    };
+    var katexEls = document.querySelectorAll(".katex-display > .katex");
+    katexEls.forEach(markOne);
+    if (window.ResizeObserver){
+      var ro = new ResizeObserver(function(entries){
+        entries.forEach(function(entry){ markOne(entry.target); });
+      });
+      katexEls.forEach(function(k){ ro.observe(k); });
+    } else {
+      window.addEventListener("resize", function(){
+        katexEls.forEach(markOne);
+      }, { passive: true });
+    }
   }
 })();
