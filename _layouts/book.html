@@ -18,7 +18,7 @@ layout: default
         <hr class="rule" style="margin-top:1em;">
       </header>
 
-      {% if page.note %}<p class="book-note">{{ page.note }}</p>{% endif %}
+      {% if page.note %}<div class="book-note">{{ page.note | markdownify }}</div>{% endif %}
 
       {{ content }}
 

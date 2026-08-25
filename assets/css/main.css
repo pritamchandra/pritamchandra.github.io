@@ -862,6 +862,8 @@ img.portrait{ object-fit: cover; display: block; }
 .book-toc ul.toc-sub li:last-child{ margin-bottom: 0; }
 
 .book-note{ color: var(--text-muted); font-size: .94rem; margin-bottom: 2.4em; padding-bottom: 2rem; border-bottom: 1px solid var(--border); }
+.book-note p{ margin: 0 0 1em; }
+.book-note p:last-child{ margin-bottom: 0; }
 
 /* Divider between two subchapters of the same chapter — a plain rule, no
    centered dots (the dots read as decorative clutter; removed in an

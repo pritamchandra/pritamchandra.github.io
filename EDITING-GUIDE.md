@@ -409,6 +409,34 @@ above), not just a bare date. If you leave the time off, the blog home's
 sorting can break because of a quirk in how the site's building tool reads
 dates — always copy the exact format above and just change the numbers.
 
+**`note:` is a short editorial note shown right below the collection's
+title/tags, above the first chapter** (used on Confessions for the
+"these are placeholder poems" disclaimer). Leave it `note: null` if you
+don't want one. When you do want one, it's written as ordinary Markdown
+— `**bold**`, `*italic*`, even multiple paragraphs — same rules as the
+body of any post. The one thing to know is *how* to write it, since it
+lives on one YAML line by default:
+
+- **A short, single-line note** can just go in quotes on the same line:
+  ```yaml
+  note: "A short note, with a \"quoted phrase\" if you escape the quotes like this."
+  ```
+  Note the backslash before each inner `"` — easy to forget, easy to get
+  wrong on a long line.
+- **Anything longer, or with quotation marks, or more than one
+  paragraph** is much easier written as a YAML "block" instead — put a
+  `|` after `note:`, then indent every following line by two spaces.
+  Nothing on those lines needs escaping, including `"` quotes:
+  ```yaml
+  note: |
+    A longer editorial note. You can use "quotation marks" here freely,
+    apostrophes like it's or don't, and *italic* or **bold** too.
+
+    A blank line like the one above starts a new paragraph.
+  ```
+  This is the recommended way to write `note:` any time it's more than
+  a short sentence — copy this block form and just change the wording.
+
 **Step 3 — add the chapter titles.** Make a new file:
 
 ```

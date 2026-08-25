@@ -1551,3 +1551,47 @@ around the element it renders into** — printing `{{ page.field }}`
 directly into a `<p>`/`<div>` with no guard will always leave a
 gap-shaped hole once that field is actually left blank, even though it
 looks harmless while every real page still has a real value there.
+
+**UPDATE — `page.note` (a book's editorial note, `_layouts/book.html`)
+switched from raw HTML to real Markdown.** Came up while answering
+Pritam's follow-up question about writing newlines and quotation marks
+inside `note:`. The field was originally `<p class="book-note">{{
+page.note }}</p>` — `{{ }}` with no filter prints the string completely
+literally, so it was never Markdown at all; the Confessions sample note
+only worked because it happened to be written as raw HTML by hand
+(`<em>...&mdash;...</em>`). That made Pritam's actual question genuinely
+awkward to answer well: a YAML double-quoted flow scalar can hold a
+literal quote mark, but only by backslash-escaping it (`\"`), and a
+"newline" typed into it doesn't produce a visible line break in the
+output at all (no `white-space: pre-line` on `.book-note`, and no
+paragraph-splitting logic downstream) — it would've been correct but
+clunky advice.
+
+Fixed at the template level instead of just documenting the workaround:
+`{% if page.note %}<div class="book-note">{{ page.note | markdownify
+}}</div>{% endif %}` — swapped the wrapping tag from `<p>` to `<div>`
+(a `markdownify`'d multi-paragraph note produces its own `<p>` tags,
+and `<p>` can't legally contain another `<p>`), and added `| markdownify`
+so the field is processed as real kramdown, same as every other body of
+prose on the site. Verified safe for the existing Confessions note (raw
+HTML passes through kramdown completely untouched, confirmed byte-for-
+byte identical output before/after) and verified with a direct kramdown
+CLI test that this newly enables exactly what was asked: literal `"`
+quotes with zero escaping, and blank-line-separated paragraphs that
+render as real, separate `<p>` tags — using YAML's `|` block-scalar
+syntax (see EDITING-GUIDE.md §4) rather than a quoted one-liner. Added
+`.book-note p{ margin: 0 0 1em; } .book-note p:last-child{ margin-bottom:
+0; }` to `main.css` right after `.book-note` itself, since a multi-
+paragraph note now needs the same last-child margin reset already used
+elsewhere on the site (e.g. `.prose li:last-child`) so the block's own
+`padding-bottom`/`border-bottom` doesn't end up with extra trailing
+space stacked under a paragraph's own default bottom margin.
+
+This is the same category of gotcha as `.thm`/`.proof`'s deliberate
+raw-HTML choice above, just resolved the other way: `.thm`/`.proof`
+stayed raw HTML because they're the one place on the site genuinely
+likely to contain `\#`/`\!`-style escaped LaTeX, where kramdown's
+escape-stripping is a real risk. `note` is a short editorial aside, not
+a place serious LaTeX would ever live, so the trade favors real Markdown
+there — flag it if a future book's note ever needs an escaped `\#` or
+`\!` in prose, same caveat as §7/§13's other kramdown-escape notes.
