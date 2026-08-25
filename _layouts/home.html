@@ -23,8 +23,13 @@ layout: default
     </aside>
 
     <aside class="col-sidebar col-right sidebar-sticky">
-      <div class="portrait" aria-hidden="true">PC</div>
-      <p class="portrait-cap">Photograph &mdash; replace with <code>/assets/img/author-photo.jpg</code></p>
+      {% assign author_photo = site.static_files | where: "path", "/assets/img/author-photo.jpg" | first %}
+      {% if author_photo %}
+        <img class="portrait" src="{{ '/assets/img/author-photo.jpg' | relative_url }}" alt="Photograph of Pritam Chandra">
+      {% else %}
+        <div class="portrait" aria-hidden="true">PC</div>
+        <p class="portrait-cap">Photograph &mdash; replace with <code>/assets/img/author-photo.jpg</code></p>
+      {% endif %}
       <h2>Elsewhere</h2>
       <ul class="link-list">
         <li><a href="{{ site.data.social.scholar }}">Google Scholar</a></li>

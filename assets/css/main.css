@@ -670,6 +670,11 @@ html.sb-hidden .layout-2col > .col-content{
   font-family: var(--font-serif); font-size: 1.9rem; font-weight: 600; color: var(--text-faint);
   margin: 0 0 .6rem;
 }
+/* Once a real photo exists, .portrait becomes an <img> instead of the
+   placeholder <div> above — same box, but filled with an actual photo
+   (object-fit:cover so it crops to the box's aspect ratio) instead of
+   centered "PC" text. */
+img.portrait{ object-fit: cover; display: block; }
 .portrait-cap{ font-size: .74rem; color: var(--text-faint); margin: 0 0 1.3rem; line-height: 1.5; }
 
 .link-list{ list-style:none; margin:0 0 1.6rem; padding:0; }

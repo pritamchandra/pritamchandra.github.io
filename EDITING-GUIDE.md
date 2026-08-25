@@ -63,6 +63,14 @@ Everything **below** the second `---` is your "About" text — three
 ordinary paragraphs. Edit that like you'd edit any document. Leave blank
 lines between paragraphs.
 
+**Your photo**: save it as `assets/img/author-photo.jpg` (that exact
+filename) and it appears automatically — the page checks whether that
+file exists and switches from the placeholder "PC" box to your actual
+photo on its own, nothing else to edit. It's cropped to a square-ish box,
+so a roughly square source photo looks best. It only ever shows on the
+full desktop width (≥1000px) — dropped entirely on narrower screens and
+in the drawer, by design, not a bug if you don't see it on your phone.
+
 **The structured lists** (Journal Publications, Preprints, Notes, Academic
 Service, Teaching) don't live in `index.md` at all — they're generated
 automatically from the files in `_data/`:
@@ -119,7 +127,8 @@ three-line file you can copy and rename).
 
 **If you want a theorem/lemma/proof box** (like in the math sample post),
 paste this directly into your post — it's plain HTML, which Markdown
-passes through untouched:
+passes through completely untouched (that's the whole reason it's
+written this way — more on that below):
 
 ```html
 <div class="thm">
@@ -130,35 +139,107 @@ passes through untouched:
 </div>
 ```
 
+**Why every paragraph inside a box like this needs its own `<p>` tag,
+instead of just being plain text like the rest of your post:** it's not
+arbitrary — it's what keeps LaTeX commands from getting silently
+corrupted. Markdown treats `<div>...</div>` as a sealed unit and doesn't
+touch anything inside it — no auto-`<p>`-wrapping, but also, critically,
+**no chance of Markdown misreading a LaTeX command as its own syntax**.
+Outside a sealed `<div>` (i.e. in ordinary paragraph text, including
+plain `$...$` math sitting directly in a sentence), Markdown actively
+looks for characters like `*`, `_`, `#`, and a few others and tries to
+do something with them — which can reach *inside* your math and corrupt
+it, invisibly, with no error message. This is the single most important
+thing to know about writing math on this site, so it's worth being
+concrete about exactly what's safe and what isn't.
+
+**Inside a `$...$` or a `<div>\[ ... \]</div>` display equation, avoid
+these bare characters — use the LaTeX word-command instead of typing the
+symbol directly:**
+
+| Avoid (bare) | Use instead | Why |
+|---|---|---|
+| `*` | `\ast` | Markdown reads `*` as italics |
+| `\|` | `\lvert`, `\rvert` | Markdown reads `\|` as a table column |
+| `\#` | (rewrite, see below) | Markdown strips the backslash |
+| `\!` | (rewrite, see below) | Markdown strips the backslash |
+| `\{`, `\}` | plain `{`, `}` (no backslash) | Markdown strips the backslash |
+
+The last three are about a **literal backslash immediately followed by
+one of those characters** — this is Markdown's own escape syntax (`\#`
+normally means "print a literal #, don't treat it as a heading"), and it
+fires even inside math, silently eating the backslash your LaTeX command
+actually needed. Concretely:
+
+```
+Wrong:  $A \# B$              (the \# for Ando's geometric-mean symbol)
+Wrong:  $A^{1/2}\!B$          (the \! for a negative thin space)
+Wrong:  $\{x : x > 0\}$       (escaped braces for a literal set)
+
+Right:  wrap the whole equation in a plain <div>\[ ... \]</div> instead —
+        display equations are always 100% safe, this issue is specific
+        to bare $...$ math sitting directly in a sentence.
+```
+
+**Bare `{` and `}` with no backslash are always fine** (e.g. `A^{-1}`,
+`\frac{1}{2}`) — it's only the *escaped* `\{`/`\}` form (for printing a
+literal curly brace) that's at risk, and that's rare enough in normal
+use that the simplest fix is usually to just avoid it or move that one
+equation into a `<div>` block. A single, lone `*` or `\|` with no
+matching second one later in the same paragraph is also harmless —
+the risk is specifically when Markdown finds a *pair* of them to match
+up, which is exactly what happened with `\!`/`\#` too (they're
+Markdown's own escape sequences, not a pairing issue, but the fix is the
+same: keep them out of bare inline math).
+
+**If a piece of inline math needs any of these**, the reliable fix is
+the same one already used for standalone equations: wrap it in a plain
+`<div>...</div>`, even for something short and inline-looking:
+
+```html
+The geometric mean, written <div>$A \# B$</div>, satisfies...
+```
+
+This is a little more HTML than ideal, admittedly — but it's the
+difference between math that's *guaranteed* correct and math that's
+*usually* correct, and for a site whose whole reason for self-hosting
+KaTeX in the first place was "never let a rendering bug hide silently,"
+guaranteed wins. If you'd rather not think about any of this on a
+case-by-case basis, the simplest blanket rule is: **any theorem/lemma/
+proof box, or any paragraph with more than trivial math in it, just use
+`<p>` tags for its text like the example above** — that's what makes it
+a sealed `<div>`, immune to all of this by construction, at the cost of
+typing `<p>` yourself instead of a blank line.
+
+**A note on a fancier alternative, and why it's not the default here:**
+kramdown (the Markdown engine this site uses) has a feature where adding
+`markdown="1"` to a `<div>` tells it to keep processing Markdown *inside*
+that div — meaning you'd get automatic `<p>` tags, `**bold**`, numbered
+lists, and so on, without writing raw HTML for any of it. It looks
+tempting for exactly this situation. The problem: turning Markdown
+processing back on inside the box also turns the *escaping bug above*
+back on for anything inside it — so `markdown="1"` trades "less typing"
+for "your `\#`/`\!` math can silently break," which for a math-heavy
+site is the wrong trade more often than not. If you want to try it
+anyway for a specific box you're sure has no risky math in it, ask and
+I'll set it up — just don't expect it as the default, and don't be
+surprised if I steer a request back toward the safer `<p>` version when
+the content has real LaTeX in it.
+
 **If you want math**, inline math is just `$...$` right in your sentence,
 e.g. `the matrix $A$ is positive definite`. A standalone equation on its
 own line is automatically **centered** if it fits within the text column,
 and becomes **left-aligned with its own horizontal scrollbar** if it's too
 wide — you don't need to do anything for either case, it's handled
 automatically. Wrap it in a plain `<div>` like this (the `<div>` is
-required — without it, Markdown can accidentally mangle the backslashes):
+required — without it, Markdown can accidentally mangle the backslashes,
+per the whole discussion above):
 
 ```html
 <div>
 \[ F(A,B) = \left(A^{1/2} B A^{1/2}\right)^{1/2} \]
 </div>
 ```
-
-**One real gotcha inside `$...$` inline math** (not inside a `<div>` —
-those are always safe): avoid a bare `*` or `|` character. Markdown reads
-`*` as "start/end italics" and `|` as "this might be a table," even
-inside math, which can silently mangle the equation. Use the LaTeX word
-form instead — `\ast` instead of `*`, and `\lvert ... \rvert` instead of
-`|...|` for absolute value bars:
-
-```
-Wrong:  $|A^*B|$
-Right:  $\lvert A^\ast B \rvert$
-```
-
-If you ever see stray asterisks, an unrendered `$`, or a table appear out
-of nowhere near a piece of inline math, this is almost always why — check
-for a bare `*` or `|` first.
 
 **If you want lyrics or a poem-style block**, wrap it in a `<p
 class="verse">` tag directly — this preserves your line breaks exactly as

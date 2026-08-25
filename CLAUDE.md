@@ -1478,3 +1478,56 @@ touched again:
   instead of a static column. If a new right-sidebar item is ever added
   to a `.layout-3col` page, it needs a matching drawer copy for this
   reason, same as every other sidebar item on the site already does.
+
+**UPDATE — author photo now actually wired up, and a fuller account of
+the kramdown escape-character gotcha.**
+
+- **Author photo**: `home.html`'s right sidebar previously hardcoded the
+  `<div class="portrait">PC</div>` placeholder unconditionally — dropping
+  a real `author-photo.jpg` into `assets/img/` never did anything,
+  because nothing in the template ever checked for the file or rendered
+  an `<img>` for it. Real, live bug, caught only because Pritam actually
+  tried it. Fixed with `{% assign author_photo = site.static_files |
+  where: "path", "/assets/img/author-photo.jpg" | first %}` — Jekyll
+  exposes every non-processed file as a `Jekyll::StaticFile` in
+  `site.static_files`, each with a `.path` relative to the source root,
+  so this is a real existence check, not a guess. When found, renders
+  `<img class="portrait" src="...">` (new `img.portrait{ object-fit:
+  cover }` CSS rule) instead of the placeholder div + its caption. The
+  general lesson: **any "drop a file here and it'll show up" instruction
+  in EDITING-GUIDE.md needs a template that actually checks for the
+  file** — a hardcoded placeholder with no conditional is a silent trap,
+  identical in spirit to the `[hidden]`-vs-`display` bugs found earlier
+  this session, just at the template level instead of the CSS level.
+
+- **The kramdown inline-math escape gotcha (§13's `*`/`\|` note) is
+  bigger than originally documented.** Tested systematically: kramdown
+  strips a backslash immediately before any of `\` `` ` `` `*` `_` `{`
+  `}` `[` `]` `#` `+` `-` `.` `!` `~` when it's processing Markdown —
+  which includes bare `$...$` math sitting in ordinary prose, *not* just
+  a `markdown="1"` div. Confirmed corrupted in this codebase's own
+  testing: `\#` → `#` (breaks Ando's geometric-mean notation, used
+  throughout the operator-fidelity post — verified the *shipped* post is
+  actually safe only because every `\#` in it happens to sit inside a
+  `.thm`/`.proof`/display-math raw block, never bare in prose) and `\!`
+  → `!` (breaks negative-thin-space spacing, used constantly in serious
+  LaTeX). `\{`/`\}` are also stripped, though bare unescaped `{`/`}`
+  (grouping, e.g. `A^{-1}`) are completely unaffected — only the
+  *escaped* literal-brace form is at risk. The `*`/`\|` risk specifically
+  needs a *pair* of them in the same paragraph to trigger (Markdown
+  pairs them up as emphasis/table syntax); a lone one is harmless. The
+  `\#`/`\!`/`\{`/`\}` risk is different — it's Markdown's *own* escape
+  syntax firing, not a pairing issue, and it fires on every single
+  occurrence, not just paired ones.
+- **Considered and rejected**: using kramdown's `markdown="1"` attribute
+  on `.thm`/`.proof` divs to get automatic `<p>` wrapping and avoid
+  hand-typing HTML. This does work for the prose (verified: `**bold**`,
+  numbered lists, auto-`<p>` all work correctly with `markdown="1"`) —
+  but it re-enables the exact escape-stripping bug above for anything
+  inside the div, which is a bad trade for a mathematician's blog where
+  `\#`/`\!` are common. Decided to keep `.thm`/`.proof` as plain raw
+  HTML (hand-written `<p>` tags) as the *documented default* rather than
+  switch, but EDITING-GUIDE.md §3 explains the tradeoff honestly and
+  offers `markdown="1"` as an opt-in for a specific box Pritam is sure
+  has no risky math in it, rather than silently deciding for him either
+  way.
