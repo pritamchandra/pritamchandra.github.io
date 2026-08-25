@@ -348,9 +348,17 @@ should reference these. Summary:
   If Pritam wants precise per-word chord placement later, that's a bigger
   design decision (probably a `<pre>` block, monospace, horizontally
   scrollable on mobile) — flag it rather than silently building it.
-- **`.epigraph`** — centered, both-sides-indented, **oblique, not
-  italic** (`font-style: oblique 10deg`) — the user was specific about this
-  distinction; don't substitute `font-style: italic`.
+- **`.epigraph`** — centered, both-sides-indented. **No automatic
+  quotation marks and no automatic italics** — both were removed at
+  Pritam's request (see §13's epigraph UPDATE for the full history,
+  including why: nested quotations inside a real quoted source don't
+  work if the template is the one adding the outer quote marks). Write
+  `epigraph.text` exactly as it should look — add your own `"..."` and
+  `*italic*`/`**bold**` inline in the YAML, same rules as `note` (§13).
+  The two existing Confessions epigraphs keep their italic look by
+  having `*...*` written into their `text:` field by hand, not by any
+  CSS doing it for them — copy that pattern for a new italicized
+  epigraph rather than expecting it automatically.
 - **Collections use a point-numbering system — chapter (`I`, `II`, ...)
   and subchapter (`I.1`, `I.2`, `II.1`, ...) — not named "parts."** An
   earlier draft grouped Confessions' five poems under two labels, "Part
@@ -1169,7 +1177,10 @@ exercise — please preserve, don't "improve":
   (hiding the sidebar visibly shifted the text left) and it's exactly the
   kind of thing a "cleanup" pass could reintroduce by adding back a
   `grid-template-columns` override.
-- Oblique (not italic) quotes.
+- ~~Oblique (not italic) quotes.~~ Superseded — epigraphs are no longer
+  auto-italicized at all (§13's epigraph UPDATE); this line described
+  the automatic behavior that was deliberately removed, not a rule
+  still in force.
 - No blue navbar (the one explicit thing ruled out from the Quarto look).
 - Math rendered as real KaTeX, not images (the fix for Tao's blog's
   dark-mode-unfriendly math images) — **and self-hosted, not loaded from a
@@ -1642,3 +1653,69 @@ holds up for genuinely single-paragraph content, since a second
 paragraph in the source would produce a second `<p>...</p>` that this
 approach doesn't know how to un-nest, so `epigraph.text` is documented
 in EDITING-GUIDE.md as a one-paragraph-only field, unlike `note`.
+
+**UPDATE, immediately superseding the block above — the auto-added
+smart quotes and automatic oblique italic are both gone; both are now
+manual, by Pritam's explicit request.** His reasoning: the whole point
+of wanting quotation marks *inside* an epigraph is to quote a real
+source directly, and a real quotation very often needs its own nested
+quote marks (a quote within the quoted passage) — automatically
+wrapping the *entire* epigraph in the site's own curly quotes made that
+impossible to do cleanly (nested `&ldquo;...&ldquo;...&rdquo;...&rdquo;`
+reads wrong, and there's no clean way to vary the inner/outer quote
+style — e.g. `"..."` outside, `'...'` inside — when the outer pair is
+being added by the template rather than typed). Likewise, the automatic
+`font-style: oblique 10deg` meant Pritam had no way to write an epigraph
+that *wasn't* italicized, or to italicize only part of one.
+
+The fix removes both mechanisms from the template/CSS, moving the
+choice entirely into what Pritam types in `text:`:
+```liquid
+{% if sub.epigraph %}
+<div class="epigraph">
+  {{ sub.epigraph.text | markdownify }}
+  <cite>{{ sub.epigraph.cite }}</cite>
+</div>
+{% endif %}
+```
+This is *simpler* than the block it replaces, not just different — the
+`&ldquo;`/`&rdquo;` hand-wrapping is gone, and with it the whole reason
+the previous fix needed `remove: '<p>'`/`remove: '</p>'` to unwrap and
+re-wrap kramdown's own `<p>` tag: there is no hand-written wrapper left
+to collide with, so `markdownify`'s own `<p>...</p>` output is used
+directly and satisfies the existing `.epigraph p` CSS selector on its
+own. One consequence worth naming: the "single paragraph only" limit
+documented in the block above was a symptom of that now-deleted
+`remove` trick, not a real requirement — a multi-paragraph epigraph
+would technically work fine today (each resulting `<p>` gets the same
+centered styling). Epigraphs are still described as one short quote by
+convention/design, just not enforced by the markup anymore.
+
+CSS: `.epigraph p{ font-style: oblique 10deg; ... }` had the
+`font-style` declaration removed entirely — `.epigraph p` is now plain
+centered/muted text with no automatic slant. `text-align: center` and
+the `.epigraph`/`.epigraph cite` block's indentation/attribution
+styling are all unchanged; only the auto-italic and auto-quotes were
+in scope for this request.
+
+Because the two existing Confessions epigraphs relied on the automatic
+italic to get their look, and Pritam asked to keep their current
+*appearance* even though the mechanism is now manual, both
+`_books/confessions-i-2-what-i-did-not-say-at-fifteen.md` and
+`_books/confessions-ii-1-letter-to-an-old-belief.md` had their
+`epigraph.text` wrapped in a literal `*...*` by hand (kramdown turns
+this into `<em>`, and `.prose em{ font-style: italic; }` — already
+defined site-wide, unchanged — picks it up) so the rendered page looks
+identical to before this change. This is a real, deliberate departure
+from the original "oblique, not italic" font distinction described at
+the top of this section: that distinction only ever mattered while the
+site was choosing the font-style *for* Pritam automatically; now that
+he's choosing it himself with plain `*text*`, it renders as ordinary
+`<em>`/italic like anywhere else in the prose, not the special oblique
+variant, and that's an accepted tradeoff of moving control to him, not
+an oversight to fix later. If a future epigraph wants no italics at
+all, or wants only part of the line italicized, or wants a nested
+quotation (e.g. `text: |` block with `"she said, 'I meant it,'" he
+wrote` inside it), all of that now works directly by typing it, no
+template change needed — see EDITING-GUIDE.md §4 for the reworded
+instructions.

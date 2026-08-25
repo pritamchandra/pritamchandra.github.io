@@ -41,9 +41,8 @@ layout: default
                 <h3>{{ sub.title }}</h3>
               </header>
               {% if sub.epigraph %}
-              {% assign epigraph_html = sub.epigraph.text | markdownify | strip | remove: '<p>' | remove: '</p>' %}
               <div class="epigraph">
-                <p>&ldquo;{{ epigraph_html }}&rdquo;</p>
+                {{ sub.epigraph.text | markdownify }}
                 <cite>{{ sub.epigraph.cite }}</cite>
               </div>
               {% endif %}

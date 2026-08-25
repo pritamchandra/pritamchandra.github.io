@@ -903,7 +903,7 @@ img.portrait{ object-fit: cover; display: block; }
 }
 
 .epigraph{ margin: 0 0 1.8em; padding: 0 2.4em; }
-.epigraph p{ font-style: oblique 10deg; text-align: center; color: var(--text-muted); margin-bottom: .4em; }
+.epigraph p{ text-align: center; color: var(--text-muted); margin-bottom: .4em; }
 .epigraph cite{ display:block; text-align:center; font-style:normal; font-family: var(--font-sans); font-size: .76rem; }
 .epigraph cite::before{ content: "\2014 "; }
 

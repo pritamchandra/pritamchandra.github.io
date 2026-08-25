@@ -7,7 +7,7 @@ order: 4
 title: "Letter to an Old Belief"
 slug: ii-1
 epigraph:
-  text: "A room built in the dark keeps its shape even after the lights come on &mdash; you just see, finally, what you built it from."
+  text: "*A room built in the dark keeps its shape even after the lights come on &mdash; you just see, finally, what you built it from.*"
   cite: "epigraph, added later"
 gloss: null
 ---

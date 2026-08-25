@@ -7,7 +7,7 @@ order: 2
 title: "What I Did Not Say at Fifteen"
 slug: i-2
 epigraph:
-  text: "Late have I loved you, beauty so old and so new &mdash; late have I loved you. You were within me while I searched outside, running after the shapes of the things you had made, mistaking the echo for the voice that made it."
+  text: "*Late have I loved you, beauty so old and so new &mdash; late have I loved you. You were within me while I searched outside, running after the shapes of the things you had made, mistaking the echo for the voice that made it.*"
   cite: "after Augustine, Confessions X"
 gloss: null
 ---
