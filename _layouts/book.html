@@ -25,34 +25,55 @@ layout: default
       {% assign chapters_data_key = page.book_slug | append: "-chapters" %}
       {% assign chapters_data = site.data.books[chapters_data_key].chapters %}
       {% assign subchapters = site.books | where: "book", page.book_slug | sort: "order" %}
-      {% for ch in chapters_data %}
-        {% assign ch_subs = subchapters | where: "chapter", ch.number %}
-        <section class="chapter" id="{{ ch.id }}">
-          <header class="chapter-head">
-            <span class="chapter-num">{{ ch.number }}</span>
-            <h2>{{ ch.title }}</h2>
-          </header>
-          {% if ch.intro %}<p class="chapter-intro">{{ ch.intro }}</p>{% endif %}
+      {% if chapters_data %}
+        {% for ch in chapters_data %}
+          {% assign ch_subs = subchapters | where: "chapter", ch.number %}
+          <section class="chapter" id="{{ ch.id }}">
+            <header class="chapter-head">
+              <span class="chapter-num">{{ ch.number }}</span>
+              <h2>{{ ch.title }}</h2>
+            </header>
+            {% if ch.intro %}<p class="chapter-intro">{{ ch.intro }}</p>{% endif %}
 
-          {% for sub in ch_subs %}
-            <section class="subchapter" id="{{ sub.slug }}">
-              <header class="subchapter-head">
-                <span class="subchapter-num">{{ ch.number }}.{{ sub.chapter_order }}</span>
-                <h3>{{ sub.title }}</h3>
-              </header>
-              {% if sub.epigraph %}
-              <div class="epigraph">
-                {{ sub.epigraph.text | markdownify }}
-                <cite>{{ sub.epigraph.cite }}</cite>
-              </div>
-              {% endif %}
-              {{ sub.content }}
-              {% if sub.gloss %}<p class="chapter-gloss">{{ sub.gloss }}</p>{% endif %}
-            </section>
-            {% unless forloop.last %}<hr class="rule chapter-divider">{% endunless %}
-          {% endfor %}
-        </section>
-      {% endfor %}
+            {% for sub in ch_subs %}
+              <section class="subchapter" id="{{ sub.slug }}">
+                <header class="subchapter-head">
+                  <span class="subchapter-num">{{ ch.number }}.{{ sub.chapter_order }}</span>
+                  <h3>{{ sub.title }}</h3>
+                </header>
+                {% if sub.epigraph %}
+                <div class="epigraph">
+                  {{ sub.epigraph.text | markdownify }}
+                  <cite>{{ sub.epigraph.cite }}</cite>
+                </div>
+                {% endif %}
+                {{ sub.content }}
+                {% if sub.gloss %}<p class="chapter-gloss">{{ sub.gloss }}</p>{% endif %}
+              </section>
+              {% unless forloop.last %}<hr class="rule chapter-divider">{% endunless %}
+            {% endfor %}
+          </section>
+        {% endfor %}
+      {% else %}
+        {% comment %} No chapters — every piece stands on its own, flat, numbered 1, 2, 3... {% endcomment %}
+        {% for sub in subchapters %}
+          <section class="subchapter" id="{{ sub.slug }}">
+            <header class="subchapter-head">
+              <span class="subchapter-num">{{ forloop.index }}</span>
+              <h2>{{ sub.title }}</h2>
+            </header>
+            {% if sub.epigraph %}
+            <div class="epigraph">
+              {{ sub.epigraph.text | markdownify }}
+              <cite>{{ sub.epigraph.cite }}</cite>
+            </div>
+            {% endif %}
+            {{ sub.content }}
+            {% if sub.gloss %}<p class="chapter-gloss">{{ sub.gloss }}</p>{% endif %}
+          </section>
+          {% unless forloop.last %}<hr class="rule chapter-divider">{% endunless %}
+        {% endfor %}
+      {% endif %}
 
       {% include footer.html %}
     </main>

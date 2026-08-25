@@ -520,7 +520,11 @@ Your piece's text goes here.
   skip it.
 - **If your book has no chapters**, just omit `chapter:` and
   `chapter_order:` entirely, and skip Step 3 — the piece will render as a
-  flat entry with no chapter grouping.
+  flat entry with no chapter grouping. Its number (shown above the
+  title, and in Contents) is just its position in the book — `order: 1`
+  shows as "1", `order: 2` as "2", and so on — and `slug` for a
+  chapterless book is just that same plain number (`slug: 1`, `slug: 2`,
+  ...), not the `i-1`-style slug a chaptered book uses.
 
 For the piece's actual text, use `<p class="verse">...</p>` for
 poetry/lyrics (see §3 above), or just ordinary paragraphs for prose.

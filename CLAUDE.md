@@ -1719,3 +1719,68 @@ quotation (e.g. `text: |` block with `"she said, 'I meant it,'" he
 wrote` inside it), all of that now works directly by typing it, no
 template change needed — see EDITING-GUIDE.md §4 for the reworded
 instructions.
+
+**UPDATE — the "chapterless book" case described in §6/§4 was never
+actually implemented, and a real second book (a new collection, called
+"Confession," singular — not a chapter added to "Confessions") hit the
+gap immediately.** Pritam added `blog/confession/index.md` (correct,
+`book_slug: confession`) and a piece,
+`_books/confession-1-wicked-seed.md` (correct, `book: confession`,
+`order: 1`, `slug: 1`, no `chapter:`/`chapter_order:` — exactly per
+spec for a book with "just pieces," his own term), then reported the
+piece wasn't showing up. Nothing in his front matter was wrong; the bug
+was structural, in both `_layouts/book.html` and
+`_includes/book-toc.html`, which had only ever been written for the
+chaptered case:
+```liquid
+{% assign chapters_data = site.data.books[chapters_data_key].chapters %}
+{% for ch in chapters_data %}
+  ...only place any piece is ever rendered...
+{% endfor %}
+```
+Since a chapterless book correctly has no
+`_data/books/<slug>-chapters.yml` file at all, `chapters_data` is
+`nil`, and `{% for ch in chapters_data %}` silently iterates zero
+times — not just skipping that one piece, but skipping *the entire book
+body and its whole Contents list*, no matter how many correct pieces
+exist in `site.books` for it. Confirmed by inspecting the built output
+directly before touching any template code: `Wicked Seed`'s title,
+epigraph, and verse were completely absent from
+`_site/blog/confession/index.html`, and both copies of `.book-toc`
+(static sidebar + drawer) rendered as empty shells with zero `<li>`s.
+This is exactly the gap CLAUDE.md §6 predicted in its original spec
+text ("a book that doesn't need chapters... render[s] a flat list of
+`.subchapter` sections with no wrapping `.chapter`") but which was
+never actually built, since Confessions — the only book that existed
+until now — always used chapters, so the untested code path sat there
+looking plausible until a second, chapterless book actually exercised
+it.
+
+Fixed by giving both templates a real `{% if chapters_data %} ... {%
+else %} ... {% endif %}` split. The `{% else %}` branch in
+`book.html` loops `subchapters` directly (no chapter grouping),
+rendering each as a bare `.subchapter` section numbered by its plain
+position (`{{ forloop.index }}`, matching `order`'s own 1, 2, 3...),
+carrying over epigraph/content/gloss handling unchanged from the
+chaptered branch. `book-toc.html` got the matching flat `{% else %}`:
+one top-level `<li>` per piece, no `ul.toc-sub` nesting, per §4's
+existing (and, until now, also untested) description of that case.
+
+**One deliberate accessibility fix made while building this, not just
+a mechanical copy of the chaptered branch**: the flat branch's piece
+title is `<h2>`, not `<h3>` like a normal subchapter. In the chaptered
+case, `<h3>` is correct because it sits one level under the chapter's
+own `<h2>` (§11's "don't skip heading levels" rule). In a chapterless
+book there is no chapter `<h2>` at all — the piece is the first
+heading-bearing content under the page's own `<h1>` — so keeping it at
+`<h3>` would silently skip a level. This meant `.subchapter-head h3`'s
+CSS rule (font size, weight, family — the "subchapter" visual
+treatment) needed extending to `.subchapter-head h2, .subchapter-head
+h3` so a flat-book piece keeps the exact same look despite the
+different tag. Verified both books render correctly and independently
+after this change: Confessions' existing chapter/subchapter structure
+is byte-for-byte unchanged (`<h2>Before</h2>` / `<h3>Prayer Before the
+First Line</h3>` still present), and Confession's one piece now renders
+with `<h2>Wicked Seed</h2>`, its epigraph, and its Contents entry
+("1 — Wicked Seed"), confirmed both in the built HTML and visually in
+the browser.

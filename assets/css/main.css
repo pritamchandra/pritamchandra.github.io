@@ -897,7 +897,7 @@ img.portrait{ object-fit: cover; display: block; }
   display:block; font-family: var(--font-sans); font-size: .76rem; letter-spacing:.06em;
   color: var(--text-faint); margin-bottom: .3em;
 }
-.subchapter-head h3{
+.subchapter-head h2, .subchapter-head h3{
   margin: 0; padding: 0; border: none; font-size: var(--step-2);
   font-style: normal; font-weight: 600; font-family: var(--font-serif);
 }

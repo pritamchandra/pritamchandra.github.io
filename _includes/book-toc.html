@@ -12,18 +12,25 @@
 {% assign subchapters = site.books | where: "book", book_slug | sort: "order" %}
 <div class="book-toc">
   <ul>
-    {% for ch in chapters_data %}
-      <li>
-        <a href="#{{ ch.id }}"><span class="chapter-num">{{ ch.number }}</span><span class="chapter-title">{{ ch.title }}</span></a>
-        {% assign ch_subs = subchapters | where: "chapter", ch.number %}
-        {% if ch_subs.size > 0 %}
-        <ul class="toc-sub">
-          {% for sub in ch_subs %}
-            <li><a href="#{{ sub.slug }}"><span class="chapter-num">{{ ch.number }}.{{ sub.chapter_order }}</span><span class="chapter-title">{{ sub.title }}</span></a></li>
-          {% endfor %}
-        </ul>
-        {% endif %}
-      </li>
-    {% endfor %}
+    {% if chapters_data %}
+      {% for ch in chapters_data %}
+        <li>
+          <a href="#{{ ch.id }}"><span class="chapter-num">{{ ch.number }}</span><span class="chapter-title">{{ ch.title }}</span></a>
+          {% assign ch_subs = subchapters | where: "chapter", ch.number %}
+          {% if ch_subs.size > 0 %}
+          <ul class="toc-sub">
+            {% for sub in ch_subs %}
+              <li><a href="#{{ sub.slug }}"><span class="chapter-num">{{ ch.number }}.{{ sub.chapter_order }}</span><span class="chapter-title">{{ sub.title }}</span></a></li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </li>
+      {% endfor %}
+    {% else %}
+      {% comment %} No chapters — one flat top-level list, no nesting {% endcomment %}
+      {% for sub in subchapters %}
+        <li><a href="#{{ sub.slug }}"><span class="chapter-num">{{ forloop.index }}</span><span class="chapter-title">{{ sub.title }}</span></a></li>
+      {% endfor %}
+    {% endif %}
   </ul>
 </div>
