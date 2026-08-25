@@ -1595,3 +1595,50 @@ escape-stripping is a real risk. `note` is a short editorial aside, not
 a place serious LaTeX would ever live, so the trade favors real Markdown
 there — flag it if a future book's note ever needs an escaped `\#` or
 `\!` in prose, same caveat as §7/§13's other kramdown-escape notes.
+
+**UPDATE — `sub.epigraph.text` (a subchapter's epigraph, also
+`_layouts/book.html`) given the same Markdown treatment as `note`,
+immediately after, when Pritam asked the natural follow-up: does the
+same fix apply to epigraphs too, since he wants quotation marks and
+bold there as well. Same underlying problem (`{{ sub.epigraph.text }}`
+printed with no filter, so no Markdown at all, and any `"` in a quoted
+YAML flow scalar needed backslash-escaping) but a different fix shape,
+because of one constraint `note` didn't have: **the template itself
+wraps the whole epigraph in curly smart quotes**
+(`<p>&ldquo;{{ ... }}&rdquo;</p>`), and that wrapping `<p>` is
+hand-written, not `markdownify`'s own output — so naively changing this
+to `{{ sub.epigraph.text | markdownify }}` the same way `note` was
+fixed would nest a kramdown-generated `<p>...</p>` inside the
+hand-written one (invalid HTML: a `<p>` can't contain a `<p>`) *and*
+strand the &ldquo;/&rdquo; entities outside of it, printed as bare text
+before/after the paragraph rather than as its first/last visible glyph.
+
+Fixed by running `sub.epigraph.text` through `markdownify` in its own
+`{% assign %}` first, then stripping kramdown's own `<p>`/`</p>` wrapper
+back off with two `| remove:` filters before splicing the result into
+the hand-written `<p>&ldquo;...&rdquo;</p>`:
+```liquid
+{% assign epigraph_html = sub.epigraph.text | markdownify | strip | remove: '<p>' | remove: '</p>' %}
+<p>&ldquo;{{ epigraph_html }}&rdquo;</p>
+```
+This keeps `**bold**`/`*italic*` and un-escaped `"` working inside the
+epigraph (verified via a direct kramdown CLI test: `<strong>`/`<em>`
+tags and curly `"..."` render correctly, then get sliced out of their
+auto-`<p>` cleanly by the `remove` filters) while still producing valid,
+single-`<p>` HTML with the site's own smart quotes wrapped around the
+*outside* of whatever Markdown rendered on the inside. Verified this is
+also fully backward-compatible with the existing Confessions epigraphs,
+which are hand-written with HTML entities (`&mdash;`) rather than plain
+punctuation — rebuilt the site and diffed the rendered
+`<div class="epigraph">` blocks for both existing epigraphs
+byte-for-byte against their pre-change output; identical.
+
+**This `markdownify` + `remove: '<p>'`/`remove: '</p>'` pattern is the
+one to reach for any time a future field needs inline Markdown
+(bold/italic/smart-quotes/etc.) spliced into a *hand-written* wrapper
+element** (as opposed to `note`, which owns its whole wrapper and could
+just switch that wrapper from `<p>` to `<div>` outright) — it only
+holds up for genuinely single-paragraph content, since a second
+paragraph in the source would produce a second `<p>...</p>` that this
+approach doesn't know how to un-nest, so `epigraph.text` is documented
+in EDITING-GUIDE.md as a one-paragraph-only field, unlike `note`.

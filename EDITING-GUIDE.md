@@ -491,7 +491,31 @@ Your piece's text goes here.
 - `epigraph` is optional: delete the `null` and replace with
   `epigraph:` then two indented lines `text: "..."` and `cite: "..."` if
   you want one (copy the format from an existing Confessions file if
-  unsure).
+  unsure). The site wraps `text` in curly quotation marks
+  (&ldquo;&rdquo;) automatically — don't type your own opening/closing
+  quotes around the whole thing. `text` is processed the same as `note`
+  (§4 above and the block below), so `**bold**`/`*italic*` work, and any
+  quotation marks *inside* the quote (e.g. quoting a third party within
+  the epigraph) don't need escaping — same two options:
+  ```yaml
+  epigraph:
+    text: "A short one-liner works in quotes, with \"escaped\" inner quotes if needed."
+    cite: "Author, Source"
+  ```
+  or, for anything with real quotation marks or bold/italic, the
+  block-scalar form (recommended):
+  ```yaml
+  epigraph:
+    text: |
+      A line that quotes someone directly: "as if this were the last
+      thing," she said — and **emphasis** if you want it.
+    cite: "Author, Source"
+  ```
+  One limit specific to `epigraph.text` (unlike `note`): keep it to a
+  single paragraph — it always renders inside one `<p>`, so a blank line
+  inside it won't start a new paragraph the way it does in `note`.
+  `cite` is a plain attribution line, not run through Markdown — write
+  it in ordinary quotes and escape any inner `"` the usual way.
 - `gloss` is an optional short note after the piece — leave as `null` to
   skip it.
 - **If your book has no chapters**, just omit `chapter:` and
