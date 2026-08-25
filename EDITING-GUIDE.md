@@ -409,6 +409,12 @@ above), not just a bare date. If you leave the time off, the blog home's
 sorting can break because of a quirk in how the site's building tool reads
 dates — always copy the exact format above and just change the numbers.
 
+**`subtitle:` is shown right under the book's title** (e.g. Confessions'
+"poems, 2024–2026"). It's also ordinary Markdown now — `*italic*`,
+`**bold**`, and literal quotation marks all work directly, same as
+`note` just below. Leave it out (`subtitle:` with nothing after it) if
+you don't want one.
+
 **`note:` is a short editorial note shown right below the collection's
 title/tags, above the first chapter** (used on Confessions for the
 "these are placeholder poems" disclaimer). Leave it `note: null` if you
@@ -515,7 +521,15 @@ Your piece's text goes here.
     cite: "Author, Source"
   ```
   `cite` is a plain attribution line, not run through Markdown — write
-  it in ordinary quotes and escape any inner `"` the usual way.
+  it in ordinary quotes and escape any inner `"` the usual way. It's
+  shown exactly as typed, with nothing added — if you want a dash
+  before it (like "&mdash; John 12:23&ndash;25"), type it yourself
+  (`cite: "&mdash; John 12:23&ndash;25"`); leave it off for just the
+  attribution on its own.
+- **An epigraph, when present, always appears *above* the piece's
+  title** — title immediately followed by the piece's own text, epigraph
+  first. This isn't something you control per-piece; it's how every
+  epigraph on the site is placed.
 - `gloss` is an optional short note after the piece — leave as `null` to
   skip it.
 - **If your book has no chapters**, just omit `chapter:` and

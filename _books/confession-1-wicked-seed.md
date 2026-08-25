@@ -8,8 +8,8 @@ slug: 1
 epigraph:
     text: |
         *Jesus replied, “The hour has come for the Son of Man to be glorified. Very truly I tell you, unless a kernel of wheat falls to the ground and dies, it remains only a single seed. But if it dies, it produces many seeds. Anyone who loves their life will lose it, while anyone who hates their life in this world will keep it for eternal life."*
-    cite: "John 12:23–25"
-gloss: null
+    cite: " John 12:23–25"
+gloss: "trial text here"
 ---
 
 <p class="verse">

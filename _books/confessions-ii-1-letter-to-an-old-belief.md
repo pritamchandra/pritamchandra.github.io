@@ -8,7 +8,7 @@ title: "Letter to an Old Belief"
 slug: ii-1
 epigraph:
   text: "*A room built in the dark keeps its shape even after the lights come on &mdash; you just see, finally, what you built it from.*"
-  cite: "epigraph, added later"
+  cite: "&mdash; epigraph, added later"
 gloss: null
 ---
 <p class="verse">You were the first shape I gave to the dark,

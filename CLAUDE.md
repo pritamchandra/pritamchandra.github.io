@@ -1784,3 +1784,63 @@ First Line</h3>` still present), and Confession's one piece now renders
 with `<h2>Wicked Seed</h2>`, its epigraph, and its Contents entry
 ("1 — Wicked Seed"), confirmed both in the built HTML and visually in
 the browser.
+
+**UPDATE — three small, related design changes to `_layouts/book.html`,
+all requested together right after "Wicked Seed" first went live: the
+epigraph moved above the title, `cite` lost its automatic dash, and
+`subtitle` got the same Markdown treatment as `note`/`epigraph`.**
+
+1. **Epigraph now renders *before* the subchapter/piece header, not
+   after it** — in both the chaptered branch and the flat (chapterless)
+   branch added just above. The header (`.subchapter-head`, numeral +
+   title) is now immediately followed by `{{ sub.content }}`, with no
+   epigraph in between. This is a pure reordering of the same three
+   blocks (epigraph / header / content) — no new Liquid logic, no CSS
+   changes needed for the reorder itself (each block's own margins
+   already made sense in either order).
+
+2. **`.epigraph cite::before{ content: "\2014 "; }` — the CSS rule that
+   auto-prepended an em dash to every citation — was deleted outright.**
+   `cite` now renders exactly what's typed in `epigraph.cite`, nothing
+   added. Pritam's own reasoning: he wants to choose per-epigraph
+   whether a dash appears at all, not have one forced on every citation.
+   Since the two existing Confessions epigraphs relied on the automatic
+   dash to get their current look, both had `&mdash; ` (matching the
+   entity style already used elsewhere in those same files, e.g. the
+   Confessions `note`) hand-typed onto the front of their `cite:` field
+   — same "preserve existing appearance by making the old automatic
+   behavior explicit" move already made twice before in this file, for
+   epigraph italics and for the CDN removal precedent. `cite` is still
+   *not* run through Markdown (only `epigraph.text` and `note`/`subtitle`
+   are) — it's a short attribution line, raw text is sufficient, and
+   there was no request to change that.
+
+3. **`page.subtitle` (shown under the book's `<h1>`) now goes through
+   `markdownify`, matching `note`.** Was `<p class="entry-meta">{{
+   page.subtitle }}</p>` (raw, unguarded against nested-`<p>` — though
+   this was never actually hit before since subtitle was always one
+   plain sentence with no HTML in it); now
+   `<div class="entry-meta">{{ page.subtitle | markdownify }}</div>` —
+   same wrapper-swap trick as `note` (§13's earlier UPDATE), for the
+   same reason (`markdownify` produces its own `<p>`, which can't nest
+   inside another `<p>`). Added `.entry-meta p{ margin: 0; }` right
+   after `.entry-meta`'s own definition in `main.css`, since
+   `.entry-meta` already carries its own `margin-bottom: .9em` and the
+   auto-generated inner `<p>` would otherwise add its own default
+   browser margin on top of that. This CSS rule is scoped to only fire
+   when there's an actual nested `<p>` (i.e. only the book-subtitle
+   case) — every other `.entry-meta` usage on the site (post dates, tag
+   lines, the portfolio's plain-text email line) uses `<p class="entry-
+   meta">` directly with no child `<p>`, so they're unaffected. Verified
+   Confessions' existing subtitle ("poems, 2024–2026") renders
+   byte-for-byte equivalent visually before/after (wrapped in kramdown's
+   auto-`<p>` now, but no visible spacing change, confirmed in the
+   browser).
+
+Note this was a deliberate, narrow scope: Pritam separately asked
+whether the book page's `description:` field (the invisible SEO `<meta
+name="description">` tag) should also take Markdown, and was told no —
+that field is plain text only, since a meta description can't contain
+rendered HTML (search engines would show literal asterisks) — and
+confirmed he meant `subtitle`, not `description`. `description` is
+unchanged.

@@ -13,7 +13,7 @@ layout: default
     <main class="col-content prose" id="main">
       <header class="entry-head">
         <h1>{{ page.book_title }}</h1>
-        {% if page.subtitle %}<p class="entry-meta">{{ page.subtitle }}</p>{% endif %}
+        {% if page.subtitle %}<div class="entry-meta">{{ page.subtitle | markdownify }}</div>{% endif %}
         <div class="tags">{% for t in page.tags %}<a class="tag" href="{{ t | slugify | prepend: '/blog/tag/' | append: '/' | relative_url }}">{{ t }}</a>{% endfor %}</div>
         <hr class="rule" style="margin-top:1em;">
       </header>
@@ -37,16 +37,16 @@ layout: default
 
             {% for sub in ch_subs %}
               <section class="subchapter" id="{{ sub.slug }}">
-                <header class="subchapter-head">
-                  <span class="subchapter-num">{{ ch.number }}.{{ sub.chapter_order }}</span>
-                  <h3>{{ sub.title }}</h3>
-                </header>
                 {% if sub.epigraph %}
                 <div class="epigraph">
                   {{ sub.epigraph.text | markdownify }}
                   <cite>{{ sub.epigraph.cite }}</cite>
                 </div>
                 {% endif %}
+                <header class="subchapter-head">
+                  <span class="subchapter-num">{{ ch.number }}.{{ sub.chapter_order }}</span>
+                  <h3>{{ sub.title }}</h3>
+                </header>
                 {{ sub.content }}
                 {% if sub.gloss %}<p class="chapter-gloss">{{ sub.gloss }}</p>{% endif %}
               </section>
@@ -58,16 +58,16 @@ layout: default
         {% comment %} No chapters — every piece stands on its own, flat, numbered 1, 2, 3... {% endcomment %}
         {% for sub in subchapters %}
           <section class="subchapter" id="{{ sub.slug }}">
-            <header class="subchapter-head">
-              <span class="subchapter-num">{{ forloop.index }}</span>
-              <h2>{{ sub.title }}</h2>
-            </header>
             {% if sub.epigraph %}
             <div class="epigraph">
               {{ sub.epigraph.text | markdownify }}
               <cite>{{ sub.epigraph.cite }}</cite>
             </div>
             {% endif %}
+            <header class="subchapter-head">
+              <span class="subchapter-num">{{ forloop.index }}</span>
+              <h2>{{ sub.title }}</h2>
+            </header>
             {{ sub.content }}
             {% if sub.gloss %}<p class="chapter-gloss">{{ sub.gloss }}</p>{% endif %}
           </section>
