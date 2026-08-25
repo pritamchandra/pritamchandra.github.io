@@ -45,6 +45,31 @@ every publication as one small, consistent block that's easy to copy and
 edit, rather than a hand-formatted list where it's easy to make one entry
 look slightly different from the rest.
 
+**Leaving a field blank — use `key:` with nothing after it, not
+`key: ""`.** This comes up anywhere you see a `null` in an example
+below (a book's `subtitle`, a publication's `link`, a reading-list
+book's `year`, and so on) — if you don't want that field at all, just
+write the key with nothing after the colon:
+
+```yaml
+subtitle:
+```
+
+not
+
+```yaml
+subtitle: ""
+```
+
+These look almost the same but aren't: the first means "this field has
+no value," which the page correctly reads as "don't show this" and
+skips it cleanly. The second means "this field's value is an empty bit
+of text," which the page can't tell apart from "show an empty line" —
+so instead of the field just disappearing, you can end up with an odd
+gap where a blank line was rendered. If you're ever unsure which one you
+typed, the safe move is to delete everything after the colon, including
+any quote marks.
+
 ## 2. Editing the portfolio (`index.md`)
 
 Open `index.md`. The top part, between the two `---` lines, is called

@@ -20,7 +20,7 @@ layout: default
       <article class="post-entry">
         <h2><a href="{{ entry.url | relative_url }}">{{ entry.title }}</a></h2>
         <p class="entry-meta"><span class="entry-kind">{% if kind == "collection" %}Collection{% else %}Page{% endif %}</span><span class="tags">{% for t in entry.tags %}<a class="tag" href="{{ t | slugify | prepend: '/blog/tag/' | append: '/' | relative_url }}">{{ t }}</a>{% endfor %}</span> &middot; {{ entry.date | date: "%B %Y" }}</p>
-        <p class="entry-preview">{{ entry.preview }}</p>
+        {% if entry.preview %}<p class="entry-preview">{{ entry.preview }}</p>{% endif %}
       </article>
       {% unless forloop.last %}<hr class="rule">{% endunless %}
     {% endfor %}

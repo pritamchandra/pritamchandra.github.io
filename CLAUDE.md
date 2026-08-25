@@ -1531,3 +1531,23 @@ the kramdown escape-character gotcha.**
   offers `markdown="1"` as an opt-in for a specific box Pritam is sure
   has no risky math in it, rather than silently deciding for him either
   way.
+
+**UPDATE — a real gap found while answering a question about blank
+front-matter fields.** Pritam asked whether an unwanted field should be
+left as `key:` or `key: ""`. The answer matters more than it looks:
+Liquid's truthiness treats `nil` (what `key:` with nothing after it
+parses to) as falsy, but an empty string (`key: ""`) as **truthy** —
+`{% if page.subtitle %}` is `false` for the former, `true` for the
+latter. Checking the actual codebase for this turned up one real bug:
+`_layouts/book.html`'s `<p class="entry-meta">{{ page.subtitle }}</p>`
+had no `{% if %}` guard at all, unlike `page.note` right below it (which
+already had one) — so a book with no `subtitle` would render an empty,
+gap-leaving `<p>` rather than nothing. Fixed (`{% if page.subtitle
+%}...{% endif %}`), and did the same audit on `entry.preview` in
+`blog-home.html`/`tag.html`, which had the identical gap. General rule
+worth remembering for any *future* optional field added to a template:
+**every field that's allowed to be blank needs an explicit `{% if %}`
+around the element it renders into** — printing `{{ page.field }}`
+directly into a `<p>`/`<div>` with no guard will always leave a
+gap-shaped hole once that field is actually left blank, even though it
+looks harmless while every real page still has a real value there.

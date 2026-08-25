@@ -13,7 +13,7 @@ layout: default
     <main class="col-content prose" id="main">
       <header class="entry-head">
         <h1>{{ page.book_title }}</h1>
-        <p class="entry-meta">{{ page.subtitle }}</p>
+        {% if page.subtitle %}<p class="entry-meta">{{ page.subtitle }}</p>{% endif %}
         <div class="tags">{% for t in page.tags %}<a class="tag" href="{{ t | slugify | prepend: '/blog/tag/' | append: '/' | relative_url }}">{{ t }}</a>{% endfor %}</div>
         <hr class="rule" style="margin-top:1em;">
       </header>
