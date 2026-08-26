@@ -302,7 +302,7 @@ a:hover{ text-decoration-color: currentColor; }
   padding: .32rem .65rem; border-radius: var(--radius); cursor: pointer;
   line-height: 1; letter-spacing: .02em;
   display: inline-flex; align-items: center; justify-content: center;
-  min-width: 2.1rem; min-height: 2.1rem;
+  min-width: 1.85rem; min-height: 1.85rem;
 }
 .nav-btn:hover{ background: var(--bg-inset); }
 .nav-btn[aria-pressed="true"]{ background: var(--bg-inset); border-color: var(--text-faint); }
@@ -313,7 +313,7 @@ a:hover{ text-decoration-color: currentColor; }
 
 /* text-size control: one segmented "−  +" pair instead of a discrete cycle */
 .size-ctl{ display:flex; border: 1px solid var(--border-strong); border-radius: var(--radius); overflow: hidden; }
-.size-ctl .nav-btn{ border: none; border-radius: 0; min-width: 2rem; }
+.size-ctl .nav-btn{ border: none; border-radius: 0; min-width: 1.75rem; }
 .size-ctl .nav-btn + .nav-btn{ border-left: 1px solid var(--border-strong); }
 .size-ctl .nav-btn:disabled{ opacity: .35; cursor: default; }
 .size-ctl .nav-btn:disabled:hover{ background: var(--bg-raised); }

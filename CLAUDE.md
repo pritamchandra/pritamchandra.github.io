@@ -1857,3 +1857,17 @@ declaration entirely rather than zeroing it out, since `font-weight:
 600` was the only thing that rule did. The extra `margin-bottom: 1.3em`
 on `.book-toc > ul > li` (more breathing room before the next
 chapter/piece's group) was left alone — only the bold was in scope.
+
+**UPDATE — the nav bar's icon/text-size/theme buttons sat too close to
+the top and bottom of the sticky nav bar.** `.sitenav` has a fixed
+`height: 52px` (unchanged, per Pritam's explicit request not to grow
+the bar); the buttons themselves (`.nav-btn`) had `min-width: 2.1rem;
+min-height: 2.1rem`, leaving only ~7px of clearance above/below each
+button inside the 52px bar. Shrunk the buttons instead of the bar:
+`.nav-btn`'s `min-width`/`min-height` dropped to `1.85rem`, and
+`.size-ctl .nav-btn`'s narrower override dropped from `2rem` to
+`1.75rem` to keep the segmented −/+ control visually matching the new
+icon-button size. Verified via computed styles in the browser: nav bar
+still exactly 52px, button height went from 37.8px to 29.6px, vertical
+clearance above/below each button went from ~7.1px to ~11.2px per
+side.
