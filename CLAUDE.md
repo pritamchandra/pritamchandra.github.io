@@ -1844,3 +1844,16 @@ that field is plain text only, since a meta description can't contain
 rendered HTML (search engines would show literal asterisks) — and
 confirmed he meant `subtitle`, not `description`. `description` is
 unchanged.
+
+**UPDATE — top-level Contents entries (a chapter's title, or a piece's
+title in a chapterless book) are no longer bold.** The rule was
+`.book-toc > ul > li > a .chapter-title{ font-weight: 600; }` in
+`main.css`, meant to read "slightly heavier than their subchapters" —
+Pritam asked for it gone across the board, both for books with chapters
+(Confessions' "Before"/"After") and books without (Confession's
+"Wicked Seed", "Blemishes", "Sensualists", each its own top-level entry
+per §13's chapterless-book fix above). Removed the `font-weight`
+declaration entirely rather than zeroing it out, since `font-weight:
+600` was the only thing that rule did. The extra `margin-bottom: 1.3em`
+on `.book-toc > ul > li` (more breathing room before the next
+chapter/piece's group) was left alone — only the bold was in scope.
