@@ -4,7 +4,7 @@ chapter:
 chapter_order:
 order: 3
 title: "The Best One"
-date: 2017-12-01
+date: 2017-02-01
 slug: 3
 epigraph: null
 gloss: null
