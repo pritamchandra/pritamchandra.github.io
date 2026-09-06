@@ -3,13 +3,15 @@ book: translations-of-lyrics
 chapter:
 chapter_order:
 order: 6
-title: "Sailor Take Me"
-subtitle: null
+title: "Amar Mon Mojaiye Re"
+subtitle: "Shah Abdul Karim"
 slug: 6
 epigraph: null
 gloss: null
 ---
-*[Listen to Sailor Take Me](https://youtu.be/FuuC2rpC0HA)*
+*[Listen to Amar Mon Mojaiya Re](https://youtu.be/FuuC2rpC0HA)*
+
+### Sailor take me
 
 <p class="verse">Oh Sailor see
 ruins abound

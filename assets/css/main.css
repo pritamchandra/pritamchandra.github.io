@@ -434,7 +434,7 @@ a:hover{ text-decoration-color: currentColor; }
 .prose blockquote{
   margin: 1.6em 0;
   padding: 0 3em;
-  font-style: oblique 10deg;
+  font-style: italic;
   text-align: center;
   color: var(--text-muted);
 }

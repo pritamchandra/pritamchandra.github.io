@@ -3240,3 +3240,62 @@ forced to caps, dates abbreviated, date-aware chapter sorting, and a new
    plain `order:` edits for dateless books, `date:` edits for
    date-sorted books (point 4 above), and moving a whole chapter block
    in `_data/books/<slug>-chapters.yml` for chapter-level reordering.
+
+**UPDATE — the blog home's hero blockquote rendered as an ugly synthetic
+slant on phone, fine on desktop; root cause was `font-style: oblique
+10deg` itself, not a font-loading bug.** `.prose blockquote` (used for
+the Bible-verse quote at the top of the blog home, and any Markdown `>
+blockquote` in a post) had `font-style: oblique 10deg` — the *original*
+site-wide "oblique, not italic" design choice from the initial build,
+predating the later, narrower decision to strip auto-oblique/auto-quotes
+from `.epigraph p` specifically (see this file's own epigraph UPDATE
+above — that change was scoped to epigraphs only, for a different
+reason — wanting manual control over nested quotes — and never touched
+`.prose blockquote`, which kept the original treatment untouched until
+now).
+
+`oblique <angle>` asks the browser to mechanically skew the font's
+*upright* glyphs by that many degrees — a synthetic transform, not a
+request for the font's own real italic design (a separate, hand-drawn
+set of letterforms most serif fonts ship). Since none of this site's
+serif font stack (`--font-serif: 'Source Serif 4', 'Iowan Old Style',
+'Palatino Linotype', Georgia, Cambria, 'Times New Roman', serif`) is
+self-hosted via `@font-face` — unlike KaTeX's fonts (§7), these rely
+entirely on whatever's already installed as a system font on the
+visitor's device — desktop and mobile Safari can each resolve this
+stack to a *different* actual font file, and a mechanical 10° skew that
+looks fine on one face can look distorted/"ugly" on another, which is
+almost certainly why this looked fine on a Mac but not on a phone: not
+a bug in the mechanism, but a real, inherent fragility of forcing a
+synthetic transform on an unpredictable, un-vendored font stack.
+
+Fixed by changing `font-style: oblique 10deg` to plain `font-style:
+italic` — this asks for the font's own real italic design instead of a
+synthetic skew, which every serif fallback in the stack actually ships
+(Source Serif 4, Iowan Old Style, Palatino, Georgia, Times New Roman all
+have real italic faces), so rendering is properly hinted and consistent
+regardless of which one a given device resolves to. `.prose blockquote
+cite` is unaffected (`font-style: normal` there was already explicit,
+so the citation line stays upright either way).
+
+**This is a real, deliberate departure from the original "oblique, not
+italic" typographic choice documented at the top of §13** — same
+category of tradeoff as the epigraph change above (a document decision
+made when the mechanism was fully automatic doesn't necessarily survive
+contact with a real cross-device rendering problem) — but this one
+wasn't a request for more manual control, it was a straightforward
+"this looks broken on my phone, fix it" bug report, so the fix is a
+straight CSS correction, not a move toward more manual authoring
+control. If a future report surfaces the same "fine on desktop, off on
+phone" symptom anywhere else `font-style: oblique` or a bare unvendored
+serif/sans font is doing real typographic work (not just chrome text),
+this same root cause — a synthetic transform, or an unpinned system
+font, applied inconsistently across platforms — is the first thing to
+check, the same lesson already learned twice before in this file for
+KaTeX's own fonts (§7) and for mobile-default browser chrome (emoji
+presentation, tap-highlight-color, focus rings, all documented
+elsewhere in this file). Fully self-hosting Source Serif 4/IBM Plex as
+real `@font-face` webfonts, the way KaTeX's fonts already are, would
+close this gap for good — flagged here as a real, known gap and a
+reasonable next step, not undertaken in this pass since the immediate
+reported symptom is fixed by the smaller, targeted change above.
