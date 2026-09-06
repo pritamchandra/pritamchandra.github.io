@@ -5,7 +5,7 @@ layout: default
   <main class="prose" style="max-width: var(--content-width); margin: 0 auto;" id="main">
 
     <header class="entry-head">
-      <h1>Tag: {{ page.tag | capitalize }}</h1>
+      <h1>Tag: {{ page.tag }}</h1>
       <hr class="rule" style="margin-top:1em;">
     </header>
 
@@ -19,7 +19,7 @@ layout: default
       {% if entry.layout == "book" %}{% assign kind = "collection" %}{% endif %}
       <article class="post-entry">
         <h2><a href="{{ entry.url | relative_url }}">{{ entry.title }}</a></h2>
-        <p class="entry-meta"><span class="entry-kind">{% if kind == "collection" %}Collection{% else %}Page{% endif %}</span><span class="tags">{% for t in entry.tags %}<a class="tag" href="{{ t | slugify | prepend: '/blog/tag/' | append: '/' | relative_url }}">{{ t }}</a>{% endfor %}</span> &middot; {{ entry.date | date: "%B %Y" }}</p>
+        <p class="entry-meta"><span class="entry-kind">{% if kind == "collection" %}Collection{% else %}Page{% endif %}</span><span class="tags">{% for t in entry.tags %}<a class="tag" href="{{ t | slugify | prepend: '/blog/tag/' | append: '/' | relative_url }}">{{ t }}</a>{% endfor %}</span> &middot; {{ entry.date | date: "%b %Y" }}</p>
         {% if entry.preview %}<p class="entry-preview">{{ entry.preview }}</p>{% endif %}
       </article>
       {% unless forloop.last %}<hr class="rule">{% endunless %}

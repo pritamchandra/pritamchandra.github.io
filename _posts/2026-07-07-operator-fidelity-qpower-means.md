@@ -2,7 +2,7 @@
 title: "On the Incomparability of Operator Fidelity and <span class=\"mono\">Q</span>-Power Means in the Near Order"
 description: "A short note on matrix means in the near order."
 date: 2026-07-07
-tags: [mathematics, matrix analysis]
+tags: [Math, Matrix Analysis]
 preview: "A short note showing that operator fidelity and the power means of two positive matrices are incomparable in the near order, for any choice of exponent."
 ---
 Let $\mathbb{P}$ and $\mathbb{P}_0$ be the cones of $n\times n$ positive definite and positive semidefinite matrices over $\mathbb{C}$, respectively. We define
@@ -125,4 +125,3 @@ with the identification that $Q_0(A,B)$ is the log-Euclidean mean of $A$ and $B$
 </div>
 
 <hr class="rule" style="margin: 2.6em 0;">
-<p style="color:var(--text-muted); font-size:.92rem;"><em>A short note, kept close to how it will eventually appear in a preprint. Comments and corrections welcome by <a href="mailto:pritamchandra18@gmail.com">email</a>.</em></p>

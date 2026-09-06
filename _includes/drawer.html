@@ -16,20 +16,22 @@
         <li style="margin-bottom:.55em;"><a href="#about">About</a></li>
         <li style="margin-bottom:.55em;"><a href="#publications">Journal Publications</a></li>
         <li style="margin-bottom:.55em;"><a href="#preprints">Preprints &amp; Working Papers</a></li>
+        <li style="margin-bottom:.55em;"><a href="#teaching">Teaching Experience</a></li>
         <li style="margin-bottom:.55em;"><a href="#notes">Notes</a></li>
         <li style="margin-bottom:.55em;"><a href="#service">Academic Service</a></li>
-        <li style="margin-bottom:.55em;"><a href="#teaching">Teaching Experience</a></li>
       </ul>
     </nav>
     <a class="tag resume-link" href="{{ '/assets/pritam-chandra-cv.pdf' | relative_url }}">{% include icon-resume.html %}Resume</a>
     <h2 style="font-family:var(--font-sans);font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.6rem;">Interests</h2>
-    <p style="font-size:.86rem; color:var(--text-muted); line-height:1.6;">Matrix analysis &middot; operator inequalities &middot; post-quantum cryptography &middot; machine learning theory</p>
+    <p style="font-size:.86rem; color:var(--text-muted); line-height:1.6;">matrix analysis &middot; operator inequalities &middot; machine learning theory &middot; post-quantum cryptography </p>
   </div>
   <div class="drawer-section">
     <h2 style="font-family:var(--font-sans);font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.6rem;">Elsewhere</h2>
+    <a class="tag resume-link" href="{{ '/blog/' | relative_url }}">{% include icon-blog.html %}Blog</a>
     <ul class="link-list" style="margin-bottom:0;">
       <li><a href="{{ site.data.social.scholar }}">Google Scholar</a></li>
       {% if site.data.social.github %}<li><a href="{{ site.data.social.github }}">GitHub</a></li>{% endif %}
+      {% if site.data.social.orcid %}<li><a href="{{ site.data.social.orcid }}">ORCID</a></li>{% endif %}
       <li><a href="{{ '/reading/' | relative_url }}">Reading List</a></li>
       {% if site.data.social.letterboxd %}<li><a href="{{ site.data.social.letterboxd }}">Letterboxd</a></li>{% endif %}
       {% if site.data.social.youtube %}<li><a href="{{ site.data.social.youtube }}">YouTube</a></li>{% endif %}
@@ -50,11 +52,12 @@
       <button type="button" data-filter="collection" aria-pressed="false">Collections</button>
       <button type="button" data-filter="page" aria-pressed="false">Pages</button>
     </div>
+    <a class="icon-link website-link" href="{{ '/' | relative_url }}">{% include icon-globe.html %}Pritam Chandra</a>
     <a class="icon-link reading-link" href="{{ '/reading/' | relative_url }}">{% include icon-book.html %}Reading List</a>
     <h2 style="font-family:var(--font-sans);font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.7rem;">Tags</h2>
     <ul class="tag-cloud">
       {% for g in tag_groups %}
-        <li><a href="{{ g.name | slugify | prepend: '/blog/tag/' | append: '/' | relative_url }}">{{ g.name | capitalize }}</a><span class="tag-count">{{ g.items.size }}</span></li>
+        <li><a href="{{ g.name | slugify | prepend: '/blog/tag/' | append: '/' | relative_url }}">{{ g.name }}</a><span class="tag-count">{{ g.items.size }}</span></li>
       {% endfor %}
     </ul>
   </div>

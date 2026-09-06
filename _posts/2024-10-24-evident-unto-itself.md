@@ -1,0 +1,32 @@
+---
+title: "Evident unto Itself"
+description: "A testimony on estrangement, anxiety, and finding hope."
+date: 2024-10-24
+tags: [Testimony, Journal]
+preview: "A tiny part of why I am a Christian."
+---
+I enjoy sitting by a road, even when I&rsquo;m alone. I don&rsquo;t like being alone in a room. Even if I try to be, my body eventually revolts. But by being by the road, I can be alone and still not be far from people. In the background there is the effervescence of a moving traffic, a moving city. And when I want I can gaze up and encounter an &ldquo;other&rdquo;. Perhaps, being isolated, in a literal sense, is a great fear for me.
+
+But I mean to write about something else. This something is so proximal to me that I dread talking about it. I fear that engaging with it will push it deeper into my being. Nevertheless, I would attempt a rather brief preface.
+
+As I was growing up, for causes that I cannot completely enumerate, I deemed that skepticism was a noble virtue. I perhaps had a high regard for truth &mdash; not daily petite truth, as I used to be a big liar &mdash; but the cosmic and existential one. I took great pride in having an eye for metaphysics. Even though my memory is faint, but I remember that this eye was quite unusually granted to me around as far back as my pre-school days.
+
+I was happy until I was not. In fact, till a point, I could derive a strange comfort in the abundant sorrow, to the extent that I had developed even an appetite for it. But life changed so much one day that I terribly fear entering its memory. The skeptic impulse, on a night when I was freshly twenty one, had logically turned into an anxious impulse. To put it dramatically, I had an encounter with the void and that evoked in me a great fear, a lasting one. For this, expect the very brief account that would follow now to be incoherent and obscure.
+
+One of the consequences of this compulsive and impulsive skepticism has been estrangement. At the level of plain feeling, on several occasions, I feel estranged to my physical and metaphysical surrounding. I&rsquo;ll explain what this entails. But before that I should say that I do not know the degree of this estrangement, as the only standard I know is its absence. Therefore, even a little bit of it is a heavy burden.
+
+You know those times when you hear a word, usually a very common one, and you are surprised by its sound, or by its feeling! That even though you have known and spoken and written the word all along, you had never paid an isolated attention to how it sounded or looked or felt, or what it contained. And suddenly, for a fleeting moment, you are estranged to it. It doesn&rsquo;t seem familiar anymore. As if it had been stripped of the meaning that it held for you.
+
+I have felt this estrangement with too many things &mdash; language, thought, memories, people and air. I have felt this estrangement with my own self. There is a way to lose meaning in life such that one cannot find his purpose anymore, where one loses his reasons to act. But, sometimes, perhaps only as a feeling, one can lose meaning quite literally. At times the boundaries between individuals tend to fade and all things appear like qualitatively indistinguishable mere blobs. At times one&rsquo;s attention is involuntarily inverted to be zoomed into noise rather than the recognized patterns of sense. Such are some experiences of those fleeting moments of estrangement. A literal loss of meaning of the tender and ever-familiar fibers of existence. Of having the need to incorporate that which should rather be like air and blood &mdash; evident unto itself.
+
+In medical terms, these are probably facets of mere clinical anxiety. And I do not intend to make it sound more miserable than it is. But the anxiety that was borne with the estrangement and hyper-consciousness has taken away my joy. My apologies for suddenly dropping another ailment in the term &ldquo;hyper-consciousness&rdquo;. In simple words, this is a state when the awareness of any experience surpasses the experience itself and claims one&rsquo;s attention so much that the experience barely exists. The two, this and the estrangement, are bound closely, many times one causing the other, or perhaps even existing in an inseparable blend. But they have indeed taken away my joy. And a lot of my sleep.
+
+And yet, this was the precise intention of my Lord, the Father of my entire being and of the entire cosmos. This great and sudden hurdle, whose cure I not only didn&rsquo;t have but also couldn&rsquo;t conceive, was what arose in me a need for my Father. I remember proudly announcing years back, when I attempted to manufacture belief with my sheer will, that my refusal of God was organic, irresistible and unconquerable. I had then not conceived the possibility of a misery that would destroy these walls of the certainty of my atheism. Behold, now I have tasted that contingencies transcend conceptions. In other words, the Father was greater than my axioms, and now He is greater than my fears!
+
+Gradually over the years, the Lord has given me a new life, new eyes and a new Hope. In fact, He has given me a simple Hope, which He has grounded with momentary peeks into His infinite glory, a Hope that has penetrated deeper than all else, and a Hope that has a name. Even today I suffer my ailments quite acutely, and sometimes my feelings restore the projection of my anxious heart into the restless expanse of the old bleak void. Sometimes the Hope too feels estranged. But I take great comfort in knowing that this Hope is not the merit of my intellect, thought or emotion, all of which are prone to ruin into dust. But the substance of this hope wholly resides in the Heavenly Father. So even when I fall completely and return to dust, my Hope will raise me up. When I fail, He will still be victorious!
+
+When you gaze too intensely into the thin experience of existence, things start to appear funny. Fortunately, humor can coexist with fear. I&rsquo;m very anxious having written this brief preface. But I pray that my Lord would grant me comfort. I pray that as He has promised, in His great wisdom and unfathomable ways, He would familiarize Him to me, as much as He has already familiarized me to Him. I pray that I shall be ever assured of this unto eternity.
+
+My encounter with the void led me to my encounter with Jesus. I&rsquo;m saved because the void is not the truth. Jesus is.
+
+Accept my prayer beloved Father in the name of your Son. Amen.

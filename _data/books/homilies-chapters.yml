@@ -1,0 +1,34 @@
+# Chapter-level title/intro for "Homilies" — each chapter here is a book
+# of the Bible; its subchapters (in _books/) are that book's chapters.
+# Same pattern as confessions-chapters.yml — see CLAUDE.md §10.4.
+#
+# IMPORTANT: this list's order is what drives rendering order on the page
+# (book.html and book-toc.html both iterate this list directly, not any
+# date or add-order) — so chapters here are kept in the order the books
+# appear in the Bible itself (Genesis before Colossians), not the order
+# they were added to the site. When adding a new book, insert its entry
+# at its correct canonical position in this list.
+#
+# `number` below is NOT what gets displayed anymore — it's only a stable
+# id that a subchapter's own `chapter:` front-matter field points at to
+# say which chapter it belongs to. The visible chapter numeral (and each
+# subchapter's "N.M" numeral) is computed from this list's own position
+# (book.html/book-toc.html use forloop.index), so inserting a chapter
+# anywhere in this list — including at the very top — never requires
+# renumbering any other chapter's `number` or updating any existing
+# _books/*.md file's `chapter:` value. Only the new chapter's own
+# `number` needs to be unique among the ones already here (it doesn't
+# need to be sequential, or even numeric) — see CLAUDE.md's UPDATE on
+# this for the full reasoning.
+chapters:
+  - number: "1"
+    id: "genesis"
+    title: "Genesis"
+    intro: null
+  - number: "2"
+    id: "colossians"
+    title: "Colossians"
+    intro: |
+      Paul writes from a prison in Rome circa 62 AD, around the same time he writes the letter to the Ephesians. Even though Paul is in chains and awaiting almost sure execution (a premonition that he has already had before?), his exaltation of the LORD is as high, if not higher, as in his other epistles. This short letter touches upon many themes, but is centred around the issue of false teachers promoting "empty" asceticism.
+
+      But before that he establishes again the divinity of Christ, this time in even cosmic and metaphysical language, decorating Him as the supreme in ontology and epistemology — one who is the Creator, outside creation, the existential juice in all that exists, and ultimately their final purpose.

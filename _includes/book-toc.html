@@ -9,18 +9,26 @@
 {% endcomment %}
 {% assign chapters_data_key = book_slug | append: "-chapters" %}
 {% assign chapters_data = site.data.books[chapters_data_key].chapters %}
-{% assign subchapters = site.books | where: "book", book_slug | sort: "order" %}
+{% comment %}
+  Same dated-first, newest-first / undated-fallback sort as book.html —
+  the two must stay in sync so the TOC matches the page's own order.
+{% endcomment %}
+{% assign subchapters_all = site.books | where: "book", book_slug %}
+{% assign subchapters_dated = subchapters_all | where_exp: "s", "s.date" | sort: "date" | reverse %}
+{% assign subchapters_undated = subchapters_all | where_exp: "s", "s.date == nil" | sort: "order" %}
+{% assign subchapters = subchapters_dated | concat: subchapters_undated %}
 <div class="book-toc">
   <ul>
     {% if chapters_data %}
       {% for ch in chapters_data %}
+        {% assign chapter_num = forloop.index %}
         <li>
-          <a href="#{{ ch.id }}"><span class="chapter-num">{{ ch.number }}</span><span class="chapter-title">{{ ch.title }}</span></a>
+          <a href="#{{ ch.id }}"><span class="chapter-num">{{ chapter_num }}</span><span class="chapter-title">{{ ch.title }}</span></a>
           {% assign ch_subs = subchapters | where: "chapter", ch.number %}
           {% if ch_subs.size > 0 %}
           <ul class="toc-sub">
             {% for sub in ch_subs %}
-              <li><a href="#{{ sub.slug }}"><span class="chapter-num">{{ ch.number }}.{{ sub.chapter_order }}</span><span class="chapter-title">{{ sub.title }}</span></a></li>
+              <li><a href="#{{ sub.slug }}"><span class="chapter-num">{{ chapter_num }}.{{ sub.chapter_order }}</span><span class="chapter-title">{{ sub.title }}</span></a></li>
             {% endfor %}
           </ul>
           {% endif %}

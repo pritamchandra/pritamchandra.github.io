@@ -1,8 +1,9 @@
 # Social / external links shown in the portfolio's right sidebar (and its
-# drawer copy). Google Scholar is real. GitHub and Letterboxd are filled
-# in. YouTube is still pending — add the channel URL when you have it and
-# it'll appear automatically, no other file needs to change.
+# drawer copy). Google Scholar is real. GitHub, ORCID, and Letterboxd are
+# filled in. YouTube is still pending — add the channel URL when you have
+# it and it'll appear automatically, no other file needs to change.
 scholar: "https://scholar.google.com/citations?user=uywPPLAAAAAJ&hl=en"
 github: "https://github.com/pritamchandra"
+orcid: "https://orcid.org/0009-0009-2976-9386"
 letterboxd: "https://letterboxd.com/oneoverepsilon/"
 youtube: null  # TODO: Pritam — add your YouTube channel URL here, e.g. "https://youtube.com/@yourhandle"

@@ -1,10 +1,15 @@
 # Select Notes, shown on the portfolio page.
 - year: 2026
-  title: "Probability and Statistics — Lecture Notes"
-  venue: "Written while teaching the course as Teaching Fellow, Ashoka University"
-  link: null  # TODO: Pritam — add the notes link (PDF or page) when available
+  title: "Lecture Notes for Probability and Statistics"
+  venue: "During Teaching Fellowship, Ashoka University"
+  link: "assets/notes/prob-stat-26.pdf"  # TODO: Pritam — add the notes link (PDF or page) when available
 
 - year: 2025
-  title: "Matrix Analysis — Lecture Notes"
-  venue: "Written while teaching the course as Teaching Fellow, Ashoka University"
-  link: null  # TODO: Pritam — add the notes link (PDF or page) when available
+  title: "Lecture Notes for Matrix Analysis"
+  venue: "During Teaching Fellowship, Ashoka University"
+  link: "assets/notes/lama-25.pdf"  # TODO: Pritam — add the notes link (PDF or page) when available
+
+- year: 2026
+  title: "Lecture Notes for Real Analysis"
+  venue: "(In progress) During Teaching Fellowship, Ashoka University"
+  link: "assets/notes/ra-26.pdf"  # TODO: Pritam — add the notes link (PDF or page) when available

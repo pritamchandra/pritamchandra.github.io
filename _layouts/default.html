@@ -7,12 +7,19 @@
 <meta name="description" content="{{ page.description }}">
 <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
 </head>
-<body>
+<body{% if page.layout == "home" %} class="page-home"{% endif %}>
 <a class="skip-link" href="#main">Skip to content</a>
 <div class="drawer-scrim" data-action="close-drawer"></div>
 {% include nav.html %}
 {% include drawer.html %}
 {{ content }}
+{% comment %}
+  Verse text for the .verse-ref hover/tap popups (see CLAUDE.md and
+  _data/bible_verses.yml) — emitted on every page since it's small and
+  main.js already no-ops on pages with no .verse-ref elements, same
+  pattern as its other page-specific features.
+{% endcomment %}
+<script type="application/json" id="bible-verses-data">{{ site.data.bible_verses | jsonify }}</script>
 <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
 </body>
 </html>

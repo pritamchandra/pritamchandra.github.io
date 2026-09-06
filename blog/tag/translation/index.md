@@ -1,6 +1,6 @@
 ---
 layout: tag
-tag: "translation"
+tag: "Translation"
 title: "Tag: Translation"
 description: "Posts and collections tagged translation."
 ---

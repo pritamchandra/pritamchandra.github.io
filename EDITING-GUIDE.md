@@ -7,6 +7,119 @@ light conventions like `**bold**`) or a short, obvious list of `key: value`
 lines (YAML). If something ever looks like actual code, that's a sign
 something's wrong — stop and ask, don't guess.
 
+## 0. How a local edit becomes a live change on the internet
+
+**The short version:** the folder on your Mac (this one — the one this
+guide lives in) *is* the website's source. There's no separate "upload"
+step, no FTP, no admin dashboard on some other site. You edit files here,
+then run three commands to send those exact files to GitHub, and GitHub
+rebuilds the live site from them automatically, usually within a minute
+or two. That's the entire mechanism, every time, for every kind of
+change in this guide — a new post, a tag fix, a typo, anything.
+
+This folder is already fully set up and connected to your GitHub
+account (to the repository `pritamchandra/pritamchandra.github.io`) —
+you don't need to configure anything before following the steps below;
+this section is about the routine you'll repeat every time you want to
+publish a change, not a one-time setup task.
+
+### The routine, every time
+
+**Step 1 — make your edits.** Add a post, edit a data file, whatever
+this guide walked you through. Save the file(s) like you would in any
+text editor.
+
+**Step 2 — preview locally (optional but recommended).** See §7 further
+down for the full instructions (`jekyll serve`, then open
+`http://127.0.0.1:4000`) — this shows you the change exactly as it'll
+look live, *before* anyone else can see it, so you can catch a typo or a
+formatting mistake first. Skip this if you're confident about a small,
+low-risk change like fixing one word.
+
+**Step 3 — publish, using three commands in Terminal.** Open Terminal,
+navigate to this folder, and run these one at a time (press Return
+after each, let it finish before typing the next):
+
+```bash
+cd ~/path/to/this/folder
+```
+(However you normally get here — if you're not sure where "here" is on
+your Mac, this folder's path is shown in Terminal's own address/title,
+or you can drag the folder itself onto the Terminal window after typing
+`cd ` with a trailing space, which fills in the path for you.)
+
+```bash
+git add -A
+```
+This tells git "include every file I've changed or added since last
+time." `-A` means "all of them" — you don't need to name files one by
+one.
+
+```bash
+git commit -m "Describe what you changed, e.g. 'add October blog post'"
+```
+This saves a permanent snapshot of exactly what you just staged, labeled
+with the message you wrote. Make the message a short, honest description
+of what changed — it's for your own future reference (git keeps every
+one of these forever, so you can always look back at what changed and
+when), not for anyone else to read.
+
+```bash
+git push
+```
+This is the actual "publish" step — it sends your snapshot from this
+folder up to GitHub. GitHub then rebuilds the live site from what it
+just received, automatically, with no further action from you. Give it
+a minute or two, then reload
+[pritamchandra.github.io](https://pritamchandra.github.io) to see your
+change live. If the page looks unchanged, a hard-refresh (Shift+reload,
+or Cmd+Shift+R on a Mac) rules out your browser just showing you a
+cached older copy.
+
+**Checking what you're about to publish, before you do:** running
+`git status` (no arguments) at any point shows you which files have
+changed and which are new, without changing anything — a good habit to
+run right before `git add -A` if you want to double check exactly
+what's about to go out, especially if it's been a while since your last
+edit and you don't remember everything you touched.
+
+**If `git push` ever asks you to log in:** use your GitHub username and,
+instead of your normal password, a [personal access
+token](https://github.com/settings/tokens) — GitHub stopped accepting
+plain account passwords for this a few years ago. Generating one is a
+one-time setup (GitHub's own page walks you through it — "generate new
+token," give it a name, check the "repo" permission box, copy the long
+string it gives you), and after you paste it in once, your Mac
+remembers it and won't ask again on this computer.
+
+**If `git push` is ever rejected** with a message mentioning the remote
+having work you don't have locally — this generally only happens if
+you'd edited the site from a second computer, or through GitHub's own
+website, without pulling those changes down here first. Run `git pull`
+once (fetches and merges in whatever's on GitHub), then `git push`
+again. For a one-person project edited from a single folder like this,
+you're unlikely to ever see this — it's here so you recognize the
+message and know it's not a broken repository, not a step you'll
+probably ever need.
+
+### A friendlier alternative to the Terminal: GitHub Desktop
+
+If typing git commands ever feels like more friction than you want, 
+[GitHub Desktop](https://desktop.github.com) is a free, official app
+that does the exact same three-step publish routine with buttons
+instead of commands: it shows you a visual list of every file you've
+changed, a box to type your commit message into, a "Commit" button,
+and then a "Push origin" button. Point it at this same folder once
+(File → Add Local Repository) and from then on, publishing a change is
+just: open the app, glance at what changed, type a short message, click
+twice. Nothing about the rest of this guide changes if you use it — the
+folder, the files, and everything you edit are identical either way;
+Desktop is just a different way to do Step 3 above. Worth trying if you
+ever want to publish a change without opening Terminal at all; the
+command-line version above is worth keeping in mind too, since that's
+what a future Claude Code session (like this one) will use on your
+behalf when you ask for help with a change directly.
+
 ## 1. Where things live, and why
 
 ```
@@ -27,11 +140,26 @@ something's wrong — stop and ask, don't guess.
 │   └── pritam-chandra-cv.pdf → your CV, once you have one to upload
 ├── _layouts/ and _includes/ → the actual templates (the "how it looks" —
 │                               you shouldn't need to open these)
+├── for_later/              → a dumping ground for source material (drafts,
+│                               PDFs, notes) you want to post eventually but
+│                               haven't processed into a real post yet — see
+│                               the note right below this tree
 └── CLAUDE.md               → the full design spec this site was built from;
                                harmless to ignore, useful if a future
                                developer (including a future AI session)
                                needs the reasoning behind a design choice
 ```
+
+**`for_later/` is not part of the site at all** — it's excluded from the
+Jekyll build (`_config.yml`'s `exclude:` list), so nothing you put there
+ever shows up on the live site, no matter what it contains or how it's
+named. Use it as a staging area: drop a document in (a rough draft, a
+PDF, a voice-memo transcript, whatever), and later ask me in a chat
+message to look in `for_later/` and turn a specific file into a real
+post — same as how the Homilies entries and this guide's own PDF-to-post
+examples were built. Nothing in this folder needs front matter, a
+particular filename format, or any site convention at all; it's yours
+until you ask for it to become a page.
 
 **Why posts go in `_posts/`, named with the date first:** Jekyll (the tool
 that turns these files into the actual website) uses the filename to figure
@@ -96,15 +224,43 @@ so a roughly square source photo looks best. It only ever shows on the
 full desktop width (≥1000px) — dropped entirely on narrower screens and
 in the drawer, by design, not a bug if you don't see it on your phone.
 
-**The structured lists** (Journal Publications, Preprints, Notes, Academic
-Service, Teaching) don't live in `index.md` at all — they're generated
-automatically from the files in `_data/`:
+**Sidebar content exists in two places — edit both, or narrow screens
+won't match.** The portfolio's left/right sidebars (`_layouts/home.html`)
+each have a mirrored copy in the mobile drawer (`_includes/drawer.html`,
+the `{% when "home" %}` case) — that copy is what phones and narrow
+windows actually show, since the static sidebars are hidden there. There
+is no single source of truth the two are generated from; they're just
+two separate blocks of text that need to say the same thing. This has
+already caused real, live bugs (see CLAUDE.md's most recent UPDATE) —
+concretely:
+
+- **"Interests"** (the `matrix analysis · operator inequalities · ...`
+  line) — reorder or reword it in `home.html`'s `.col-left` aside, then
+  copy the exact same text into `drawer.html`.
+- **"Elsewhere"** (the social links list, `.link-list`) — covered below;
+  same rule applies, both copies need the same `<li>`s in the same order.
+
+After editing either, check both a wide window *and* a narrow one (or
+the mobile drawer) before considering the edit done.
+
+**Social/"Elsewhere" links** live in `_data/social.yml`, not hardcoded in
+`home.html` — add or change a URL there (`scholar`, `github`, `orcid`,
+`letterboxd`, `youtube`) and it updates in both the sidebar and the
+drawer automatically, since both read from the same data file. Leaving a
+value as `null` hides that link entirely rather than rendering a dead
+one — that's how `youtube` behaves right now. To add an entirely new
+link (one `social.yml` doesn't already have a field for), you do need to
+touch both `.link-list`s in `home.html` and `drawer.html` by hand — see
+the two-places rule above.
+
+**The structured lists** (Journal Publications, Preprints, Select
+Lecture Notes, Academic Service) don't live in `index.md` at all —
+they're generated automatically from the files in `_data/`:
 
 - `_data/publications.yml`
 - `_data/preprints.yml`
 - `_data/notes.yml`
 - `_data/service.yml`
-- `_data/teaching.yml`
 
 To add a publication, open `_data/publications.yml`, copy one existing
 entry (the block starting with `- year:`), paste it as a new block, and
@@ -120,8 +276,26 @@ change the fields. For example:
 
 If you don't have a link yet, just write `link: null` — the title will
 show as plain text instead of a dead link, and you can fill it in later.
-`_data/teaching.yml` and `_data/service.yml` work the same way, just with
-different fields (look at an existing entry to see which).
+`_data/service.yml` works the same way, just with different fields (look
+at an existing entry to see which).
+
+**`authors`, `venue`, and `description` all understand Markdown**, so you
+can put a link inside them the normal way — `[Falcon](https://...)` — not
+just in `title`/`link`. `<strong>`/`<em>` also still work if you'd rather
+write raw HTML for emphasis (both styles can be mixed in the same field).
+This isn't only for new entries — `_data/preprints.yml`'s "Fast Fourier
+Orthogonalization" venue already had a `[Falcon](...)` link sitting in it
+unrendered before this was wired up, which is what prompted adding it.
+
+**Teaching Experience is the one exception** — it's plain prose, not a
+data-driven list. Edit `_includes/teaching-description.md` directly, like
+any Markdown document (it's included into the Teaching section and run
+through Markdown, so `[Name](url)`-style links work normally there). The
+old table (`_data/teaching.yml` + the `.teaching-table` markup in
+`home.html`) still exists underneath, just commented out with `{%
+comment %}...{% endcomment %}` rather than deleted, in case you want a
+table again later — ask for it to be switched back rather than trying to
+uncomment Liquid by hand.
 
 ## 3. Adding an ordinary blog post
 
@@ -326,7 +500,7 @@ something to avoid:
 ```html
 <figure class="gallery-video">
   <div class="video-frame">
-    <iframe src="https://www.youtube-nocookie.com/embed/YOUR-VIDEO-ID" title="A short title" allowfullscreen loading="lazy"></iframe>
+    <iframe src="https://www.youtube-nocookie.com/embed/YOUR-VIDEO-ID" title="A short title" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
   </div>
   <figcaption>An optional caption, e.g. attribution/license.</figcaption>
 </figure>
@@ -491,7 +665,10 @@ Your piece's text goes here.
 - `chapter_order` is this piece's position within its chapter (1, 2, 3...)
   — it becomes the "I.1", "I.2" numbering.
 - `order` is this piece's position in the whole book, top to bottom —
-  easiest to just count 1, 2, 3... across every piece in the book.
+  easiest to just count 1, 2, 3... across every piece in the book. **This
+  is only consulted for pieces that have no `date` at all** — see the
+  `date` bullet just below, and "Reordering pieces or chapters" further
+  down for how the two interact.
 - `slug` becomes the anchor in the URL (`#i-1`) — keep it matching
   `chapter-num.chapter_order` in lowercase, like the example.
 - `epigraph` is optional: delete the `null` and replace with
@@ -538,16 +715,114 @@ Your piece's text goes here.
   title, and in Contents) is just its position in the book — `order: 1`
   shows as "1", `order: 2` as "2", and so on — and `slug` for a
   chapterless book is just that same plain number (`slug: 1`, `slug: 2`,
-  ...), not the `i-1`-style slug a chaptered book uses.
+  ...), not the `i-1`-style slug a chaptered book uses. "From the
+  journal" (`_books/from-the-journal-*.md`) is a working example of this
+  — three entries, no chapters at all.
+- `date` is optional on any piece, chaptered or not — add it
+  (`date: 2026-03-15`) and it's shown right under the piece's title,
+  small and muted, as an abbreviated month and year (e.g. "Mar 2026") —
+  never the day, even though you type the full date. Leave it out
+  entirely if you don't want a date shown — there's no blank
+  placeholder, the line just doesn't appear. **Adding a real `date` also
+  changes how the piece is sorted** — see the next section.
 
 For the piece's actual text, use `<p class="verse">...</p>` for
 poetry/lyrics (see §3 above), or just ordinary paragraphs for prose.
+
+### Reordering pieces or chapters after the fact
+
+**If a book's pieces have no `date` field at all** (Translations of
+Lyrics, Confession, Elegy, and most others), the reading order is just
+whatever you set with `order:` — to move a song up, give it a lower
+`order` number than the piece you want it to come before. You don't
+need to keep every file's `order` perfectly sequential (no gaps, no
+duplicates) — Jekyll just sorts by whatever numbers are there, so to
+swap two adjacent songs you only ever need to edit those two files'
+`order` values, not renumber the whole book. For example, in
+Translations of Lyrics, to move "Bahu Manaratha" (currently `order: 4`)
+above "Phir Le Aya Dil" (currently `order: 3`), just change Bahu
+Manaratha's `order` to `3` and Phir Le Aya Dil's to `4` — nothing else
+in the book needs to change.
+
+**If a book's pieces *do* carry real `date` fields** (like "From the
+journal," or the two poems collections with real dates), any piece with
+a date sorts itself automatically, newest first, ahead of any piece with
+no date — you don't set an `order` for these at all to control their
+relative position, the date does it for you. To reorder two dated
+pieces, correct their `date` values rather than their `order` (their
+`order` is ignored as long as they have a date). A book can mix the two:
+dated pieces always float to the top, newest first, with any undated
+pieces trailing after them in plain `order` sequence — so if a piece
+mysteriously isn't where you expect, check whether it (or its neighbor)
+has a `date` before touching `order` at all.
+
+**To reorder the top-level *chapters* of a chaptered book** (like
+Homilies — the numbered "1", "2", ... groupings, not the pieces inside
+them), the pieces' own `order`/`date` don't come into it at all. Open
+that book's `_data/books/<slug>-chapters.yml` file and move the whole
+chapter block (the `- number: ...` through the next chapter's `-
+number:`) to wherever you want it in the list — the file's own top-to-
+bottom order is exactly the page's rendering order. You don't need to
+renumber anything: each chapter's displayed numeral is computed from its
+position in this list automatically, and the `number:` field is just an
+internal label a chapter's pieces use to say which chapter they belong
+to (their `chapter:` front-matter field) — moving a chapter's block
+around, or inserting a brand-new one anywhere including the very top,
+never requires touching that field or any piece's front matter.
+
+**If the piece is a translated song** (like "Translations of Lyrics"),
+add a plain italicized link to the original recording right above the
+text — just ordinary Markdown, nothing to paste or style:
+
+```markdown
+*[Listen to Song Title](https://youtu.be/VIDEO_ID)*
+```
+
+Replace `Song Title` with the song's actual name and `VIDEO_ID` with a
+link to the recording (YouTube or anywhere else). That's the whole
+pattern — one line, no thumbnail, no box.
 
 That's it — once these files exist, the book automatically shows up on the
 blog home's timeline, gets a working table of contents, and its tags
 become real links.
 
-## 5. The reading list — adding, editing, and favorites
+## 5. Bible verse links (hover or tap to preview the verse)
+
+Used on the Homilies posts. Any Bible citation you write can become a
+small interactive link — hovering it on a computer, or tapping it on a
+phone, pops up a small box showing the verse itself (NIV text), without
+leaving the page. Tapping/clicking anywhere else closes it again.
+
+**Two steps, both required, in either order:**
+
+1. **Write the citation as a link, directly in your Markdown**, using this
+   exact HTML (raw HTML like this passes straight through, same as the
+   `.thm`/`.proof` boxes in §3):
+   ```html
+   As <a href="#" class="verse-ref" data-verse="Colossians 1:17">Colossians 1:17</a> puts it...
+   ```
+   The `data-verse="..."` value is the lookup key — it must match a key
+   in the file from step 2, exactly, including the colon and spacing
+   (`"Colossians 1:17"`, not `"Colossians 1: 17"` or `"colossians 1:17"`).
+   The visible link text (between the `>` and `</a>`) can say whatever
+   you like — it doesn't have to match the key.
+
+2. **Add the verse text to `_data/bible_verses.yml`**, one line per verse:
+   ```yaml
+   "Colossians 1:17": "He is before all things, and in him all things hold together."
+   ```
+   If you cite a verse that isn't in this file yet, the link just won't
+   pop anything up — it fails quietly, not with an error — so it's safe
+   to add the link first and the text later, just don't forget the
+   second step or the link will look inert.
+
+The file already has a short comment at the top explaining that this is
+NIV text, used under the license terms that allow quoting individual
+verses with attribution — keep that comment if you ever edit the file,
+and keep quoting single verses (not long passages) the same way the
+existing entries do.
+
+## 6. The reading list — adding, editing, and favorites
 
 Your reading list lives at `pritamchandra.github.io/reading/`. It has two
 parts: the **favorites shelf** at the top (up to a handful of covers,
@@ -636,7 +911,7 @@ a number to add it). There's no fixed limit, but the shelf is one row
 that just gets narrower as you add more — four or five is about right
 before it gets cramped on a phone.
 
-## 6. Previewing changes before publishing
+## 7. Previewing changes before publishing
 
 You'll need [Ruby](https://www.ruby-lang.org) and Jekyll installed once —
 if you're not sure whether you have them, open Terminal and run:
@@ -660,12 +935,36 @@ window running while you look around; press Ctrl+C to stop it. Every time
 you save a file, refresh the browser to see the change — no need to
 restart the server.
 
-## 7. Publishing
+**To preview on your phone instead** (useful for checking anything
+phone-specific, like the drawer or the mobile-only icon rendering) — your
+Mac and phone need to be on the **same Wi-Fi network**. Start the server
+so it listens for other devices, not just itself:
 
-This site is a **git repository** connected to GitHub — GitHub is where
-the live copy lives, and `git` is how you send your changes there.
+```bash
+cd ~/path/to/this/folder
+jekyll serve --host 0.0.0.0
+```
 
-Once you're happy with a change:
+Then find your Mac's local network address — open a second Terminal tab
+and run:
+
+```bash
+ipconfig getifaddr en0
+```
+
+That prints something like `192.168.1.15`. On your phone's browser, go to
+`http://192.168.1.15:4000` (using whatever number your Mac actually
+printed). This address can change if your Mac reconnects to Wi-Fi or
+switches networks, so re-run the `ipconfig` command if the page stops
+loading on your phone after a while. Ctrl+C in the Terminal stops the
+server, same as the plain `jekyll serve` case above.
+
+## 8. Publishing
+
+See §0 at the very top of this guide for the full walkthrough (the
+three-command git routine, what to do if `git push` asks you to log in,
+and the GitHub Desktop alternative). Once you're happy with a change,
+the short version is:
 
 ```bash
 cd ~/path/to/this/folder
@@ -674,14 +973,8 @@ git commit -m "Describe what you changed, e.g. 'add October blog post'"
 git push
 ```
 
-That's the whole publishing step. A minute or two after `git push`
-finishes, [pritamchandra.github.io](https://pritamchandra.github.io) will
-show your update — GitHub rebuilds the site automatically, you don't need
-to run `jekyll build` yourself for the live site (that's only for local
-preview).
-
-If `git push` ever asks you to log in, use your GitHub username and,
-instead of your password, a
-[personal access token](https://github.com/settings/tokens) — GitHub
-stopped accepting plain passwords for this a while back. This should only
-come up once; after that your computer remembers it.
+A minute or two after `git push` finishes,
+[pritamchandra.github.io](https://pritamchandra.github.io) will show
+your update — GitHub rebuilds the site automatically, you don't need to
+run `jekyll build` yourself for the live site (that's only for local
+preview, §7 above).

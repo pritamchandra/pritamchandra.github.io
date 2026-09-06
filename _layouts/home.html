@@ -12,14 +12,14 @@ layout: default
           <li style="margin-bottom:.55em;"><a href="#about">About</a></li>
           <li style="margin-bottom:.55em;"><a href="#publications">Journal Publications</a></li>
           <li style="margin-bottom:.55em;"><a href="#preprints">Preprints &amp; Working Papers</a></li>
+          <li style="margin-bottom:.55em;"><a href="#teaching">Teaching Experience</a></li>
           <li style="margin-bottom:.55em;"><a href="#notes">Notes</a></li>
           <li style="margin-bottom:.55em;"><a href="#service">Academic Service</a></li>
-          <li style="margin-bottom:.55em;"><a href="#teaching">Teaching Experience</a></li>
         </ul>
       </nav>
       <a class="tag resume-link" href="{{ '/assets/pritam-chandra-cv.pdf' | relative_url }}">{% include icon-resume.html %}Resume</a>
       <h2>Interests</h2>
-      <p style="font-size:.86rem; color:var(--text-muted); line-height:1.6;">Matrix analysis &middot; operator inequalities &middot; post-quantum cryptography &middot; machine learning theory</p>
+      <p style="font-size:.86rem; color:var(--text-muted); line-height:1.6;">matrix analysis &middot; operator inequalities &middot; machine learning theory &middot; post-quantum cryptography </p>
     </aside>
 
     <aside class="col-sidebar col-right sidebar-sticky">
@@ -31,9 +31,11 @@ layout: default
         <p class="portrait-cap">Photograph &mdash; replace with <code>/assets/img/author-photo.jpg</code></p>
       {% endif %}
       <h2>Elsewhere</h2>
+      <a class="tag resume-link" href="{{ '/blog/' | relative_url }}">{% include icon-blog.html %}Blog</a>
       <ul class="link-list">
         <li><a href="{{ site.data.social.scholar }}">Google Scholar</a></li>
         {% if site.data.social.github %}<li><a href="{{ site.data.social.github }}">GitHub</a></li>{% endif %}
+        {% if site.data.social.orcid %}<li><a href="{{ site.data.social.orcid }}">ORCID</a></li>{% endif %}
         <li><a href="{{ '/reading/' | relative_url }}">Reading List</a></li>
         {% if site.data.social.letterboxd %}<li><a href="{{ site.data.social.letterboxd }}">Letterboxd</a></li>{% endif %}
         {% if site.data.social.youtube %}<li><a href="{{ site.data.social.youtube }}">YouTube</a></li>{% endif %}
@@ -53,47 +55,72 @@ layout: default
       </section>
 
       <section id="publications">
-        <h2>Journal Publications</h2>
+        <h2>Select Journal Publications</h2>
         <ul class="pub-list">
           {% for pub in site.data.publications %}
           <li>
             <span class="pub-year">{{ pub.year }}</span>
             <div>
               {% if pub.link %}<a class="pub-title" href="{% if pub.link contains 'http' %}{{ pub.link }}{% else %}{{ pub.link | relative_url }}{% endif %}">{{ pub.title }}</a>{% else %}<span class="pub-title">{{ pub.title }}</span>{% endif %}
-              <p class="pub-authors">{{ pub.authors }}</p>
-              <p class="pub-venue">{{ pub.venue }}</p>
+              <div class="pub-authors">{{ pub.authors | markdownify }}</div>
+              <div class="pub-venue">{{ pub.venue | markdownify }}</div>
             </div>
           </li>
           {% endfor %}
         </ul>
-        <p class="pub-note">Full list on <a href="{{ site.data.social.scholar }}">Google Scholar</a>.</p>
+        <!-- <p class="pub-note">Full list on <a href="{{ site.data.social.scholar }}">Google Scholar</a>.</p> -->
       </section>
 
       <section id="preprints">
-        <h2>Preprints &amp; Working Papers</h2>
+        <h2>Select Preprints and Working Papers</h2>
         <ul class="pub-list">
           {% for pub in site.data.preprints %}
           <li>
             <span class="pub-year">{{ pub.year }}</span>
             <div>
               {% if pub.link %}<a class="pub-title" href="{% if pub.link contains 'http' %}{{ pub.link }}{% else %}{{ pub.link | relative_url }}{% endif %}">{{ pub.title }}</a>{% else %}<span class="pub-title">{{ pub.title }}</span>{% endif %}
-              <p class="pub-authors">{{ pub.authors }}</p>
-              <p class="pub-venue">{{ pub.venue }}</p>
+              <div class="pub-authors">{{ pub.authors | markdownify }}</div>
+              <div class="pub-venue">{{ pub.venue | markdownify }}</div>
             </div>
           </li>
           {% endfor %}
         </ul>
       </section>
 
+      <section id="teaching">
+        <h2>Teaching Experience</h2>
+        {% comment %}
+          Was a data-driven table (_data/teaching.yml + the .teaching-table
+          markup below) — commented out rather than deleted since that's a
+          reusable pattern worth keeping around for elsewhere on the site.
+          Replaced for now with a plain-text description, edited directly
+          in _includes/teaching-description.md (see EDITING-GUIDE.md §2).
+        {% endcomment %}
+        {% comment %}
+        <table class="teaching-table">
+          <thead>
+            <tr><th class="col-year">Year</th><th>Course</th><th>Instructor</th></tr>
+          </thead>
+          <tbody>
+            {% for t in site.data.teaching %}
+            <tr><td class="col-year">{{ t.year }}</td><td>{{ t.course }}</td><td>{{ t.instructor }}</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% endcomment %}
+        {% capture teaching_text %}{% include teaching-description.md %}{% endcapture %}
+        {{ teaching_text | markdownify }}
+      </section>
+
       <section id="notes">
-        <h2>Select Notes</h2>
+        <h2>Select Lecture Notes</h2>
         <ul class="pub-list">
           {% for n in site.data.notes %}
           <li>
             <span class="pub-year">{{ n.year }}</span>
             <div>
               {% if n.link %}<a class="pub-title" href="{% if n.link contains 'http' %}{{ n.link }}{% else %}{{ n.link | relative_url }}{% endif %}">{{ n.title }}</a>{% else %}<span class="pub-title">{{ n.title }}</span>{% endif %}
-              <p class="pub-venue">{{ n.venue }}</p>
+              <div class="pub-venue">{{ n.venue | markdownify }}</div>
             </div>
           </li>
           {% endfor %}
@@ -106,24 +133,10 @@ layout: default
           {% for s in site.data.service %}
           <li>
             <span class="pub-year">{{ s.year }}</span>
-            <p style="margin:0;">{{ s.description }}</p>
+            <div style="margin:0;">{{ s.description | markdownify }}</div>
           </li>
           {% endfor %}
         </ul>
-      </section>
-
-      <section id="teaching">
-        <h2>Teaching Experience</h2>
-        <table class="teaching-table">
-          <thead>
-            <tr><th class="col-year">Year</th><th>Course</th><th>Instructor</th></tr>
-          </thead>
-          <tbody>
-            {% for t in site.data.teaching %}
-            <tr><td class="col-year">{{ t.year }}</td><td>{{ t.course }}</td><td>{{ t.instructor }}</td></tr>
-            {% endfor %}
-          </tbody>
-        </table>
       </section>
 
       {% include footer.html %}

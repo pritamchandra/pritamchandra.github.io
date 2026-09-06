@@ -1,6 +1,6 @@
 ---
 layout: tag
-tag: "poetry"
+tag: "Poetry"
 title: "Tag: Poetry"
 description: "Posts and collections tagged poetry."
 ---

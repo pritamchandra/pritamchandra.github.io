@@ -16,11 +16,12 @@ layout: default
         <button type="button" data-filter="collection" aria-pressed="false">Collections</button>
         <button type="button" data-filter="page" aria-pressed="false">Pages</button>
       </div>
+      <a class="icon-link website-link" href="{{ '/' | relative_url }}">{% include icon-globe.html %}Pritam Chandra</a>
       <a class="icon-link reading-link" href="{{ '/reading/' | relative_url }}">{% include icon-book.html %}Reading List</a>
       <h2>Tags</h2>
       <ul class="tag-cloud">
         {% for g in tag_groups %}
-          <li><a href="{{ g.name | slugify | prepend: '/blog/tag/' | append: '/' | relative_url }}">{{ g.name | capitalize }}</a><span class="tag-count">{{ g.items.size }}</span></li>
+          <li><a href="{{ g.name | slugify | prepend: '/blog/tag/' | append: '/' | relative_url }}">{{ g.name }}</a><span class="tag-count">{{ g.items.size }}</span></li>
         {% endfor %}
       </ul>
     </aside>
@@ -75,8 +76,8 @@ layout: default
           </g>
         </svg>
         <blockquote>
-          <p>&ldquo;Put out into the deep, and let down your nets for a catch.&rdquo;</p>
-          <cite>Luke 5:4</cite>
+          <p>&ldquo;But many of the priests and Levites and chief of the fathers, that had seen the first house, when the foundation of this house was laid before their eyes, wept with a loud voice; the people could not discern the noise of the shout of joy from the noise of the weeping of the people, and the noise was heard afar off.&rdquo;</p>
+          <cite>Ezra 3:12&dash;13</cite>
         </blockquote>
       </div>
 
@@ -87,7 +88,7 @@ layout: default
           {% if entry.layout == "book" %}{% assign kind = "collection" %}{% endif %}
           <article class="post-entry" data-kind="{{ kind }}">
             <h2><a href="{{ entry.url | relative_url }}">{{ entry.title }}</a></h2>
-            <p class="entry-meta"><span class="entry-kind">{% if kind == "collection" %}Collection{% else %}Page{% endif %}</span><span class="tags">{% for t in entry.tags %}<a class="tag" href="{{ t | slugify | prepend: '/blog/tag/' | append: '/' | relative_url }}">{{ t }}</a>{% endfor %}</span> &middot; {{ entry.date | date: "%B %Y" }}</p>
+            <p class="entry-meta"><span class="entry-kind">{% if kind == "collection" %}Collection{% else %}Page{% endif %}</span><span class="tags">{% for t in entry.tags %}<a class="tag" href="{{ t | slugify | prepend: '/blog/tag/' | append: '/' | relative_url }}">{{ t }}</a>{% endfor %}</span> &middot; {{ entry.date | date: "%b %Y" }}</p>
             {% if entry.preview %}<p class="entry-preview">{{ entry.preview }}</p>{% endif %}
           </article>
           {% unless forloop.last %}<hr class="rule">{% endunless %}

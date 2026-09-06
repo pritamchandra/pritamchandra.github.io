@@ -4,10 +4,9 @@ title: "Confession"
 description: 
 book_slug: confession
 book_title: "Confession"
-subtitle: |
-     Poems about a man's unceasing interactions with sin. 
-tags: [poetry, faith]
+subtitle:
+tags: [Poetry, Faith]
 date: 2026-12-03 12:00:00 +0530
 note: 
-preview: "Poems about a man's unceasing interactions with sin."
+preview: "Collection of poems about man&rsquo;s unceasing interactions with sin."
 ---

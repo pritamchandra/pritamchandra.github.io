@@ -6,10 +6,10 @@
   title: "Cartesian Decomposition and Schatten Norms: On the Sharpness of Some Inequalities of Bhatia and Zhan"
   authors: "<strong>Pritam Chandra</strong>"
   venue: "Indian Journal of Pure and Applied Mathematics"
-  link: null  # TODO: Pritam — add the PDF/journal link when available
+  link: https://link.springer.com/article/10.1007/s13226-026-00959-x
 
 - year: 2024
   title: "Learning Arithmetic Formulas in the Presence of Noise: A General Framework and Applications to Unsupervised Learning"
   authors: "<strong>Pritam Chandra</strong>, Ankit Garg, Neeraj Kayal, Kunal Mittal, Tanmay Sinha"
   venue: "Innovations in Theoretical Computer Science (ITCS)"
-  link: null  # TODO: Pritam — add the PDF/journal link when available
+  link: https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.ITCS.2024.25 

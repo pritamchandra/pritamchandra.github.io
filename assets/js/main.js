@@ -39,7 +39,12 @@
   function paintThemeBtn(){
     var t = currentTheme();
     themeBtn.forEach(function(b){
-      b.textContent = t === 'dark' ? '☾' : '☀'; /* ☾ / ☀ */
+      /* ︎ forces the plain monochrome "text presentation" of these
+         glyphs — without it, iOS/Safari renders them as full-color emoji
+         (a much "busier"/detailed sun and moon than the simple line
+         version desktop browsers show), which is exactly the phone-vs-
+         desktop mismatch this was reported as. */
+      b.textContent = t === 'dark' ? '☾︎' : '☀︎'; /* ☾ / ☀, text style */
       b.setAttribute('aria-pressed', t === 'dark');
     });
   }
@@ -52,6 +57,43 @@
     });
   });
   paintThemeBtn();
+
+  /* ---------- share buttons: copy a page/chapter/subchapter link ---------- */
+  /* One handler for every .share-btn on the page — a post's own header,
+     a book's own header, and every chapter/subchapter heading inside a
+     book all render one of these (see book.html/post.html), each with
+     its own data-url already built server-side (the page's absolute
+     URL, plus a #anchor for a chapter/subchapter) — no client-side URL
+     guessing needed. */
+  var shareBtns = document.querySelectorAll('[data-action="copy-link"]');
+  shareBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var url = btn.getAttribute('data-url');
+      var done = function(){
+        btn.classList.add('is-copied');
+        clearTimeout(btn._copyTimer);
+        btn._copyTimer = setTimeout(function(){ btn.classList.remove('is-copied'); }, 1500);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(url).then(done, function(){
+          fallbackCopy(url); done();
+        });
+      } else {
+        fallbackCopy(url); done();
+      }
+    });
+  });
+  function fallbackCopy(text){
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try { document.execCommand('copy'); } catch (e){}
+    document.body.removeChild(ta);
+  }
 
   /* ---------- text size: a −/+ pair over a wider range ---------- */
   var sizeDecBtn = document.querySelectorAll('[data-action="size-dec"]');
@@ -121,6 +163,34 @@
   window.addEventListener('keydown', function(e){
     if (e.key === 'Escape') closeDrawer();
   });
+
+  /* ---------- scrollspy: mildly highlight the current Contents section ---------- */
+  /* Portfolio only — .toc is home.html's Contents nav and its drawer
+     mirror (book pages use a differently-named/-structured .book-toc,
+     untouched by this). Both copies are selected together and kept in
+     sync, since the drawer should already show the right section
+     highlighted if it's opened mid-scroll, not just the static one. */
+  var tocLinks = document.querySelectorAll('.toc a[href^="#"]');
+  if (tocLinks.length && window.IntersectionObserver){
+    var tocSeen = {}, tocSections = [];
+    tocLinks.forEach(function(a){
+      var id = a.getAttribute('href').slice(1);
+      if (tocSeen[id]) return;
+      var el = document.getElementById(id);
+      if (el){ tocSeen[id] = true; tocSections.push(el); }
+    });
+    var setCurrentSection = function(id){
+      tocLinks.forEach(function(a){
+        a.classList.toggle('current', a.getAttribute('href') === '#' + id);
+      });
+    };
+    var spy = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) setCurrentSection(entry.target.id);
+      });
+    }, { rootMargin: '-15% 0px -70% 0px' });
+    tocSections.forEach(function(el){ spy.observe(el); });
+  }
 
   /* ---------- hide navbar on scroll down, reveal on scroll up ---------- */
   var nav = document.querySelector('.sitenav');
@@ -198,6 +268,75 @@
         applyYearFilter(b.getAttribute('data-reading-year'));
         root.classList.remove('drawer-open');
       });
+    });
+  }
+
+  /* ---------- Bible verse hover/tap popups (Biblical posts) ---------- */
+  /* Verse text comes from _data/bible_verses.yml, emitted into the page
+     as JSON by default.html. Desktop: hover shows the popup. Touch/
+     mobile: tap toggles it, tap outside closes it (there's no hover on
+     touch, so click has to do both jobs). One shared popup element,
+     repositioned under whichever reference is active, rather than one
+     per reference. */
+  var verseRefs = document.querySelectorAll('.verse-ref');
+  if (verseRefs.length){
+    var verseData = {};
+    var verseDataEl = document.getElementById('bible-verses-data');
+    if (verseDataEl){
+      try { verseData = JSON.parse(verseDataEl.textContent); } catch (e){ verseData = {}; }
+    }
+
+    var versePopup = document.createElement('div');
+    versePopup.className = 'verse-popup';
+    versePopup.setAttribute('role', 'tooltip');
+    versePopup.hidden = true;
+    document.body.appendChild(versePopup);
+
+    var activeVerseRef = null;
+
+    function positionVersePopup(ref){
+      var r = ref.getBoundingClientRect();
+      var top = r.bottom + window.scrollY + 6;
+      var left = r.left + window.scrollX;
+      var maxLeft = window.scrollX + document.documentElement.clientWidth - versePopup.offsetWidth - 10;
+      if (left > maxLeft) left = Math.max(window.scrollX + 10, maxLeft);
+      versePopup.style.top = top + 'px';
+      versePopup.style.left = left + 'px';
+    }
+    function showVersePopup(ref){
+      var text = verseData[ref.getAttribute('data-verse')];
+      if (!text) return;
+      versePopup.textContent = text;
+      versePopup.hidden = false;
+      activeVerseRef = ref;
+      positionVersePopup(ref);
+    }
+    function hideVersePopup(){
+      versePopup.hidden = true;
+      activeVerseRef = null;
+    }
+
+    verseRefs.forEach(function(ref){
+      ref.addEventListener('mouseenter', function(){ showVersePopup(ref); });
+      ref.addEventListener('mouseleave', function(){ hideVersePopup(); });
+      ref.addEventListener('focus', function(){ showVersePopup(ref); });
+      ref.addEventListener('blur', function(){ hideVersePopup(); });
+      ref.addEventListener('click', function(e){
+        e.preventDefault();
+        if (activeVerseRef === ref) hideVersePopup();
+        else showVersePopup(ref);
+      });
+    });
+    document.addEventListener('click', function(e){
+      if (!activeVerseRef) return;
+      if (e.target.closest('.verse-ref') || e.target.closest('.verse-popup')) return;
+      hideVersePopup();
+    });
+    window.addEventListener('scroll', function(){
+      if (activeVerseRef) positionVersePopup(activeVerseRef);
+    }, { passive: true });
+    window.addEventListener('resize', function(){
+      if (activeVerseRef) positionVersePopup(activeVerseRef);
     });
   }
 

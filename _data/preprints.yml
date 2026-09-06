@@ -1,6 +1,6 @@
 # Preprints & Working Papers, shown on the portfolio page.
 - year: 2026
-  title: "Eigenvalue Inequalities for Some Matrix Means"
+  title: "Various Order Relations between Some Matrix Means"
   authors: "Rajendra Bhatia, <strong>Pritam Chandra</strong>"
   venue: "In submission at Acta Scientiarum Mathematicarum"
   link: null  # TODO: Pritam — add the preprint link when available
@@ -9,16 +9,22 @@
   title: "An Elementary Introduction to Smoothing Parameter Bounds"
   authors: "<strong>Pritam Chandra</strong>"
   venue: "Manuscript in preparation for the Cryptology ePrint Archive"
-  link: "/blog/2026/07/07/operator-fidelity-qpower-means/"  # links to the real math sample post on this site
+  link: "/assets/preprints/intro-to-sp-bounds.pdf"  # links to the real math sample post on this site
 
 - year: 2025
   title: "An Exposition on Fast Fourier Orthogonalization"
   authors: "<strong>Pritam Chandra</strong>"
-  venue: "Manuscript in preparation for the Cryptology ePrint Archive"
-  link: null  # TODO: Pritam — add the preprint link when available
+  venue: "An elementary presentation of central ideas behind the(post-quantum) state-of-the-art signature scheme [Falcon](https://falcon-sign.info/)."
+  link: "/assets/preprints/exposition-ffo.pdf"  # TODO: Pritam — add the preprint link when available
 
 - year: 2024
   title: "Towards Analyzing Self-Attention via Linear Neural Networks"
   authors: "<strong>Pritam Chandra</strong>, Ankit Garg, Neeraj Kayal, Kunal Mittal, Tanmay Sinha"
   venue: "Under revision for the International Conference on Learning Representations (ICLR)"
-  link: null  # TODO: Pritam — add the preprint link when available
+  link: "https://openreview.net/pdf?id=4fVuBf5HE9"  # TODO: Pritam — add the preprint link when available
+
+- year: 2022  # TODO: Pritam — confirm the actual year of the capstone thesis
+  title: "Norm Inequalities Related to the Cartesian Decomposition of matrices"
+  authors: "<strong>Pritam Chandra</strong>"
+  venue: "Undergraduate Capstone Thesis written under [Rajendra Bhatia](https://scholar.google.com/citations?user=QQYGgRoAAAAJ&hl=en)"
+  link: "/assets/preprints/ug-thesis.pdf"  # TODO: Pritam — add a link (PDF or page) when available

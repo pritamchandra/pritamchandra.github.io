@@ -1,6 +1,6 @@
 ---
 layout: tag
-tag: "matrix analysis"
-title: "Tag: Matrix analysis"
+tag: "Matrix Analysis"
+title: "Tag: Matrix Analysis"
 description: "Posts and collections tagged matrix analysis."
 ---

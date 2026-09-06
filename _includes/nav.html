@@ -2,48 +2,66 @@
   One shared nav bar for every page. What differs per page type (per
   CLAUDE.md §4): whether the sidebar-toggle hamburger is shown at all
   (only on pages that have a sidebar/drawer), where the site name links
-  to, and what the one cross-link says/points to.
+  to, what the one cross-link says/points to, and — blog pages only —
+  the site name itself, which shows the blog's "1/epsilon" mark instead
+  of "Pritam Chandra"/"PC". `brand` tracks that last one; it's "frac"
+  exactly when sitename_href already points at "/blog/" (blog-home,
+  book, and everything in the `else` branch), and "name" when it points
+  at "/" (home/portfolio, reading) — the two were already the same split,
+  this just makes the split do double duty.
+
+  "home" and "blog-home" set cross_text to "" deliberately — neither
+  page gets a cross-link in the bar anymore; the portfolio's link to the
+  blog now lives as a Resume-styled tag in the right sidebar's
+  "Elsewhere" list, and the blog's link back to the portfolio now lives
+  as an icon-link in the left sidebar, right above "Reading List" — see
+  home.html/blog-home.html (and drawer.html's matching copies).
 {% endcomment %}
 {% case page.layout %}
   {% when "home" %}
     {% assign show_toggle = true %}
     {% assign sitename_href = "/" | relative_url %}
-    {% assign cross_text = "Blog" %}
-    {% assign cross_href = "/blog/" | relative_url %}
+    {% assign cross_text = "" %}
+    {% assign cross_href = "" %}
+    {% assign brand = "name" %}
   {% when "blog-home" %}
     {% assign show_toggle = true %}
     {% assign sitename_href = "/blog/" | relative_url %}
-    {% assign cross_text = "Website" %}
-    {% assign cross_href = "/" | relative_url %}
+    {% assign cross_text = "" %}
+    {% assign cross_href = "" %}
+    {% assign brand = "frac" %}
   {% when "book" %}
     {% assign show_toggle = true %}
     {% assign sitename_href = "/blog/" | relative_url %}
     {% assign cross_text = "All posts" %}
     {% assign cross_href = "/blog/" | relative_url %}
+    {% assign brand = "frac" %}
   {% when "reading" %}
     {% assign show_toggle = true %}
     {% assign drawer_always = true %}
     {% assign sitename_href = "/" | relative_url %}
     {% assign cross_text = "Blog" %}
     {% assign cross_href = "/blog/" | relative_url %}
+    {% assign brand = "name" %}
   {% else %}
     {% assign show_toggle = false %}
     {% assign sitename_href = "/blog/" | relative_url %}
     {% assign cross_text = "All posts" %}
     {% assign cross_href = "/blog/" | relative_url %}
+    {% assign brand = "frac" %}
 {% endcase %}
 <nav class="sitenav" aria-label="Site">
   <div class="nav-cluster">
     {% if show_toggle %}<button class="nav-btn icon-btn" data-action="toggle-sidebars"{% if drawer_always %} data-drawer-always="true"{% endif %} aria-pressed="false" title="Show or hide the sidebar">&#9776;</button>{% endif %}
-    <a class="nav-sitename" href="{{ sitename_href }}"><span class="full">Pritam Chandra</span><span class="short">PC</span></a>
+    <a class="nav-sitename" href="{{ sitename_href }}">{% if brand == "frac" %}<span class="frac" role="img" aria-label="one over epsilon"><span class="frac-n">1</span><span class="frac-slash">&frasl;</span><span class="frac-d">&epsilon;</span></span>{% else %}<span class="full">Pritam Chandra</span><span class="short">PC</span>{% endif %}</a>
     <span class="nav-spacer"></span>
-    <a class="nav-link" href="{{ cross_href }}">{{ cross_text }}</a>
+    {% if cross_text != "" %}<a class="nav-link" href="{{ cross_href }}">{{ cross_text }}</a>{% endif %}
     <div class="nav-tools">
       <div class="size-ctl" role="group" aria-label="Text size">
         <button class="nav-btn" data-action="size-dec" aria-label="Decrease text size">&minus;</button>
         <button class="nav-btn" data-action="size-inc" aria-label="Increase text size">&plus;</button>
       </div>
-      <button class="nav-btn icon-btn" data-action="toggle-theme" title="Toggle dark mode" aria-label="Toggle dark mode">&#9728;</button>
+      <button class="nav-btn icon-btn" data-action="toggle-theme" title="Toggle dark mode" aria-label="Toggle dark mode">&#9728;&#xFE0E;</button>
     </div>
   </div>
 </nav>

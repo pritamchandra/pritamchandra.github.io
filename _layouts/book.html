@@ -11,10 +11,11 @@ layout: default
     </aside>
 
     <main class="col-content prose" id="main">
+      {% assign book_url = page.url | absolute_url %}
       <header class="entry-head">
         <h1>{{ page.book_title }}</h1>
         {% if page.subtitle %}<div class="entry-meta">{{ page.subtitle | markdownify }}</div>{% endif %}
-        <div class="tags">{% for t in page.tags %}<a class="tag" href="{{ t | slugify | prepend: '/blog/tag/' | append: '/' | relative_url }}">{{ t }}</a>{% endfor %}</div>
+        <div class="tags">{% for t in page.tags %}<a class="tag" href="{{ t | slugify | prepend: '/blog/tag/' | append: '/' | relative_url }}">{{ t }}</a>{% endfor %}{% include share-button.html url=book_url %}</div>
         <hr class="rule" style="margin-top:1em;">
       </header>
 
@@ -24,18 +25,28 @@ layout: default
 
       {% assign chapters_data_key = page.book_slug | append: "-chapters" %}
       {% assign chapters_data = site.data.books[chapters_data_key].chapters %}
-      {% assign subchapters = site.books | where: "book", page.book_slug | sort: "order" %}
+      {% comment %}
+        Pieces with a real date sort newest-first by that date; pieces
+        with no date keep the plain manual `order` convention and are
+        appended after the dated ones — see CLAUDE.md's UPDATE on this.
+      {% endcomment %}
+      {% assign subchapters_all = site.books | where: "book", page.book_slug %}
+      {% assign subchapters_dated = subchapters_all | where_exp: "s", "s.date" | sort: "date" | reverse %}
+      {% assign subchapters_undated = subchapters_all | where_exp: "s", "s.date == nil" | sort: "order" %}
+      {% assign subchapters = subchapters_dated | concat: subchapters_undated %}
       {% if chapters_data %}
         {% for ch in chapters_data %}
+          {% assign chapter_num = forloop.index %}
           {% assign ch_subs = subchapters | where: "chapter", ch.number %}
           <section class="chapter" id="{{ ch.id }}">
             <header class="chapter-head">
-              <span class="chapter-num">{{ ch.number }}</span>
+              <span class="chapter-num">{{ chapter_num }}</span>
               <h2>{{ ch.title }}</h2>
             </header>
-            {% if ch.intro %}<p class="chapter-intro">{{ ch.intro }}</p>{% endif %}
+            {% if ch.intro %}<div class="chapter-intro">{{ ch.intro | markdownify }}</div>{% endif %}
 
             {% for sub in ch_subs %}
+              {% assign sub_url = book_url | append: "#" | append: sub.slug %}
               <section class="subchapter" id="{{ sub.slug }}">
                 {% if sub.epigraph %}
                 <div class="epigraph">
@@ -44,11 +55,14 @@ layout: default
                 </div>
                 {% endif %}
                 <header class="subchapter-head">
-                  <span class="subchapter-num">{{ ch.number }}.{{ sub.chapter_order }}</span>
+                  <span class="subchapter-num">{{ chapter_num }}.{{ sub.chapter_order }}</span>
                   <h3>{{ sub.title }}</h3>
+                  {% if sub.subtitle %}<p class="subchapter-subtitle">{{ sub.subtitle }}</p>{% endif %}
+                  {% if sub.date %}<span class="subchapter-date">{{ sub.date | date: "%b %Y" }}</span>{% endif %}
                 </header>
                 {{ sub.content }}
                 {% if sub.gloss %}<p class="chapter-gloss">{{ sub.gloss }}</p>{% endif %}
+                {% include share-button.html url=sub_url variant="plain" %}
               </section>
               {% unless forloop.last %}<hr class="rule chapter-divider">{% endunless %}
             {% endfor %}
@@ -57,6 +71,7 @@ layout: default
       {% else %}
         {% comment %} No chapters — every piece stands on its own, flat, numbered 1, 2, 3... {% endcomment %}
         {% for sub in subchapters %}
+          {% assign sub_url = book_url | append: "#" | append: sub.slug %}
           <section class="subchapter" id="{{ sub.slug }}">
             {% if sub.epigraph %}
             <div class="epigraph">
@@ -67,9 +82,12 @@ layout: default
             <header class="subchapter-head">
               <span class="subchapter-num">{{ forloop.index }}</span>
               <h2>{{ sub.title }}</h2>
+              {% if sub.subtitle %}<p class="subchapter-subtitle">{{ sub.subtitle }}</p>{% endif %}
+              {% if sub.date %}<span class="subchapter-date">{{ sub.date | date: "%b %Y" }}</span>{% endif %}
             </header>
             {{ sub.content }}
             {% if sub.gloss %}<p class="chapter-gloss">{{ sub.gloss }}</p>{% endif %}
+            {% include share-button.html url=sub_url variant="plain" %}
           </section>
           {% unless forloop.last %}<hr class="rule chapter-divider">{% endunless %}
         {% endfor %}

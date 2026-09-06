@@ -1871,3 +1871,1372 @@ icon-button size. Verified via computed styles in the browser: nav bar
 still exactly 52px, button height went from 37.8px to 29.6px, vertical
 clearance above/below each button went from ~7.1px to ~11.2px per
 side.
+
+**UPDATE — a round of portfolio changes, plus the blog's nav mark.**
+
+1. **No underlines on the portfolio page, colors alone signal a link.**
+   Explicitly scoped to the portfolio, not site-wide: `default.html` now
+   sets `class="page-home"` on `<body>` only when `page.layout ==
+   "home"`, and `main.css` has `.page-home #main a, .page-home
+   .col-sidebar a{ text-decoration: none; }` plus `.page-home .link-list
+   a{ border-bottom: none; }` (`.link-list`, the right sidebar's
+   "Elsewhere" links, used a border-bottom as its underline rather than
+   `text-decoration`, so it needed its own line). The global `a{
+   text-decoration: underline; ... }` rule near the top of `main.css` is
+   untouched — the blog still underlines links as before. If this
+   experiment doesn't stick, deleting the `.page-home` block (and the
+   body-class line in `default.html`) fully reverts it.
+
+2. **Real bug: the "Interests" line in the drawer had drifted out of
+   sync with the static left sidebar.** Pritam had reordered it (moving
+   "machine learning theory" before "post-quantum cryptography") in the
+   static `.col-left` copy in `home.html`, but the mirrored copy in
+   `drawer.html` — which is what narrow screens actually show — still
+   had the old order (and a capitalization mismatch: "Matrix analysis"
+   vs. "matrix analysis"). This is exactly the failure mode §13 already
+   warned about elsewhere on this page ("the drawer's content should
+   always equal the union of both static sidebars") — there's no single
+   source of truth for sidebar text, so a static aside and its drawer
+   copy can silently diverge if only one gets edited. Fixed by copying
+   the static copy's text verbatim into the drawer. **Then hit the
+   identical bug two more times in the same sitting** — once adding
+   ORCID (next item): added it to the static `.link-list` in
+   `home.html`, initially forgot `drawer.html` entirely. Once reordering
+   the Contents nav for the section-order change (item 3, below):
+   reordered the `<li>`s in `home.html`'s `nav.toc`, again initially left
+   `drawer.html`'s copy in the old order. Both caught only by diffing the
+   *rendered* text of both copies in the browser (`.col-left`'s TOC/
+   Interests/link-list vs. `.drawer`'s), not by re-reading the diff or
+   inspecting source — the mistake is invisible in a source diff of just
+   the file you actually edited, because the bug by definition is in the
+   file you *didn't* touch. Three instances of the same slip in one
+   session is a strong signal, not a coincidence: treat "did I update
+   the drawer copy too" as a mandatory check, not an optional one, on
+   every future `.col-left`/`.col-right` edit in `home.html` — verify by
+   rendering and comparing both, every time, not by memory.
+
+3. **Section names and order.** Headings: "Journal Publications" →
+   "Select Journal Publications", "Preprints & Working Papers" →
+   "Select Preprints and Working Papers", "Select Notes" → "Select
+   Lecture Notes". "Academic Service" and "Teaching Experience" keep
+   their text. Section order (both the `<section>` blocks in `home.html`
+   and the Contents `<nav class="toc">` list, in the static sidebar and
+   the drawer) is now About, Journal Publications, Preprints, Teaching,
+   Lecture Notes, Academic Service — Teaching moved up from last to
+   third, Notes and Service swapped after it. The Contents nav *link
+   text* was deliberately left as the short forms ("Notes", not "Select
+   Lecture Notes") — this page already had that asymmetry (nav said
+   "Notes", the heading already said "Select Notes", before this update
+   touched either), so the new section names just extend an existing
+   convention rather than introduce one.
+
+4. **ORCID added** to `_data/social.yml` and both `.link-list`s, right
+   after GitHub, before Reading List — same conditional-render pattern
+   as the other social links (`{% if site.data.social.orcid %}`), so a
+   missing value degrades to "link not shown," not a dead link.
+
+5. **Teaching Experience is text now, not the `.teaching-table` table.**
+   The table markup and its `{% for t in site.data.teaching %}` loop are
+   still in `home.html`, wrapped in `{% comment %}...{% endcomment %}`
+   rather than deleted, since Pritam may want the
+   data-file-driven-table pattern again elsewhere — `_data/teaching.yml`
+   itself is untouched. In its place: `{% capture teaching_text %}{%
+   include teaching-description.md %}{% endcapture %}{{ teaching_text |
+   markdownify }}`. The new `_includes/teaching-description.md` is plain
+   Markdown (deliberately not YAML, so it reads/edits like prose, not
+   data) — see EDITING-GUIDE.md §2 for how to edit it. Rajendra Bhatia's
+   name links via `{{ page.bhatia_link }}`, reusing the same front-matter
+   value `index.md` already sets for his name elsewhere on the page —
+   confirmed `page.*` front-matter variables resolve correctly from
+   inside an `{% include %}`'d file, not just the page that includes it
+   directly. Abhishek Khetan's name links to `#` — a real placeholder,
+   not a broken oversight; swap it for his actual page once Pritam has
+   a link he wants to use.
+
+6. **The blog's nav mark is now "1⁄ε" (a slanted fraction), not "Pritam
+   Chandra"/"PC" — the portfolio and reading pages keep the name.** This
+   is the blog's actual name ("one over epsilon" — also the Letterboxd
+   handle in `social.yml`), typeset as a real slanted/nice fraction: a
+   raised, reduced numerator, the Unicode fraction-slash character
+   (`⁄`, U+2044 — not a plain `/`), and a normal-baseline denominator —
+   deliberately not a stacked `\frac`-style fraction, and not built with
+   KaTeX (this is nav-bar chrome, not page content). Markup and CSS are
+   both in `nav.html`/`main.css`: `.frac`/`.frac-n`/`.frac-d` sized in
+   `em` off the surrounding `.nav-sitename` font-size, so it scales
+   correctly with the nav's own font-size and with dark/light mode
+   (inherits `color`, not set separately). `nav.html` picks the mark via
+   a new `brand` variable (`"frac"` or `"name"`) in the same per-layout
+   `{% case page.layout %}` block that already set `sitename_href` —
+   the two turned out to already be the same split (`brand: "frac"`
+   exactly where `sitename_href` was already `"/blog/"`: blog-home,
+   book, and the post/tag/reading-review `else` branch; `brand: "name"`
+   where it was already `"/"`: home and reading), so no new
+   per-layout-type decision was actually needed, just reusing the
+   existing one. No `.short`/narrow-screen variant — unlike "Pritam
+   Chandra"/"PC", "1⁄ε" doesn't need one, it's already short at any
+   width. Verified via computed styles in the browser (numerator ~72%
+   size raised ~0.5em, denominator ~88% size on the baseline) and via
+   curl across one page of each layout type (home, reading, blog-home,
+   book, a post, a tag page, a reading-review page) to confirm the
+   split lands on the right side for each.
+
+**UPDATE — visited-link color, a mild scrollspy highlight, and a few
+more underline removals.**
+
+1. **Visited links no longer change color.** Originally scoped to just
+   the portfolio (`.page-home a:visited`), matching how the underline
+   removal above was scoped — but Pritam reported visited links still
+   changing color on the blog shortly after, meaning he wanted this
+   site-wide, not portfolio-only. Now a plain `a:visited{ color:
+   var(--link); }` in `main.css`, overriding the original `a:visited`
+   rule near the top of the file by source order (both are the same
+   specificity, so the later one in the file wins — no `!important`
+   needed). `--link-visited` is still defined in the color tokens,
+   just unused now; left in rather than deleted in case a future page
+   wants the distinction back.
+
+2. **The Contents sidebar now mildly highlights whatever section is
+   currently in view while scrolling** — both the static `.col-left`
+   copy and its drawer mirror update together (one shared
+   `IntersectionObserver` in `main.js` toggles `.current` on every
+   `.toc a` whose `href` matches, in both copies at once, not just
+   whichever one happens to be visible). Styling is deliberately
+   restrained — Wikipedia's TOC highlighting was named as the explicit
+   "too much" reference point: just a color shift to `--accent` and a
+   thin 2px left border stripe (`.toc a.current` in `main.css`), no
+   background tint, no bold. Every `.toc a` (not just `.current`) carries
+   a transparent `border-left` + matching `padding-left`/negative
+   `margin-left` at all times, so the text doesn't visibly shift
+   sideways the moment a section activates — only the border's color
+   changes, not the layout. Scoped to `.toc` specifically (`.book-toc` on
+   book pages is a different class, untouched — this wasn't asked for
+   there).
+
+   **Testing note for future sessions**: this could only be partially
+   verified live. The observer's *initial* firing (setting `.current` on
+   "About" at page load) was confirmed working, and the CSS's own
+   correctness was confirmed by manually toggling the `.current` class
+   by hand and screenshotting the result (clean, mild highlight, exactly
+   as intended). But *dynamic* re-firing on scroll could not be
+   confirmed in the browser tooling used for this session —
+   `document.visibilityState` reported `"hidden"` throughout, which is
+   what actually explains it (browsers correctly suspend
+   `IntersectionObserver` notifications, `requestAnimationFrame`, and
+   scroll-driven animation for a page that isn't genuinely foregrounded,
+   screenshots or no) — matching an already-documented limitation
+   elsewhere in this project's history with `scroll-behavior: smooth` in
+   the same tooling. Not a sign of a real bug; just something that has
+   to be checked by hand in an actual browser rather than assumed fixed
+   from a screenshot.
+
+3. **More underline removals, same border-bottom-as-underline pattern as
+   `.link-list`/`.tag-cloud` already established:**
+   - `.nav-link` (the "Blog"/"Website"/"All posts" cross-link) — site-
+     wide, not scoped, since it's the one shared element regardless of
+     which page/wording is showing.
+   - `.tag-cloud a` (the blog sidebar's tag list) — blog-only by
+     construction, since `.tag-cloud` doesn't exist on the portfolio.
+   - `.timeline a`/`.timeline button` (the year links/reading-year
+     filters) were deliberately **left untouched** — a completely
+     separate rule already, so removing `.tag-cloud`'s underline doesn't
+     touch it, confirmed still underlined both at full width and at the
+     ~700-1000px breakpoint where the timeline merges into the left
+     sidebar column (a pure layout reflow — the merge doesn't change
+     which CSS class governs the link, so nothing extra was needed to
+     "maintain" this, it already held).
+
+4. **The blog's "1⁄ε" mark is bigger** — `.frac{ font-size: 1.4em; }`
+   (up from inheriting `.nav-sitename`'s own size directly), sized off
+   `.nav-sitename` like before so it still scales with the nav's own
+   font-size; `.frac-n`/`.frac-d`'s own relative sizing (`.72em`/`.88em`
+   off `.frac`) is unchanged, so the numerator/denominator proportions
+   look the same, just bigger overall.
+
+**UPDATE — visited-link fix wasn't complete, plus real link support in
+publication/note/service subtext.**
+
+1. **The underline-removal experiment above missed the drawer.** Pritam
+   reported underlines still showing on the left sidebar in narrow-
+   screen mode. Cause: `.page-home #main a, .page-home .col-sidebar a`
+   only reaches the static sidebars — `.drawer` is a sibling off-canvas
+   panel, not a descendant of `.col-sidebar`, so its mirrored Contents
+   links were never in scope. Added `.page-home .drawer a` alongside the
+   other two selectors. This is the same "two copies, one CSS rule
+   forgotten" mistake as the earlier JS/content drift bugs, just on the
+   CSS side — worth remembering that the drawer needs checking whenever
+   *any* portfolio-scoped rule is added, not just content edits.
+
+2. **`authors`, `venue` (publications/preprints/notes), and `description`
+   (service) now run through `markdownify`**, so they can hold a real
+   `[text](url)` link instead of just plain text — Pritam asked for this
+   generally ("wherever there's a subtext... anywhere else"), not for one
+   specific field. Concretely this turned out to fix something already
+   broken: `_data/preprints.yml`'s "Fast Fourier Orthogonalization" entry
+   already had `[Falcon](fd.com)` typed into its `venue`, written before
+   this was wired up — it was rendering as the literal bracketed text,
+   not a link, since `{{ pub.venue }}` was plain unfiltered output.
+   Confirmed it renders as a real `<a>` now.
+
+   Mechanically this is the same wrapper-tag swap as `note`/`subtitle`
+   elsewhere on this page (`<p class="pub-venue">{{ pub.venue }}</p>` →
+   `<div class="pub-venue">{{ pub.venue | markdownify }}</div>`, same for
+   `.pub-authors` and service's description), **not** the epigraph-style
+   `remove: '<p>'` unwrap trick — these fields own their whole wrapper
+   element outright (nothing hand-written surrounds them), so there was
+   no nested-`<p>` collision to avoid, just an unwanted tag mismatch if
+   left as `<p>`. No new margin CSS was needed to compensate for
+   kramdown's own `<p>`: this file's base `p{ margin: 0 0 1.15em; }` +
+   `p:last-child{ margin-bottom: 0; }` already zeroes it automatically
+   for these fields, since a one-line field's rendered `<p>` is always
+   both first- and last-child — confirmed 0px/0px via computed style
+   rather than assumed. Raw HTML already living in these fields
+   (`<strong>`, `<em>`) passes through kramdown untouched, confirmed
+   byte-equivalent for the existing entries that use it.
+
+**UPDATE — a new preprint entry, two mobile-only rendering discrepancies,
+and two new blog books (one chapterless with optional dates, one
+chaptered with a new Bible-verse popup feature).**
+
+1. **New preprint entry** in `_data/preprints.yml`: "Norm Inequalities
+   Related to the Cartesian Decomposition of matrices", with `venue`
+   holding `"Undergraduate Capstone Thesis written under [Rajendra
+   Bhatia](https://scholar.google.com/citations?user=QQYGgRoAAAAJ&hl=en)"`
+   — the first real-world use of the `venue`-as-Markdown fix from the
+   UPDATE directly above this one, added the same session it landed.
+   `year: 2022` is a **placeholder, not a confirmed fact** — flagged with
+   a `# TODO` comment in the file; Pritam should confirm or correct it.
+   `link: null` is also a pending TODO (no PDF/page yet).
+
+2. **Two mobile-only visual bugs, neither reproducible by narrowing a
+   desktop browser window** — both are real phone-vs-desktop rendering
+   differences, not narrow-vs-wide layout differences, which is why
+   resizing a Mac browser never surfaced them:
+
+   - **Theme toggle icon looked "more sophisticated" on phone.** Root
+     cause: `☀`/`☾` with no variation selector let iOS fall back to its
+     default colorful emoji-style glyph for those two characters, while
+     desktop browsers were already rendering them as plain monochrome
+     text glyphs. Fixed by appending **U+FE0E** (VARIATION SELECTOR-15,
+     "render as text") right after each character, both in
+     `base.js`/`main.js` (`b.textContent = t === 'dark' ? '☾︎' : '☀︎';`
+     — that trailing mark is U+FE0E, verified with a hex dump, not the
+     visually-identical-in-a-diff U+FE0F "render as emoji" selector,
+     which would have made this worse) and in the static HTML fallback
+     in `nav.html` (`&#9728;` → `&#9728;&#xFE0E;`). No visible change on
+     desktop (glyphs there were already text-presentation by default);
+     on iOS this forces the same plain glyph desktop already showed.
+     Confirmed via `Array.from(btn.textContent).map(c =>
+     c.codePointAt(0).toString(16))` → `["263e", "fe0e"]`.
+   - **Scrollspy TOC highlight (`.toc a.current`, from an earlier
+     UPDATE) looked exaggerated on phone.** Root cause: mobile Safari/
+     Chrome's default tap behavior flashes a gray highlight rectangle
+     over a tapped link (`-webkit-tap-highlight-color`), which desktop
+     doesn't have at all — that flash was stacking visually on top of
+     the already-restrained `.current` accent styling, reading as
+     over-designed. Fixed with a global reset right after the base CSS
+     reset block: `a, button{ -webkit-tap-highlight-color: transparent;
+     }`. This is a general mobile-hygiene fix, not scoped to `.toc`
+     specifically — it also quietly improves every other link/button's
+     tap feedback on mobile (Bible verse-ref links included, see below),
+     since none of this site's interactive elements were designed
+     around that default flash.
+
+   General takeaway for future sessions: **a "looks different on my
+   phone but not when I narrow the Mac browser" report is a strong
+   signal to check mobile-only browser defaults (emoji presentation,
+   tap-highlight, `-webkit-*` UA styles) before assuming it's a
+   responsive-breakpoint bug** — narrowing a desktop window changes
+   viewport width but not the browser engine or its platform defaults.
+
+3. **New book: "From the journal"** (`blog/from-the-journal/index.md`,
+   `book_slug: from-the-journal`) — a **chapterless** book (no
+   `_data/books/from-the-journal-chapters.yml` file), three filler
+   entries: Lent, Easter, Shimla. This is also the first real use of the
+   **optional per-entry `date` field**, added to `_layouts/book.html`'s
+   subchapter-head markup in both the chaptered and chapterless
+   branches:
+   ```liquid
+   {% if sub.date %}<span class="subchapter-date">{{ sub.date | date: "%B %-d, %Y" }}</span>{% endif %}
+   ```
+   guarded exactly like every other optional field on this site (§10's
+   "every optional field needs its own `{% if %}`" rule) — a subchapter
+   with no `date:` in its front matter renders with no date line at all,
+   not an empty one. Styled small and muted, directly under the
+   title (`.subchapter-date`, sans-serif, `--text-muted`).
+
+   **Pritam listed the three entries as "Shimla, Easter, Lent" but the
+   dates given to them are real 2026 liturgical/calendar dates, which
+   put them in a different order: Lent (Ash Wednesday, Feb 18 2026, used
+   March 15 as a mid-Lent placeholder date) → Easter (April 5, 2026,
+   computed via the actual Gregorian/Western Easter algorithm for 2026)
+   → Shimla (June 10, 2026, an arbitrary placeholder since no real date
+   was given for a summer trip).** The book's `order:` front-matter
+   field was set chronologically (Lent=1, Easter=2, Shimla=3) rather
+   than in Pritam's listed order, since a diary-style "from the journal"
+   book reads more sensibly sorted by date than by whatever order the
+   entries happened to be requested in — **but this is a judgment call,
+   not a fact Pritam stated explicitly, and should be confirmed with
+   him**; if he intended the listed order (or different actual dates for
+   Easter/Shimla), swap the three files' `order:`/`date:` values, no
+   template change needed.
+
+4. **New book: "Homilies"** (`blog/homilies/index.md`,
+   `book_slug: homilies`) — **chaptered**, one chapter so far
+   (`_data/books/homilies-chapters.yml`: chapter "1", id `colossians`,
+   title "Colossians", with a two-paragraph `intro`), one subchapter
+   (`_books/homilies-1-colossians-1.md`, "Chapter 1"). Content is
+   adapted from a source PDF (`Book of Colossians.pdf`) per Pritam's
+   explicit instruction to preserve meaning while adapting presentation:
+   the original's inline "!!" emphasis markers became bold lead-in
+   phrases, its shorthand verse citations (e.g. "v17") became real
+   `.verse-ref` links (see next point), its numbered catechism became a
+   real Markdown ordered list, and its ASV Colossians 1:24 quotation
+   became a real Markdown blockquote.
+
+   **`chapter_intro` needed `markdownify`** — `ch.intro` was previously
+   plain `{{ }}` output in a `<p>`, which can't hold the Homilies intro's
+   two separate paragraphs. Changed to
+   `<div class="chapter-intro">{{ ch.intro | markdownify }}</div>` (same
+   wrapper-swap pattern as `note`/`subtitle` elsewhere in this file).
+   Regression-checked against Confessions' existing single-paragraph
+   chapter intros: rendered output is visually identical, only
+   difference is kramdown's own `<p>` wrapper now present around the
+   text, which was already accounted for by this site's standing
+   `p:last-child{ margin-bottom: 0 }` rule.
+
+5. **New feature: Bible verse hover/tap popups (`.verse-ref` /
+   `.verse-popup`).** A verse citation like `Colossians 1:17` is now
+   written as `<a href="#" class="verse-ref" data-verse="Colossians
+   1:17">Colossians 1:17</a>` directly in the Markdown body (raw HTML
+   passes through kramdown untouched, same as `.thm`/`.proof`). Hovering
+   it (desktop) or tapping it (phone) shows a small floating box with the
+   verse text; tapping/clicking outside closes it. Built from three
+   pieces:
+
+   - **`_data/bible_verses.yml`** — a flat `"Book C:V": "verse text"` map,
+     NIV text, fetched per-verse from a live source rather than
+     paraphrased, with a header comment recording Biblica's stated
+     NIV attribution/permissions requirement for quoting individual
+     verses (quoted in full in the file itself — keep that comment
+     intact if this file is ever edited, it's the actual permissions
+     basis for including NIV text at all). **Note the underscore, not a
+     hyphen, in the filename/key** — `site.data.bible_verses` is valid
+     Liquid dot-notation, `site.data.bible-verses` is not (parses as
+     subtraction) — this is now the second data file on this site to
+     need that (existing precedent noted elsewhere in this doc); any
+     future new `_data/*.yml` file that gets accessed via
+     `site.data.<name>` must use underscores, not hyphens, in its
+     filename for this reason.
+   - **`_layouts/default.html`** exposes the whole map to client JS as a
+     JSON `<script>` tag, once per page, right before the `main.js`
+     include:
+     ```liquid
+     <script type="application/json" id="bible-verses-data">{{ site.data.bible_verses | jsonify }}</script>
+     ```
+     (the *id* can keep the hyphen — only the Liquid data-file key needs
+     the underscore; a DOM id has no such restriction).
+   - **`main.js`** — one self-contained block, gated behind `if
+     (verseRefs.length)` so it's a no-op on every page with no `.verse-
+     ref` elements (i.e. every page except Homilies posts, currently).
+     Creates a single shared `.verse-popup` div appended to
+     `document.body` (not one popup per link — repositioned/repopulated
+     on demand), wires `mouseenter`/`mouseleave` (desktop hover),
+     `focus`/`blur` (keyboard access), and `click` (mobile tap-to-toggle,
+     `preventDefault`ed since `href="#"` would otherwise jump/scroll),
+     plus a document-level click-outside listener
+     (`e.target.closest('.verse-ref')`/`closest('.verse-popup')` checked
+     to decide whether a click was "outside") and `scroll`/`resize`
+     listeners that reposition (not hide) an already-open popup.
+     Verse text lookup fails quietly (`if (!text) return;`) if a
+     `data-verse` key isn't in `bible_verses.yml` yet — a citation with
+     no matching entry just doesn't pop anything up, rather than
+     throwing or showing "undefined", so adding a `.verse-ref` ahead of
+     its data entry is safe, not a build-breaker.
+   - **CSS** (`main.css`): `.verse-ref{ cursor: pointer; }` plus
+     `.verse-popup` styled as a small serif-italic floating card
+     (`position: absolute`, themed border/background via existing
+     tokens, `[hidden]{ display: none; }` — this project's established
+     pattern for anything toggled via the `hidden` attribute rather than
+     inline `style.display`, see the reading-list `[hidden]` bug
+     documented earlier in this file for why that pairing matters
+     whenever an element also has its own non-block `display` — this one
+     doesn't, so no extra override was needed here).
+
+   **Verified functionally** (hover shows correct text and hides on
+   `mouseleave`; click opens/toggles; a click elsewhere on the page
+   closes it) via dispatched synthetic DOM events rather than
+   screenshots — this session's Browser-pane tooling had the same
+   intermittent screenshot/compositing unreliability documented
+   elsewhere in this file (`document.visibilityState` reporting
+   `"hidden"`), so the interaction logic was confirmed via direct
+   assertions on `.verse-popup.hidden` and its `textContent` instead of
+   relying on visual capture. If a future session needs to add a real
+   screenshot to this record, that's still outstanding — the underlying
+   behavior itself is confirmed correct, just not yet captured visually.
+
+   **Adding a new verse later** is a two-step, no-template-change
+   operation: add the citation as a `.verse-ref` link in the post's
+   Markdown, and add its `"Book C:V": "text"` entry to
+   `_data/bible_verses.yml` — see EDITING-GUIDE.md for the Pritam-facing
+   version of this.
+
+**UPDATE — a `for_later/` staging folder, and the mobile scrollspy
+highlight was still not right after the tap-highlight-color fix above.**
+
+1. **`for_later/`** — a new top-level folder, added to `_config.yml`'s
+   `exclude:` list (`for_later/`), so nothing in it is ever copied into
+   the built site regardless of what it contains — no front matter, no
+   filename convention, nothing Jekyll-shaped required. It's a staging
+   area for source material (a PDF, a rough draft, notes) that Pritam
+   intends to turn into a real post later by asking a future session to
+   process a specific file from it — same pattern already used for the
+   Homilies content (sourced from a PDF outside the repo, but the intent
+   going forward is that such source material lives in `for_later/`
+   instead of an arbitrary path elsewhere on disk). Not `.gitignore`d —
+   these are documents Pritam wants kept/versioned, just not built.
+
+2. **The mobile scrollspy highlight ("exaggerated"/"more sophisticated"
+   than desktop) was reported again after the earlier tap-highlight-color
+   fix, meaning that fix wasn't the whole story.** Root-caused as a
+   second, independent mobile-only layering effect: tapping a link also
+   *focuses* it, and some mobile browsers (notably iOS Safari) draw their
+   own default focus ring around the tapped element even though it
+   wasn't reached via keyboard — that ring stacks visually on top of the
+   `.toc` scrollspy's own accent stripe/color, reading as an extra box
+   the desktop click-driven version never shows (desktop mouse clicks
+   don't trigger a visible focus ring in modern browsers to begin with).
+   `main.css` had no focus-outline handling at all before this — the
+   default browser outline was simply never addressed.
+
+   Fixed with the standard, accessibility-preserving idiom rather than a
+   blanket outline removal:
+   ```css
+   a:focus:not(:focus-visible), button:focus:not(:focus-visible){ outline: none; }
+   ```
+   `:focus-visible` is the browser's own heuristic for "this focus came
+   from a keyboard/keyboard-equivalent interaction, show the ring" versus
+   "this focus came from a mouse click or a touch tap, don't bother" —
+   so this removes exactly the mobile-only extra box without touching
+   real keyboard focus indication anywhere on the site (including the
+   verse-ref popup's own focus/blur handling from the UPDATE just above,
+   and the `.skip-link:focus` rule, both unaffected since neither relies
+   on the default outline being present). Placed directly after the
+   `-webkit-tap-highlight-color` rule since the two are the same class of
+   fix (mobile-only default chrome stacking on top of this site's own
+   restrained styling) — if a future "looks different on my phone" report
+   about tapped elements comes in again, check both of these together,
+   plus emoji-presentation (the theme icon fix, two UPDATEs above) — that's
+   now three distinct mobile-default-styling causes found in this general
+   category, worth checking as a set rather than one at a time.
+
+   Verified via `getComputedStyle` after a programmatic `.focus()` call
+   (`outlineStyle: "none"`, `tapHighlightColor: "rgba(0,0,0,0)"`) in this
+   session's Chromium-based mobile emulation — genuine `:focus-visible`
+   (real keyboard Tab-focus) could not be simulated by this tooling to
+   verify the ring is *still shown* there, so that half relies on the
+   pseudo-class's well-established, spec-defined browser behavior rather
+   than a direct test; if the skip-link or any keyboard-only user ever
+   reports lost focus visibility, this rule is the first place to check.
+
+**UPDATE — the blog home's nav cross-link now says "Pritam Chandra"/"PC",
+not "Website".** `_includes/nav.html`'s `blog-home` case previously set
+`cross_text = "Website"`, rendered as plain text into `.nav-link`. Changed
+to the same two-span markup `.nav-sitename` itself uses:
+```liquid
+{% assign cross_text = '<span class="full">Pritam Chandra</span><span class="short">PC</span>' %}
+```
+— safe to splice unescaped into `{{ cross_text }}` (Liquid's plain `{{ }}`
+was already outputting this variable unescaped before this change; only
+its content changed, not the escaping behavior). The `.full`/`.short`
+collapse-to-initials rule in `main.css` was scoped to `.nav-sitename .full`/
+`.short` only, so it needed generalizing to also match `.nav-link .full`/
+`.short` — done at both the base "hide `.short`" rule and the `@media
+(max-width: 480px)` override, rather than duplicating the pattern under a
+`.nav-link`-specific selector, per §4's own instruction that this two-span
+pattern is "the general rule, not a portfolio-only fix." Verified at
+1400px (`.full` shown, "Pritam Chandra") and 420px (`.short` shown, "PC")
+via computed `display` values in the browser. The other three `cross_text`
+values (`"Blog"`, `"All posts"`) are unaffected — they're short enough at
+every width already and don't use the two-span markup, same as before.
+
+**UPDATE — the big one: publishing years of older material from
+`for_later/Publish`.** Pritam collected years of older writing (an old
+Hugo-based site's exported HTML, plus PDFs/docx/rtf he'd written directly)
+into `for_later/Publish/`, organized into folders-are-collections,
+loose-files-are-standalone-posts, and asked for all of it to be turned
+into real site content in one pass. This was the largest single batch of
+this project's history — worth recording the shape of it, not just the
+mechanics, since a future session extending any of these collections
+needs the same conventions.
+
+1. **Five new collections**, all using the existing chapterless-book
+   mechanism (§6, §13's "chapterless book" fix) — no new Liquid, no new
+   layout, just more `_books/*.md` files plus a `blog/<slug>/index.md`:
+   `Elegy` (4 poems), `Hope` (3 poems), `Translations of Lyrics` (5
+   translated song lyrics), `Poems from when I was much younger` (4
+   poems), `Stories from when I was much younger` (5 short stories).
+   Two *existing* collections also grew: `From the journal` gained two
+   pieces (`for-pippy`, `piu-in-the-cavea`), and `Homilies` gained a
+   second chapter (`Genesis`, one subchapter so far) via the same
+   `_data/books/homilies-chapters.yml` mechanism already used for
+   Colossians.
+
+2. **Ten new standalone `_posts`**, three of them math/CS: an exposition
+   of Robust Vector Space Decomposition combining an old short intro post
+   with a *new* YouTube video (the previous embedded video in the old
+   HTML was deliberately dropped per Pritam's instruction) and a full,
+   section-by-section transcription of a 74-slide Beamer deck. The slide
+   deck was PDF-text-extracted with `pdftotext -layout`, then
+   **deduplicated programmatically** — Beamer's incremental `\pause`
+   reveals meant most of the 74 pages were partial builds of the same
+   slide; a page was kept only if the *next* page's text didn't start
+   with it verbatim (i.e. only the final, fullest build of each slide
+   survived), which took 74 pages down to 36 genuinely distinct slides
+   before transcription. The other two math posts (`basis-counting`,
+   `klein`) came from short LaTeX-typeset PDFs with embedded figures —
+   see the next point for how those figures made it onto the page.
+
+3. **PDF figures were rasterized, not redrawn.** `basis-counting.pdf` has
+   four hand-drawn 3D cube diagrams (GeoGebra-style) illustrating a
+   combinatorial proof; `klein.pdf` has one Gaussian-curve-with-rectangles
+   figure. Neither existed as a separate image file, only baked into the
+   PDF. `pdftoppm`/`ghostscript` weren't installed on this machine at the
+   start of this session — `brew install poppler` was run to get
+   `pdftoppm`/`pdftotext` (ghostscript was already present and used for
+   the actual page rasterization at 300dpi, then Python/PIL cropped each
+   figure's region out of the full-page render). This is a real,
+   reusable technique for this site: a PDF's own diagrams don't need to
+   be manually redrawn as SVG when a pixel-accurate crop of the original
+   is good enough — `assets/img/basis-counting-*.png` and
+   `assets/img/klein-gaussian-rectangles.png` are the result, dropped
+   into `.gallery-full` figures same as any other image.
+
+4. **New component: `.song-thumb`** (`main.css`, right after
+   `.subchapter-date`) — a small YouTube-thumbnail-plus-title link, used
+   above each piece in "Translations of Lyrics" the same way a reading-
+   list book gets a cover. Deliberately modeled on `.reading-cover`
+   (bordered box, no shadow, `object-fit: cover`) rather than invented
+   from scratch, just a 16:9 video thumbnail instead of a 2:3 book cover,
+   and laid out as a single link (image + title side by side) rather
+   than a whole list row, since it's a one-off per piece, not a repeated
+   table. Thumbnail images are hotlinked from `img.youtube.com/vi/<id>/
+   hqdefault.jpg` — the same "hotlink rather than self-host" exception
+   already established for the reading list's Open Library covers (§13),
+   extended here to YouTube's own thumbnail CDN for the same reason (a
+   growing list of songs isn't practical to self-host thumbnails for one
+   at a time).
+
+5. **Real bug found and fixed: `_includes/audio-player.html` had no
+   guards for missing `duration`/`instruments`/`caption`.** Every song
+   post until now (`Hold You Somehow`) supplied all four fields, so this
+   never surfaced. The new "Sailor Take Me" post needs an audio player
+   wired up to a file that doesn't exist yet (`audio_src` points at
+   `/assets/audio/sailor-take-me.m4a`, a real recording Pritam will add
+   later) with genuinely unknown duration/instruments/caption — exactly
+   the "every optional field needs its own `{% if %}`" gap documented
+   earlier in this file (the `page.subtitle`/`entry.preview` UPDATE), just
+   never hit before because no song post had ever left a field blank.
+   Fixed with the same pattern: `{% if include.duration or include.
+   instruments %}` around the whole middle dot separator (not just each
+   half, so a lone duration/instruments doesn't leave a stray `&middot;`
+   on its own), and `{% if include.caption %}` around the caption text
+   before the `<code>{{ include.src }}</code>` path, which always shows
+   regardless. Verified via computed `innerHTML` in the browser: with all
+   three fields `null`, the label renders as just `<span>Recording</span>`
+   (no trailing `· ·`) and the caption renders as just the `<code>` path
+   with no leading space.
+
+6. **"Hold You Somehow" was a real update, not a new post** — Pritam's
+   explicit instruction was to replace the placeholder/reconstructed
+   lyrics in the existing `2026-06-14-hold-you-somehow-sad.md` with the
+   real ones (sourced from `for_later/Publish/2025-04-Hold you somehow.
+   pdf`) and drop "Sad" from the title. Renamed the file to `2026-06-14-
+   hold-you-somehow.md` (slug follows title) but **left the actual
+   `.m4a` asset's filename alone** (`hold-you-somehow-sad.m4a` — it's a
+   real 8MB recording already committed; renaming a real binary asset
+   for a title change is unnecessary churn, only the page URL/slug
+   needed to track the new title). The real lyrics have a very different
+   emotional arc than the placeholder ones (doubt clearing into trust,
+   not an unresolved ache), so the surrounding prose commentary had to
+   be rewritten too, not just the lyrics block swapped — the old prose
+   ("I almost didn't post this one... it doesn't resolve") was simply
+   false of the real song. No chords were given for the real lyrics, so
+   none were invented — the `.chords` line was dropped entirely (not
+   filled with a plausible-sounding placeholder) with a one-line note
+   that chords are still pending, consistent with this file's own
+   standing rule against inventing chord progressions.
+
+7. **Six filler posts retired, moved (not deleted) to
+   `for_later/retired-posts/`** — same "keep on disk, exclude from the
+   build" pattern as `for_later/old-posts/` (both already covered by
+   `for_later/` itself being in `_config.yml`'s `exclude:` list, so no
+   config change was needed for this specific move): `a-falcon-tree-
+   illustrated`, `two-folk-songs-translated`, `on-rereading-simone-weil`,
+   `watched-mostly-alone`, `eigenvalues-annotated`, `von-neumann-trace-
+   inequality-notes`. `spirals-and-seeds-a-small-gallery` was explicitly
+   named to *keep* and is untouched; `rose-leaves` and `operator-
+   fidelity-qpower-means` weren't on the retirement list either and were
+   left alone.
+
+8. **Tags were retained verbatim from the old site's HTML** (`Categories`
+   ignored per instruction, `Tags` kept exactly), and any piece that
+   arrived with no tags at all (every PDF/docx/rtf source, since only the
+   old site's HTML pages carried metadata) got sensible filler tags
+   chosen to reuse the *existing* tag vocabulary wherever the content
+   genuinely fit (`poetry`, `faith`, `mathematics`, `post-quantum-
+   crypto`, `translation`, `music`) rather than inventing near-duplicates
+   — new tags were only introduced where the content genuinely needed a
+   word the site didn't have yet (`prose`, `realism`, `testimony`,
+   `journal`, `oped`, `commentary`, `song`, `psalm`, `elegy`, plus
+   `math`/`cs`/`video`/`exposition`/`ml`, retained verbatim from the old
+   RVSD post's own tags rather than folded into the existing
+   `mathematics` tag). Per Pritam's explicit instruction, every tag now
+   in use — old and new — was cross-checked against `blog/tag/` and any
+   missing page created; this turned up one pre-existing gap too
+   (`theology`, used by `rose-leaves.md` from an earlier session, had no
+   tag page at all until this pass) — worth remembering that "make sure
+   every tag has a page" is a real, recurring maintenance task on this
+   site now that tag pages are hand-created stubs, not auto-generated.
+
+9. **A collection's own `date:`, when its pieces don't reliably carry
+   dates, now works the way Pritam described it in the instruction that
+   started this whole batch**: newest-page-date when pages have dates
+   (verified against `From the journal`'s existing manual edits, which
+   turned out to already be in *newest-first* internal order —
+   `order: 1` = the most recently dated piece, `order: 3` = the oldest —
+   the opposite of the chronological-ascending convention used for
+   Confession/the original three journal placeholders; this was
+   Pritam's own deliberate reordering from a previous session, preserved
+   rather than "corrected" back to ascending, and the two new pieces
+   were slotted in at `order: 4`/`5` to extend that same newest-first
+   scheme, not to reinstate the old one), and an explicit collection-
+   level date when pieces are genuinely undated (`Translations of
+   Lyrics`, per Pritam's own note that those pieces aren't dated yet —
+   given today's date as a placeholder, `note:` on the collection says
+   so directly).
+
+10. **Placeholder dates, flagged for Pritam to correct** — several source
+    files only had a year, or a year and month, in their filename, with
+    no more precise date recoverable from the content itself (one
+    exception: `for pippy.pdf`'s filename said 2026-04-28, but the piece
+    itself opens "March 5, for Pippy" — the *content's* date was trusted
+    over the filename's, landing it at `2026-03-05`). Every other
+    partial date was filled in with a `-01-01` or `-MM-01` placeholder
+    and should be treated as provisional: the "Poems"/"Stories from when
+    I was much younger" collections (every piece), `there-may-be-rain`,
+    `an-average-monday-of-departure`, `you-can-call-me-abraham`, and
+    `hope-3-ressurection`. None of these are guesses at content — only at
+    the precise day (or day+month) within a year Pritam himself
+    supplied — but they're still not real dates and the pages/posts
+    should be revisited once he has the actual ones.
+
+11. **One deliberate non-decision, flagged rather than resolved**: the
+    Publish folder's `Translations of Lyrics/0-2025-01-14-sailor-take-me.
+    html` is a byte-identical duplicate of the top-level `Sailor Take Me`
+    piece, numbered `0` in a folder where every other file was numbered
+    `1`&ndash;`5` to match six given YouTube links (`0` through `5`).
+    Sailor Take Me's own content (original English lyrics, not a
+    translation) and Pritam's explicit separate instruction for it
+    ("should be another song... a link to the song, which I will later
+    put in the assets") both point away from it belonging in the
+    Translations collection at all, so it was built as a standalone song
+    post instead (matching `Hold You Somehow`'s pattern: a self-hosted
+    `audio_src` placeholder, not a YouTube embed) — and Translations of
+    Lyrics only got five entries (`1`&ndash;`5`), leaving link `0`
+    (`https://www.youtube.com/watch?v=FuuC2rpC0HA`) unused anywhere. This
+    is a real, unresolved ambiguity, not a confident call — flagged to
+    Pritam directly rather than guessed past.
+
+**UPDATE — a round of real fixes after Pritam actually used the batch
+above: two genuine bugs (one pre-existing, one introduced by this
+session), one structural change to how Homilies orders itself, and a
+redo of every date this batch got wrong by defaulting to "today"
+instead of the source's real year.**
+
+1. **Homilies now orders chapters by their position in the Bible, not by
+   when they were added.** `_data/books/homilies-chapters.yml`'s
+   `chapters:` list is what actually drives rendering order — both
+   `book.html` and `book-toc.html` iterate it directly (`{% for ch in
+   chapters_data %}`), never deriving order from the subchapters'
+   `order`/add-sequence — so reordering a book's chapters is just
+   reordering entries in that YAML list, no template change needed. Fixed
+   by moving Genesis's entry above Colossians's (Genesis is Bible book 1,
+   Colossians is book 51) and swapping their `number` values ("1"→Genesis,
+   "2"→Colossians) to match — which meant updating the matching `chapter:
+   "1"`/`"2"` value in each book's own `_books/*.md` subchapter file
+   too, since that's the field that ties a piece to its chapter entry.
+   Files were also renamed to keep the `homilies-<order>-<slug>.md`
+   naming convention meaningful (`homilies-1-genesis-1.md`,
+   `homilies-2-colossians-1.md`). **When adding a new Homilies book**,
+   insert its entry at its correct canonical position in the YAML list
+   (not at the end) and renumber/relink whatever comes after it — this
+   is now written directly into the data file's own header comment so
+   it isn't lost again.
+
+2. **New optional field: `sub.subtitle`**, rendered right under a
+   subchapter's title (between the `<h2>`/`<h3>` and the optional date),
+   in both the chaptered and chapterless branches of `book.html`. Added
+   specifically so the Genesis piece could be titled "Chapter 1" (matching
+   Colossians's own subchapter, since both are literally "chapter 1 of
+   that Bible book") while still surfacing its real subject — "The
+   Creation Narrative — Scripture vs Science" — as a subtitle line rather
+   than folding it into the title. Styled as `.subchapter-subtitle`
+   (`main.css`): serif italic, muted, deliberately *not* the sans-serif
+   `.subchapter-date` treatment, so it still reads as part of the heading
+   rather than as metadata.
+
+3. **Real, pre-existing bug found: `hold-you-somehow-sad.m4a` was a
+   non-fast-start 3GP-branded container and wouldn't play in-browser at
+   all**, despite being a completely valid AAC recording — `file`
+   reported it as "ISO Media, MPEG v4 system, 3GPP" (not the "M4A"/"mp4"
+   branding browsers expect for an `<audio>` source) and `afinfo` showed
+   `not optimized` (its `moov` metadata atom sits at the end of the file,
+   not the front) — the standard "browser gives up before it finds the
+   metadata" failure mode for progressively-served MPEG-4 family media.
+   `audio.readyState` stayed `0` (`HAVE_NOTHING`) and `networkState`
+   went to `3` (`NETWORK_NO_SOURCE`) with no fetch of the file ever even
+   showing up in devtools — nothing about the site's own HTML/CSS/JS was
+   at fault, it was purely the asset file itself, present since before
+   this session's own edits touched this post. Fixed by remuxing with
+   `afconvert -f m4af -d aac -b 256000 -q 127 -s 2` (macOS's own Core
+   Audio tool — no re-encode-from-scratch needed, just re-container at
+   a bitrate matching the original's ~256kbps so quality doesn't visibly
+   drop) into a proper fast-start `m4af`-branded file, replacing the
+   asset at the same path (no reason to touch the post's `audio_src` or
+   rename the file — the *container*, not the location, was broken).
+   Verified end-to-end in the browser: `readyState` reaches `4`
+   (`HAVE_ENOUGH_DATA`), `duration` reports correctly (**249.7s ≈
+   4:10**, which is also why `audio_duration: "3:5x"` in the post's own
+   front matter was wrong — fixed to `"4:10"` while already in there),
+   and `audio.play()` genuinely advances `currentTime`. **If a future
+   audio upload ever silently "doesn't play" again, check the container
+   with `afinfo` (`not optimized` output, or a `File type ID` that isn't
+   `m4af`/`mp4a`) before assuming the site's HTML is at fault** — this
+   is exactly the kind of failure that looks like a template bug but
+   isn't.
+
+4. **The `.gallery-video` iframe embed was missing the `allow`/
+   `referrerpolicy` attributes YouTube's own embed code ships with.**
+   Every `.gallery-video` on the site (`main.css`/EDITING-GUIDE.md's own
+   documented example, plus the two posts that use it —
+   "Spirals and Seeds" and the new RVSD exposition) had only `src`,
+   `title`, `allowfullscreen`, and `loading="lazy"` — no `allow="..."`
+   at all, unlike the *original* pre-migration HTML's embed
+   (`exposition-on-rvsd.html`), which had the full attribute set. Added
+   `allow="accelerometer; autoplay; clipboard-write; encrypted-media;
+   gyroscope; picture-in-picture; web-share"` and
+   `referrerpolicy="strict-origin-when-cross-origin"` to all three
+   places (both existing posts' iframes, plus the EDITING-GUIDE.md
+   template so future videos get it by default) — this is YouTube's own
+   documented recommended embed markup, not a guess. **Caveat, stated
+   plainly rather than papered over**: this was applied because it's
+   objectively the more correct/complete embed, but the specific
+   complaint that prompted it (clicking the in-player title/channel
+   overlay to open the video on YouTube itself doesn't do anything) could
+   not be confirmed fixed in this session's own testing — the automated
+   browser tool used here appears unable to interact with the YouTube
+   iframe at all (a simulated click on the play button didn't even start
+   playback), so the click-through specifically needs verifying by
+   Pritam on a real device/browser, not just trusted because the
+   attributes now match YouTube's spec.
+
+5. **A real batch of wrong dates, all following the same mistake: several
+   posts built from source material that only had a *year* (or year +
+   month) in its filename got dated with the day this batch was actually
+   built (2026-09-05) instead of a placeholder within the source's own
+   year.** This is a materially different, worse error than the
+   already-documented "day/month placeholder within the right year"
+   dates from the previous UPDATE (those were flagged and are still
+   correct in spirit) — these three landed in the *wrong year entirely*,
+   which is a much easier mistake to miss on a skim and a much worse one
+   to leave wrong, since it visibly misplaces the piece on the blog
+   home's chronological timeline by years. Caught only because Pritam
+   spot-checked one (`basis-counting`, filename said 2020, published as
+   2026) and asked for the rest to be re-verified. Fixed, each file
+   renamed to match its corrected `date:`:
+   - `_posts/2020-basis-counting.pdf` → the post was dated `2026-09-05`;
+     source filename says `2020` only (no month) → corrected to
+     `2020-01-01` (month/day assumed, year real), file renamed
+     `2020-01-01-counting-special-basis-for-rn.md`.
+   - `_posts/2026-06-klein.pdf` → the post was dated `2026-09-05`; the
+     *filename* said `2026-06`, but the PDF's own first page says
+     "Pritam Chandra, **October 2025**" — the content's stated date was
+     trusted over the filename's (same precedent as `for-pippy.pdf` in
+     the previous UPDATE, whose filename said April but its own opening
+     line said "March 5") → corrected to `2025-10-01`, file renamed
+     `2025-10-01-randomized-nearest-plane-by-klein.md`.
+   - The merged RVSD exposition+slides post was dated `2026-09-05`
+     (the day it was assembled) even though its core content is the
+     *old* `2023-04-24-exposition-on-rvsd.html` post with a slide-deck
+     walkthrough added underneath → corrected to `2023-04-24` (the
+     original exposition's own date), file renamed accordingly. Flagged
+     as a genuine judgment call, not a certainty: the slide deck itself
+     carries its own date in its footer text ("Feb. 22, 2024"), so if
+     Pritam considers the *talk* the more meaningful date than the
+     *original short blog post*, `2024-02-22` is the other defensible
+     choice — either way, `2026-09-05` (the date this Claude Code
+     session happened to run) was never a real date for this content and
+     shouldn't have been used.
+   - `_books/hope-3-ressurection.md` had no `date:` field at all, even
+     though its source filename says `2026` and its sibling pieces in
+     the same collection (and Elegy's `self-reference`, from the exact
+     same "year only" situation) all got an explicit placeholder date —
+     added `date: 2026-01-01` for consistency; this one doesn't change
+     the *collection's* own sort position (already `2026-01-01` from the
+     original pass) but fixes the piece itself silently showing no date
+     under its title while its neighbors do.
+   - Checked every other new post/piece against this same failure mode
+     (source year vs. assigned date) — everything else in this batch was
+     already correct, including the collections (Elegy, Hope, the two
+     "when I was much younger" collections, From the journal) which all
+     used the source's real year from the start. Only the three
+     already-flagged "day/month assumed within the right year" cases
+     from the previous UPDATE remain open placeholders, not wrong-year
+     ones.
+
+**UPDATE — a share/copy-link button (new, site-wide feature), plus four
+more fixes from another round of feedback.**
+
+1. **New component: `.share-btn`, via `_includes/share-button.html` +
+   `_includes/icon-copy-link.html`.** A small chain-link icon button
+   that copies a URL to the clipboard — "nothing fancy," per Pritam's
+   own framing, matching the theme toggle's icon-only treatment rather
+   than a bordered `.nav-btn`. One appears next to a standalone post's
+   tags row, next to a book's own tags row, and next to *every*
+   chapter and subchapter heading inside a book — so any piece,
+   however deep, is independently shareable and links straight to
+   itself, not just the book. Mechanically: the URL is always built
+   server-side in Liquid (`page.url | absolute_url`, with `#id`
+   appended for a chapter/subchapter) and handed to the button as a
+   `data-url` attribute — no client-side URL guessing. `main.js` wires
+   a single delegated-by-`querySelectorAll` click handler
+   (`[data-action="copy-link"]`, same pattern as every other button on
+   the site) that calls `navigator.clipboard.writeText()`, with a
+   `document.execCommand('copy')` fallback for browsers without the
+   Clipboard API, and toggles an `.is-copied` class for 1.5s that shows
+   a small "Copied" tooltip above the button (CSS-only, `opacity`
+   transition). Opening a copied chapter/subchapter link relies on
+   nothing but the browser's own native `#anchor` scroll-on-load
+   behavior — no new JS needed — and both `.chapter` and `.subchapter`
+   already carry `scroll-margin-top: 80px` from earlier work, so the
+   sticky nav never covers the target. **A genuinely interesting Liquid
+   bug hit while building this**: the include tag's own usage
+   *documentation*, written as a `{% comment %}` block containing a
+   literal `{% include share-button.html url=page.url | absolute_url %}`
+   example (deliberately *invalid* syntax, meant only as an
+   illustration of what *not* to pass directly), broke the entire site
+   build — `{% comment %}...{% endcomment %}` in this Liquid version
+   does **not** treat its contents as inert raw text; tags inside a
+   comment are still tokenized and validated at parse time, so a
+   malformed tag *in a comment* is exactly as fatal as one in real
+   code. Fixed by writing the example without the `{% %}` delimiters
+   (plain `assign ...` / `include ...` lines, prose-style) — if a
+   future doc comment ever needs to show literal Liquid syntax as an
+   example, this is the trap to avoid; use `{% raw %}...{% endraw %}`
+   around the example instead, not a plain comment, if the literal
+   delimiters are actually needed.
+
+2. **Math in a post's *preview* text (the blog home listing snippet)
+   wasn't rendering** — a different bug from the earlier title issue,
+   caught only because Pritam pointed at the blog listing specifically.
+   `preview:` is printed unfiltered (`{{ entry.preview }}`) directly
+   into `.entry-preview` in `blog-home.html`, which *is* inside
+   `document.body` and therefore *is* in scope for the site-wide
+   `renderMathInElement(document.body, ...)` call — so real `$...$` in
+   `preview:` renders exactly as well as it does in a title, it just
+   hadn't been *used* there yet. `basis-counting`'s `preview` had
+   `R^n`/`R^3` as bare text; switched to `$\mathbb{R}^n$`/`$\mathbb{R}^3$`
+   (single-quoted YAML again, same reasoning as the title fix). Its
+   `description:` field was deliberately left as plain `R^n` text and
+   **not** given the same treatment — `description` only ever reaches a
+   `<meta>` tag, never the visible DOM, so real LaTeX there would just
+   be inert markup in a search engine's snippet, not rendered math (this
+   is the same reasoning CLAUDE.md already has on record for why a
+   book's `description:` field stays plain-text-only while `subtitle:`
+   gets `markdownify`) — worth remembering as the general rule: any
+   field that ends up in `document.body` can carry real `$...$` math,
+   any field that only ever becomes an HTML *attribute* (`<meta
+   content="...">`, `alt="..."`, `title="..."`) cannot and shouldn't be
+   written as if it could.
+
+3. **Real bug, not a false alarm this time: a numbered list broke
+   itself by embedding a display equation, on the Klein post.** Section
+   1.1 wrote steps 1–3 as a plain Markdown `1. / 2. / 3.` list, with a
+   raw `<div>\[ ... \]</div>` display equation sitting inside step 2's
+   own text (between two paragraphs of that same list item, no special
+   indentation). kramdown's line-based list parser doesn't treat an
+   unindented block-level raw-HTML element as "still part of the
+   current list item" — it ends the list right there. Step 3's `3.`
+   marker then starts a **second, independent** ordered list, which
+   restarts numbering from 1 by default (this is why it visibly
+   rendered as "1" instead of "3" — not a CSS issue, a real change in
+   document structure) — and separately, something about how that
+   break interacted with the surrounding raw HTML left step 3's inline
+   math unrendered ("buggy appearance"), most likely the equation's own
+   `<div>` boundaries no longer aligning with paragraph boundaries the
+   way kramdown expected once list-parsing state was disrupted. This is
+   the same underlying category of gotcha CLAUDE.md already documents
+   for kramdown/raw-HTML interactions (the `\#`/`\!` escaping issue,
+   the `markdown="1"` tradeoff for `.thm`/`.proof`) — a new instance of
+   it, not a new mechanism: **don't mix a Markdown-syntax numbered list
+   with a raw block-level element sitting inside one of its items.**
+   Fixed the only way that's actually safe here, matching how the
+   Algorithm 1/2 boxes *elsewhere in the same post* already handled
+   numbered steps: rewrote the whole list as plain raw HTML
+   (`<ol><li>...</li></ol>`), same as those boxes — inline math inside
+   raw HTML list items is unaffected (KaTeX's client-side scan doesn't
+   care whether kramdown touched the surrounding markup), only the
+   *Markdown-list-syntax* version breaks. **If a numbered list ever
+   needs to contain a display equation (or any other block-level raw
+   HTML) in one of its steps, write that whole list as raw
+   `<ol>`/`<li>` from the start** — don't reach for `1. 2. 3.` syntax
+   and assume embedded HTML will just work inside it.
+
+4. **Translated-song thumbnails, chucked entirely** — the box-styled
+   `.song-thumb` component (added, then immediately re-styled once
+   already, in the same batch) has been removed outright, CSS and all,
+   per Pritam's explicit "keep it simple" call: no box, no YouTube
+   thumbnail image, not even its own CSS class. Every "Translations of
+   Lyrics" piece now opens with one plain italicized Markdown link —
+   `*[Listen to Song Title](https://...)*` — nothing else. This is a
+   genuine reversal, not a refinement: the lesson isn't "simplify the
+   box," it's that a component built and shipped without the recipient
+   seeing it first can miss the mark twice in a row even when each
+   individual version was internally consistent with the site's design
+   language — worth checking in with Pritam before investing further
+   design effort in a *new* component next time, rather than iterating
+   silently on assumptions.
+
+5. **Homilies bug from the previous UPDATE only got half-fixed: the
+   Genesis/Colossians reorder was right, but Pritam wants the *ordering
+   mechanism itself* to be about Biblical canon, not chronology, going
+   forward** — already covered by point 1 in the *previous* UPDATE
+   (`chapters_data`'s own YAML list order is authoritative, so this was
+   already the mechanism; no new change needed here beyond what's
+   already on record) — noted here only so a future session doesn't
+   re-litigate whether Homilies should ever sort by date. It shouldn't;
+   "forget about the dates" for this collection specifically was
+   Pritam's own explicit, standing instruction.
+
+6. **"Confessions" (plural) retired to `for_later/retired-posts/
+   confessions/`** — moved as a whole unit (`blog/confessions/index.md`,
+   its 5 `_books/confessions-*.md` poems, and
+   `_data/books/confessions-chapters.yml`), same pattern as every other
+   retirement on this site: kept on disk, excluded from the build via
+   `for_later/`'s standing exclude rule, nothing deleted. **Not** to be
+   confused with "Confession" (singular, `blog/confession/`,
+   Wicked Seed / Blemishes / Sensualists) — that one stays live and
+   untouched; the two collections' near-identical names are a real,
+   ongoing source of ambiguity worth double-checking against by slug
+   (`confession` vs `confessions`) rather than by ear whenever either
+   comes up again.
+
+**UPDATE — the share button's visual design, redone per Pritam's direct
+spec after seeing the first version.** The plain borderless icon from
+the previous UPDATE is gone; `.share-btn` is now built on the existing
+`.tag` pill (same border/background/`.74rem` sizing as a topic tag)
+rather than novel chrome, in two presentations selected by a new
+`variant` param on `share-button.html`:
+
+- `variant` omitted (default) → `.share-btn--icon` — icon-only, used
+  once per post/book header. Flushed to the *right* edge of that
+  page's `.tags` row via `margin-left: auto` on the button itself
+  (the tag pills stay left-aligned/wrapping as before; only the share
+  button gets pulled to the opposite edge — `.tags` needed
+  `align-items: center` added so it sits on the same baseline as the
+  tags when the row wraps).
+- `variant="labeled"` → `.share-btn--labeled` — a `.tag` pill reading
+  literally "share" next to a copy glyph, used once per chapter
+  heading *and* once per subchapter heading inside a book (both
+  levels, not just subchapters).
+
+New icons, matching Pritam's two specific references rather than
+reusing `icon-copy-link.html` for both: `icon-share-arrow.html` (a
+curved arrow sweeping up-and-right into an arrowhead — the "share"
+glyph, used only in the icon-only variant) and `icon-copy.html` (two
+overlapping document rectangles — the classic "copy" glyph, used only
+in the labeled variant, paired with the word "share"). The original
+`icon-copy-link.html` (a chain-link glyph) is now unused by either
+variant and was left in place rather than deleted, in case a plain
+"copy a link" icon is wanted somewhere else later — nothing currently
+references it.
+
+Because `.tag`'s own sizing is an *absolute* unit (`.74rem`), not
+`1em`, this redesign also **removed** the `h1/h2/h3 .share-btn{
+font-size: 1rem; }` override from the previous UPDATE — it's no longer
+needed (the button doesn't inherit the heading's own large font-size
+in the first place now, since it isn't sized in em to begin with), and
+was actively wrong to leave in since it would have fought the new
+`.tag`-based sizing instead of the old em-based one.
+
+**UPDATE — the `.tag`-pill share design didn't land either; reverted the
+post/book one, replaced the chapter/subchapter one with plain text, and
+a real scrollspy regression fixed.**
+
+1. **Post/book share button reverted to exactly its original design**
+   (two UPDATEs back) — the plain borderless link-glyph icon
+   (`icon-copy-link.html`), sitting right beside the tags, no box, no
+   `.tag` styling, no flush-right push. The `.tag`-pill version and its
+   `margin-left: auto` flush-right rule are gone. `icon-share-arrow.html`
+   and `icon-copy.html` (added for the boxed version, one per icon
+   variant) are deleted outright rather than left unused, since neither
+   is used by anything else on the site — unlike `icon-copy-link.html`
+   before it, which was kept once already because it might be reused;
+   these two never were.
+
+2. **Chapter/subchapter share is no longer attached to the heading at
+   all** — titles are clean, no icon, no box, nothing next to "Genesis"
+   or "Chapter 1". Instead, a single plain word, "share", appears once
+   at the very end of *each subchapter's own content* (after its
+   `gloss`, right before the `</section>` — which is to say, right
+   before the `<hr class="chapter-divider">` that follows it, whenever
+   one does), muted (`--text-faint`), no button chrome at all
+   (`border: none; background: none; padding: 0`), turning full `--text`
+   on hover. This is deliberately **subchapter-scoped only** — there's
+   no separate chapter-level trailing share (the chapter heading itself
+   lost its share button and nothing replaced it there) — because
+   Homilies' two chapters currently have exactly one subchapter each,
+   and a second "share" immediately after the first would have read as
+   an obvious duplicate for the common case. If a future chapter
+   genuinely has multiple subchapters and Pritam wants a way to share
+   the *chapter* as a whole (not just each piece inside it), that's a
+   real, deliberately-deferred gap, not an oversight — flag it if it
+   comes up rather than silently adding a second share point back.
+   Clicking it swaps its own text from "share" to "copied" in place
+   (`.share-btn-label`/`.share-btn-feedback`, toggled via `display:
+   none`/`inline`) rather than popping up a floating tooltip box like
+   the icon variant does — a floating box, even a small one, would have
+   undercut the whole "just text, nothing else" point of this variant.
+
+3. **Real CSS regression, not a phone-only quirk this time: the
+   scrollspy's "you are here" indicator had a left border stripe as
+   well as the color change**, and Pritam explicitly wants color only.
+   This wasn't a mobile-vs-desktop difference at all (same CSS renders
+   identically on both) — the stripe itself was simply more than what
+   was wanted, full stop. `.toc a`'s `border-left: 2px solid
+   transparent` (previously reserving space so the stripe wouldn't
+   nudge text sideways when it appeared) and `.toc a.current`'s
+   `border-left-color: var(--accent)` are both gone; `.toc a.current`
+   now only sets `color: var(--accent)`, with a plain `color`
+   transition replacing the old `border-color, color` pair. Given this
+   is the *second* round of "the phone highlighting still isn't right"
+   feedback in this project's history, and this fix turned out to be a
+   real, universal CSS change rather than another mobile-default-styling
+   cause (tap-highlight-color, emoji presentation, focus rings — the
+   three from earlier rounds) — worth genuinely double-checking with
+   Pritam that this one is settled now, rather than assuming a fourth
+   mobile-only cause exists somewhere if it isn't.
+
+**UPDATE — the nav bar's cross-link is gone from both the portfolio and
+the blog home; each now lives as a sidebar link styled after an existing
+pattern instead.**
+
+1. **Portfolio**: the "Blog" link no longer appears in the nav bar at
+   all. It's now `<a class="tag resume-link">Blog</a>` (new
+   `icon-blog.html`, a plain document-with-lines glyph) sitting right
+   after the "Elsewhere" heading, before Google Scholar — reusing the
+   exact `.tag.resume-link` treatment Resume already has, per Pritam's
+   own comparison. Added a `.col-right .resume-link` margin rule (`.9rem
+   0 1.3rem`) since the existing margin for that class was scoped to
+   `.col-left` specifically (where Resume lives) and this new instance
+   needed its own breathing room in the right sidebar instead. Both
+   copies updated — `home.html`'s static aside and `drawer.html`'s
+   `home` case.
+
+2. **Blog home**: the "Pritam Chandra"/"PC" link is gone from the nav
+   bar too. It's now `<a class="icon-link website-link">Pritam
+   Chandra</a>` (new `icon-globe.html`) sitting directly *above*
+   "Reading List" in the left sidebar, styled identically to it (same
+   `.icon-link` class, no box). Both copies updated —
+   `blog-home.html`'s static aside and `drawer.html`'s `blog-home` case.
+
+3. **`nav.html`** — `home` and `blog-home` now set `cross_text = ""`,
+   and the `<a class="nav-link">` render is wrapped in `{% if cross_text
+   != "" %}` so an empty cross-link doesn't leave a stray anchor tag in
+   the DOM. `.nav-spacer`'s `flex: 1 1 auto` already pushes `.nav-tools`
+   to the right end of the bar regardless of whether the cross-link
+   exists, so removing it left no gap to patch. The `book`/`reading`/
+   `else` cases (still showing "All posts"/"Blog") are untouched —
+   this request was scoped to exactly these two page types, not every
+   cross-link on the site.
+
+4. **Real bug caught while building this: `.icon-link` was
+   `inline-flex`, not `flex`**, which had never mattered while Reading
+   List was the only one in its sidebar slot. The moment a second
+   `.icon-link` ("Pritam Chandra") was added right above it, inline-flex
+   elements only wrap to their own line when the container happens to
+   be too narrow to fit both side by side — which held by accident on
+   the ~232px desktop sidebar (they stacked, looked correct) but broke
+   in the wider drawer panel, where they sat side by side instead.
+   Switched to plain `flex` (block-level) so both copies stack
+   consistently regardless of container width — verified in both the
+   desktop sidebar and the mobile drawer after the fix.
+
+**UPDATE — tags can now carry their own capitalization (`CS`, `ML`,
+`OpEd`), and a real gap this exposed between the blog home's tag-cloud
+gap and one other spot has been closed too.**
+
+Every tag display on the site (`.tags`/`.tag` pills on a post/book
+header, the blog home's `.tag-cloud` sidebar list, and a tag page's own
+`<h1>Tag: ...</h1>`) previously ran the raw tag string through Liquid's
+`| capitalize` filter. That filter only uppercases the *first* letter
+and lowercases everything after it — correct for an ordinary word
+("realism" → "Realism") but wrong for anything that isn't simple title
+case: "cs" → "Cs" instead of "CS", "ml" → "Ml" instead of "ML", "oped" →
+"Oped" instead of "OpEd". There is no Liquid filter that gets this right
+automatically, since the correct casing for an abbreviation is a fact
+about the word, not a mechanical rule.
+
+**Fix: remove `| capitalize` everywhere it was applied to a tag
+(`_layouts/tag.html`'s `<h1>`, `_layouts/blog-home.html`'s and
+`_includes/drawer.html`'s tag-cloud loops), and instead make the *stored*
+tag string itself already be the desired display casing** — a post's
+`tags: [...]` front matter and a tag page's `tag: "..."` front matter
+are now typed exactly as they should display: `CS`, `ML`, `OpEd`,
+`Post-Quantum-Crypto`, `Matrix Analysis`, etc., ordinary words in plain
+title case as before. This means **every occurrence of a given logical
+tag across every post/book, plus its `blog/tag/<slug>/index.md`'s own
+`tag:` field, must use identical casing and punctuation** — tag matching
+(`where_exp: "e.tags contains page.tag"` on a tag page, `group_by_exp`
+for the tag-cloud) is a literal string comparison, so `"cs"` and `"CS"`
+are different tags to Liquid, not the same tag differently cased. A
+tag's *folder* name never needs to change when its casing does —
+`slugify` already lowercases (`slugify("CS")` = `slugify("cs")` =
+`"cs"`), so `blog/tag/cs/` stays `blog/tag/cs/` regardless of which
+casing is stored in its `tag:` field.
+
+Executed as a scripted find/replace (Python, run inline via Bash) across
+every `_posts/*.md`/`blog/*/index.md`'s `tags:` line and every
+`blog/tag/*/index.md`'s `tag:` field, using one canonical case map (the
+full vocabulary in use at the time: Commentary, CS, Culture, Elegy,
+Exposition, Faith, Film, Journal, Math, Mathematics, Matrix Analysis,
+ML, Music, OpEd, Poetry, Post-Quantum-Crypto, Prose, Psalm, Realism,
+Recording, Song, Teaching, Testimony, Theology, Translation, Video) —
+**anyone adding a genuinely new tag in the future just needs to type it
+consistently everywhere it appears, same as before this fix; there's no
+map to maintain, the map above was only this one migration's tool.**
+
+**Two real, independent bugs turned up during this pass, worth
+recording since they're the kind of thing "add a new tag" could
+reintroduce if not checked for:**
+1. `blog/tag/post-quantum-crypto/index.md` had `tag: "post-quantum
+   crypto"` (a space) while every post using it stored
+   `post-quantum-crypto` (a hyphen) — a pre-existing mismatch, unrelated
+   to casing, that silently meant this tag page never matched any post
+   at all (`where_exp` doesn't fuzzy-match). Caught by cross-checking
+   every tag page's `tag:` field against the actual vocabulary in use,
+   not by looking for a casing problem specifically.
+2. Three tag pages' `title:` front-matter field (used for the browser
+   tab title, independent of the `tag:` field used for matching/`<h1>`)
+   had drifted out of sync with their own `tag:` field:
+   `matrix-analysis` (`"Tag: Matrix analysis"`), `oped`
+   (`"Tag: Op-ed"`), and `post-quantum-crypto` (`"Tag: Post-quantum
+   crypto"`) — all three fixed to match their corrected `tag:` value.
+   **A tag page has two separate fields that both need to agree with
+   the canonical casing — `tag:` (matching + `<h1>`) and `title:`
+   (browser tab) — don't assume fixing one fixes both.**
+
+**One script run silently under-converted one file, worth flagging as a
+general caution about batch text edits rather than a specific mechanism
+to avoid**: the first pass over
+`_posts/2023-04-24-robust-vector-space-decomposition.md`'s `tags: [math,
+cs, video, exposition, ml]` line came out as `tags: [math, CS, video,
+exposition, ML]` — two of five tokens converted, three left lowercase —
+despite the case map containing correct entries for all five, and
+despite the same script correctly converting every other file's
+multi-token `tags:` line in the same run. Re-running the identical
+script a second time converted the remaining three tokens correctly and
+made no changes to any other file, so this reads as a one-off, not a
+systematic flaw in the matching logic. **Lesson: after any scripted
+mass edit across many files, spot-check the actual rendered output (not
+just the script's own "changed files" log) for at least the
+highest-token-count case, and be prepared to simply re-run an idempotent
+fixer a second time rather than assuming one clean pass was
+sufficient** — confirmed clean here via the blog home's live tag-cloud
+in the browser (`document.querySelectorAll('.tag-cloud a')`, deduplicated
+and sorted), which showed all 24 in-use tags with correct, unique
+casing and no stray lowercase duplicates after the second pass.
+
+Separately, in the same sitting: the gap between the blog home's new
+"Pritam Chandra" website link and "Reading List" right below it (both
+`.icon-link`, added in the previous UPDATE) was slightly larger than
+intended. `.icon-link` itself carries a `1.1rem` bottom margin (meant to
+separate the last sidebar link from the "Tags" heading that follows
+it), which was also firing between these two *adjacent* links. Added
+`.website-link{ margin-bottom: .5rem; }` — scoped to just this one link,
+not a change to `.icon-link` itself, since `.icon-link`'s own margin is
+still correct for its original job of spacing out from whatever comes
+after the *last* link in a sidebar group. Verified via
+`getBoundingClientRect()` in the browser: 8px gap between "Pritam
+Chandra" and "Reading List," down from the original spacing.
+
+**UPDATE — a math-rendering bug fix, theorem/lemma headers no longer
+forced to caps, dates abbreviated, date-aware chapter sorting, and a new
+"Sailor Take Me" entry.**
+
+1. **Real bug: bare inline `$...$` math in the RVSD post rendered `O(...)`
+   (Big-O notation) as `O!(...)`.** Root cause is the kramdown escape-
+   stripping gotcha this file already documents for `\#`/`\{`/`\}` — it
+   also applies to `\!` (a cosmetic negative-thin-space command), and the
+   RVSD post's four-step error-bound list (`_posts/2023-04-24-robust-
+   vector-space-decomposition.md`) had three instances of `O\!\left(...`
+   sitting in a plain Markdown numbered list (bare inline math, not a raw
+   `<div>` block) — kramdown stripped the backslash, leaving a literal
+   `!` right after the `O`. Fixed by simply dropping the `\!` (it's purely
+   cosmetic spacing, not semantically needed) rather than wrapping the
+   list items in raw HTML. The one occurrence of the same pattern inside
+   a raw `<div>\[...\]</div>` block (line 164, same file) was already
+   safe and untouched — raw HTML blocks are opaque to kramdown, per the
+   established rule.
+
+2. **Real bug: `.thm-label` (theorem/lemma/algorithm box headers) had
+   `text-transform: uppercase` in `main.css`, which forced ALL of a
+   label's text to caps — including any math variables typed as plain
+   characters inside it.** This is what turned Klein's algorithm label
+   "Algorithm 1 — NP(n, t)" into "Algorithm 1 — NP(N, T)" — CSS
+   `text-transform` doesn't know or care that `n`/`t` are meant to be
+   math, it just transforms every glyph in the box. Fixed by removing
+   `text-transform: uppercase` from `.thm-label` entirely (bumped its
+   `font-size` from `.82rem` to `.95rem` and eased `letter-spacing` from
+   `.05em` to `.01em`, since wide tracking and small size were both
+   compensating for all-caps and look wrong on mixed case). This is a
+   global fix — every `.thm`/`.proof` box on the site is affected, not
+   just Klein's. `.proof-label` (which only ever says the single word
+   "Proof.") was deliberately left uppercase — it never carries embedded
+   math, so the original bug doesn't apply there and there's no reason to
+   change its look.
+
+   Separately, converted Klein's two algorithm labels themselves from
+   plain text to real inline math — `NP(n, t)` → `$\mathrm{NP}(n, t)$`,
+   and the trickier `NP*<sub>A</sub>(n, t)` (hand-rolled raw-HTML
+   subscript) → `$\mathrm{NP}^*_A(n, t)$` — so KaTeX properly italicizes
+   the variables instead of leaving them as plain upright text. This is
+   independent of the CSS fix above (removing the uppercase transform
+   alone wouldn't have made `n`/`t` render as math; they were never
+   wrapped in `$...$` in the first place) but was needed to fully satisfy
+   the same complaint, since plain-text "NP(n, t)" still wouldn't read as
+   proper notation once decapitalized.
+
+3. **Dates display as abbreviated month + year, everywhere** (e.g. "Mar
+   2026", not "March 2026" and not "15 March 2026") — changed
+   `_layouts/post.html`'s and `_layouts/book.html`'s date filters from
+   `"%-d %B %Y"`/`"%B %-d, %Y"` (day-level) or `"%B %Y"` (full month
+   name) to `"%b %Y"`. `_layouts/tag.html` and `_layouts/blog-home.html`
+   already omitted the day and just needed the month-name → month-
+   abbreviation change, same filter swap.
+
+4. **New feature: a book's pieces with a real `date` now sort themselves
+   automatically, newest first — pieces with no date keep the existing
+   plain `order:` convention and are appended after all the dated
+   ones.** Previously every book (chaptered or flat) sorted purely by the
+   manually-typed `order:` field, meaning a book like "From the journal"
+   needed `order` hand-maintained to *mimic* newest-first chronological
+   order — this automates that so `order` never needs to track real
+   chronology again once real dates are known. Implemented in both
+   `_layouts/book.html` and `_includes/book-toc.html` (which must stay in
+   sync) by replacing the single `sort: "order"` call with a two-group
+   split-and-concat:
+   ```liquid
+   {% assign subchapters_all = site.books | where: "book", page.book_slug %}
+   {% assign subchapters_dated = subchapters_all | where_exp: "s", "s.date" | sort: "date" | reverse %}
+   {% assign subchapters_undated = subchapters_all | where_exp: "s", "s.date == nil" | sort: "order" %}
+   {% assign subchapters = subchapters_dated | concat: subchapters_undated %}
+   ```
+   (Liquid's `sort` filter has no descending option, hence sort-ascending-
+   then-`reverse` for the dated group.) For a chaptered book, this same
+   `subchapters` list is what gets filtered per-chapter via `where:
+   "chapter", ch.number`, so the date-first ordering applies within each
+   chapter too, automatically, with no separate change needed there.
+
+   **This is a genuine, visible reordering for two existing books**,
+   worth flagging explicitly rather than assuming it's a no-op: "Hope"
+   (mixed dated/undated pieces) went from its old `order`-based sequence
+   (Cliff → Before You Found Him → Ressurection) to date-first order
+   (Ressurection [2026] → Cliff [2022] → Before You Found Him
+   [undated, trails last]); "Poems from when I was much younger"
+   similarly reordered from its old order-1-2-3-4 sequence to
+   date-descending-then-undated-last. Two other books were unaffected in
+   practice: "From the journal" (every piece already dated, and its
+   existing manual `order` happened to already match date-descending
+   exactly, per its own already-documented history — so this automation
+   changes nothing visible there, only removes the future need to keep
+   `order` hand-synced to real dates) and every dateless book
+   (Confession, Elegy, Translations of Lyrics, the Stories collection,
+   Homilies' subchapters) — with zero pieces carrying a `date`, the
+   "dated" group is simply empty and behavior is byte-for-byte identical
+   to the old pure-`order` sort. If "Hope"'s or "Poems..."'s new order
+   isn't what's wanted (e.g. if the old order reflected a deliberate
+   reading sequence unrelated to when a piece was written, not just an
+   attempt at chronological order), the fix is to either adjust those
+   pieces' `date` values or remove `date` from whichever piece should
+   fall back to manual `order` control instead.
+
+5. **"Sailor Take Me" added to "Translations of Lyrics" as a sixth,
+   separate piece** (`_books/translations-of-lyrics-6-sailor-take-me.md`,
+   `order: 6`), alongside its existing life as a standalone post
+   (`_posts/2025-01-14-sailor-take-me.md`) — this resolves the "one
+   deliberate non-decision" flagged in an earlier UPDATE (the unused
+   YouTube link `0` in the original Publish batch, `https://
+   www.youtube.com/watch?v=FuuC2rpC0HA`, matching the `youtu.be/
+   FuuC2rpC0HA` link Pritam gave directly this round) — Pritam confirmed
+   directly that yes, it belongs in both places. The book piece reuses
+   the exact same verse text as the standalone post (Pritam's own
+   original composition, not a translation) rather than inventing new
+   content, and opens with the same `*[Listen to ...]*` plain-link
+   pattern the other five translation pieces use, pointed at the given
+   link with its tracking query param (`?si=...`) stripped, matching the
+   plain-URL convention already in use for the other five. One judgment
+   call, flagged rather than silently decided: `subtitle: null` for this
+   piece, since every other entry in this book uses `subtitle` for the
+   *original* artist's name (a field this piece doesn't really have, as
+   it isn't a translation of anyone else's song) — Pritam can fill in
+   something there (e.g. crediting the Bengali folk tune it's loosely
+   inspired by) if he wants a subtitle to show.
+
+6. **Chapter numbering decoupled from insertion order — the mechanism
+   flagged as an open design question in the previous round is now
+   built.** Previously, a chapter's `number:` field (in a book's
+   `_data/books/<slug>-chapters.yml`) was BOTH the literal displayed
+   numeral AND the join key subchapters use (`chapter: "1"` in their own
+   front matter) to say which chapter they belong to — conflating
+   "identity" and "display label" into one field meant inserting a new
+   chapter anywhere but the very end required renumbering every
+   subsequent chapter's `number` *and* updating every one of their
+   subchapters' `chapter:` front-matter values to match, exactly the
+   tedious process `homilies-chapters.yml`'s own header comment used to
+   describe as the required steps.
+
+   Fixed by decoupling the two roles: `book.html` and `book-toc.html` no
+   longer print `{{ ch.number }}` as the visible numeral at all — they
+   now compute it from the chapter's own position in the YAML list
+   (`{% assign chapter_num = forloop.index %}`, right after the `{% for
+   ch in chapters_data %}` line, then `{{ chapter_num }}` everywhere the
+   numeral is shown, including the subchapter's compound "N.M" numeral).
+   `ch.number` is still there and still used for the `where: "chapter",
+   ch.number` join — but it's now purely an internal, never-displayed
+   identifier, so it doesn't need to be sequential, doesn't need to match
+   its position in the list, and never needs to change once assigned.
+   Practical effect: inserting a new chapter anywhere in the YAML list
+   (including at the very top) now only ever requires adding the new
+   chapter's own entry (with a fresh, unique `number`) and setting that
+   same value in its own subchapters' `chapter:` field — every *existing*
+   chapter's `number`, and every existing subchapter's `chapter:`
+   reference, is untouched, and the displayed numerals for everything
+   after the insertion point simply recompute themselves from the new
+   array position. Updated `homilies-chapters.yml`'s header comment to
+   describe this (removed the old "renumber everything after it"
+   instruction, which is now obsolete) — verified this is a complete
+   no-op for Homilies' current rendering (Genesis still shows "1",
+   Colossians still shows "2", since their positions already matched
+   their old `number` values) even though the underlying mechanism
+   changed entirely. Per Pritam's own explicit scoping, this fix removes
+   only the *renumbering busywork* — for Homilies specifically, deciding
+   *where* a new Bible book belongs in the list (canonical Bible order)
+   is still a manual judgment call every time, unchanged and unaffected
+   by this mechanism.
+
+   Also added a matching "Reordering pieces or chapters after the fact"
+   section to EDITING-GUIDE.md §4, covering all three cases in one place:
+   plain `order:` edits for dateless books, `date:` edits for
+   date-sorted books (point 4 above), and moving a whole chapter block
+   in `_data/books/<slug>-chapters.yml` for chapter-level reordering.

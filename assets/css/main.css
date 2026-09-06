@@ -249,6 +249,21 @@ html{ -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-behavior: s
 body{ margin: 0; }
 img, svg, audio, video{ max-width: 100%; }
 h1,h2,h3,h4,p,ul,ol,dl,figure,blockquote{ margin: 0; }
+/* Mobile Safari/Chrome shade a tapped link/button with a gray flash by
+   default (no equivalent on desktop) — on top of the .toc scrollspy's
+   own accent highlight this is what made it read as "exaggerated" on a
+   real phone specifically, not just a narrow window. Off everywhere. */
+a, button{ -webkit-tap-highlight-color: transparent; }
+/* Tapping a link also focuses it, and some mobile browsers (notably iOS
+   Safari) draw a default focus ring around that tapped element even
+   though it wasn't reached via keyboard — stacking a second box on top
+   of the .toc scrollspy's own accent stripe/color, which is what still
+   read as "more sophisticated than the web version" after the
+   tap-highlight fix above. :focus-visible tells "focused via keyboard"
+   (a real accessibility need — keep the ring) apart from "focused via a
+   tap/click" (suppress it) natively, so this only removes the mobile-only
+   extra box, not keyboard focus indication. */
+a:focus:not(:focus-visible), button:focus:not(:focus-visible){ outline: none; }
 a{ color: var(--link); }
 a:visited{ color: var(--link-visited); }
 ::selection{ background: var(--selection-bg); }
@@ -322,19 +337,35 @@ a:hover{ text-decoration-color: currentColor; }
   font-family: var(--font-serif); font-weight: 600; font-size: 1.02rem;
   text-decoration: none; color: var(--text); white-space: nowrap;
 }
-.nav-sitename .short{ display: none; }
+.nav-sitename .short, .nav-link .short{ display: none; }
+
+/* The blog's mark: "1/epsilon" as a slanted (solidus) fraction — a raised,
+   reduced numerator and a normal-baseline denominator joined by a real
+   fraction-slash character, not a stacked \frac. Simple on purpose (no
+   .short variant needed the way "Pritam Chandra"/"PC" has one — it's
+   already short at any width). */
+.frac{ font-style: italic; white-space: nowrap; font-size: 1.4em; }
+.frac-n{ font-size: .72em; vertical-align: .5em; }
+.frac-d{ font-size: .88em; }
 
 .nav-spacer{ flex: 1 1 auto; }
-.nav-link{ font-size: .88rem; text-decoration: none; color: var(--text); border-bottom: 1px solid var(--border-strong); white-space: nowrap; }
-.nav-link:hover{ border-color: currentColor; }
+/* No underline (was a border-bottom, same substitute pattern as
+   .link-list/.tag-cloud elsewhere) — applies to this link's text on
+   every page it appears on ("Blog" on the portfolio, "Website" on the
+   blog, "All posts" everywhere else), since it's the same one shared
+   cross-section link doing the same job regardless of wording. */
+.nav-link{ font-size: .88rem; text-decoration: none; color: var(--text); white-space: nowrap; }
 
 .nav-tools{ display:flex; align-items:center; gap:.5rem; }
 
 /* Below ~480px, even the decluttered nav gets tight — collapse the site
-   name to initials. Every page follows this same rule (see CLAUDE.md). */
+   name to initials. Every page follows this same rule (see CLAUDE.md).
+   The blog home's cross-link ("Pritam Chandra" → "PC") reuses the exact
+   same .full/.short two-span pattern as .nav-sitename, so it collapses
+   here too — not scoped to .nav-sitename alone. */
 @media (max-width: 480px){
-  .nav-sitename .full{ display: none; }
-  .nav-sitename .short{ display: inline; }
+  .nav-sitename .full, .nav-link .full{ display: none; }
+  .nav-sitename .short, .nav-link .short{ display: inline; }
   .sitenav .nav-cluster{ gap: .6rem; }
   .sitenav{ padding: 0 .85rem; }
 }
@@ -439,8 +470,8 @@ td:last-child, th:last-child{ padding-right: 0; }
   border-radius: var(--radius);
 }
 .thm-label{
-  font-family: var(--font-sans); font-weight: 600; font-size: .82rem;
-  text-transform: uppercase; letter-spacing: .05em; color: var(--accent);
+  font-family: var(--font-sans); font-weight: 600; font-size: .95rem;
+  letter-spacing: .01em; color: var(--accent);
   margin-bottom: .4em; display:block;
 }
 .thm-body{ font-style: italic; }
@@ -472,6 +503,21 @@ td:last-child, th:last-child{ padding-right: 0; }
   text-decoration: none; background: var(--bg-raised);
 }
 .tag:hover{ color: var(--text); border-color: var(--text-faint); }
+
+/* ---- Bible verse hover/tap popups (Biblical posts) -------------------------- */
+/* .verse-ref is a plain <a>, so it already looks/behaves like any other
+   link (color, underline) with no extra CSS needed for that part — this
+   only styles the popup itself. No shadow, per the site's flat/primitive
+   aesthetic elsewhere (theorem boxes, callouts, tags all skip shadows too). */
+.verse-ref{ cursor: pointer; }
+.verse-popup{
+  position: absolute; z-index: 60; max-width: 260px;
+  background: var(--bg-raised); border: 1px solid var(--border-strong);
+  border-radius: var(--radius); padding: .6em .8em;
+  font-family: var(--font-serif); font-style: italic; font-size: .88rem; line-height: 1.5;
+  color: var(--text);
+}
+.verse-popup[hidden]{ display: none; }
 
 /* ---- post/article header (Tao-style) ---------------------------------------- */
 .entry-head{ margin-bottom: 2.2em; }
@@ -664,6 +710,48 @@ html.sb-hidden .layout-2col > .col-content{
 /* ---- page-specific ---- */
 /* Portfolio home — page-specific rules */
 
+/* Experiment: no underlines on the portfolio page specifically — body
+   and both sidebars, colors alone signal a link. Scoped via .page-home
+   (set on <body> in default.html only when page.layout == "home") so it
+   doesn't leak onto the blog. .link-list's border-bottom (its underline
+   substitute) is switched off too, same reasoning.
+   .drawer is listed separately from .col-sidebar because it isn't
+   nested inside it — it's a sibling off-canvas panel that only mirrors
+   the sidebars' content (CLAUDE.md's running "two copies" warning) — so
+   the narrow-screen/drawer view of Contents was still underlined until
+   this was added, even though the static sidebar was already fixed. */
+.page-home #main a,
+.page-home .col-sidebar a,
+.page-home .drawer a{
+  text-decoration: none;
+}
+.page-home .link-list a{
+  border-bottom: none;
+}
+/* Visited links stay the same color as unvisited ones, site-wide (not
+   just the portfolio — the blog wants this too). Overrides the
+   a:visited rule near the top of this file; --link-visited is kept
+   defined (unused now) rather than deleted, in case a future page
+   wants the distinction back. */
+a:visited{
+  color: var(--link);
+}
+
+/* Mild "you are here" indicator for the Contents sidebar (both the
+   static aside and its drawer copy — main.js's scrollspy toggles
+   .current on whichever links match the section currently in view, in
+   both places at once). Color only, deliberately — an earlier version
+   also added a left border stripe, which read as a "strip"/bar rather
+   than a mild highlight; removed entirely per Pritam's explicit call,
+   not just toned down. */
+.toc a{
+  display: block;
+  transition: color .15s ease;
+}
+.toc a.current{
+  color: var(--accent);
+}
+
 .portrait{
   width: 100%; aspect-ratio: 1 / 1.15; max-width: 128px;
   background: var(--bg-raised); border: 1px solid var(--border-strong);
@@ -685,14 +773,61 @@ img.portrait{ object-fit: cover; display: block; }
 
 /* Reading List sidebar link — icon + text, no box (Pritam's explicit
    call for this one specifically). Resume went the other way — see
-   .tag.resume-link below, back to a bordered pill like a topic tag. */
+   .tag.resume-link below, back to a bordered pill like a topic tag.
+   display:flex (not inline-flex) so it's block-level — needed now that
+   the blog home's left sidebar stacks two of these ("Pritam Chandra"
+   above "Reading List"): inline-flex only wraps to a new line when the
+   container happens to be too narrow to fit both side by side, which
+   held by accident on the ~232px desktop sidebar but not in the wider
+   drawer panel, where the two sat side by side instead of stacked. */
 .icon-link{
-  display: inline-flex; align-items: center; gap: .5em;
+  display: flex; align-items: center; gap: .5em;
   font-family: var(--font-sans); font-size: .86rem; color: var(--text);
   text-decoration: none; margin: 0 0 1.1rem;
 }
 .icon-link:hover{ color: var(--link); text-decoration: underline; text-decoration-color: var(--border-strong); }
 .icon-link svg{ width: 1.05em; height: 1.05em; flex: 0 0 auto; color: var(--text-muted); }
+/* Tighter gap specifically between "Pritam Chandra" and "Reading List"
+   (the only two .icon-links ever stacked directly on top of each
+   other) — the base 1.1rem below is still what separates "Reading
+   List" from "Tags" below it. */
+.website-link{ margin-bottom: .5rem; }
+
+/* Share/copy-link control, two presentations:
+   .share-btn--icon — a plain borderless link-glyph button, sized in em
+   so it scales with its context, sitting right beside a post/book's own
+   tags (no box, no pill — this is the whole point Pritam asked for
+   after the boxed version didn't land).
+   .share-btn--plain — a single word, "share", styled as quiet muted
+   text (not a button-looking control at all) — used once at the end of
+   each chapter/subchapter's own content, right before the divider that
+   follows it. No icon, no box, here either. */
+.share-btn{
+  appearance: none; border: none; background: none; padding: 0;
+  cursor: pointer; position: relative;
+}
+.share-btn--icon{
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: .15em .25em; margin: 0 .15em; color: var(--text-faint);
+  vertical-align: -.15em; border-radius: var(--radius);
+}
+.share-btn--icon:hover, .share-btn--icon:focus-visible{ color: var(--link); }
+.share-btn--icon svg{ width: 1em; height: 1em; display: block; }
+.share-btn--icon .share-btn-feedback{
+  position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%) translateY(-.3em);
+  background: var(--bg-raised); border: 1px solid var(--border-strong); border-radius: var(--radius);
+  padding: .2em .55em; font-family: var(--font-sans); font-size: .74rem; color: var(--text);
+  white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity .15s ease;
+}
+.share-btn--icon.is-copied .share-btn-feedback{ opacity: 1; }
+.share-btn--plain{
+  display: block; margin-top: 1.3em; font-family: var(--font-sans);
+  font-size: .82rem; color: var(--text-faint);
+}
+.share-btn--plain:hover, .share-btn--plain:focus-visible{ color: var(--text); }
+.share-btn--plain .share-btn-feedback{ display: none; }
+.share-btn--plain.is-copied .share-btn-label{ display: none; }
+.share-btn--plain.is-copied .share-btn-feedback{ display: inline; }
 
 /* Resume — a plain .tag pill (same box as a topic tag under a post
    title), sized to its content rather than stretched, with the icon
@@ -706,6 +841,11 @@ img.portrait{ object-fit: cover; display: block; }
    "Interests") — see .col-left .resume-link below for why 2rem
    specifically, not a generic margin baked into .resume-link itself. */
 .col-left .resume-link{ margin: 0 0 2rem; }
+/* Right sidebar: the new Blog link under "Elsewhere" reuses this same
+   .tag.resume-link styling (Pritam's own comparison), sitting between
+   the heading above it and the link list below — needs its own margin
+   since the base rule above is scoped to .col-left specifically. */
+.col-right .resume-link{ margin: .9rem 0 1.3rem; }
 /* Drawer copy: the .tag's own .74rem reads as noticeably smaller than
    the plain 1rem sans links around it in the drawer (Contents/Elsewhere
    list items have no such override) — bump it back up to match, and
@@ -769,8 +909,7 @@ img.portrait{ object-fit: cover; display: block; }
 
 .tag-cloud{ list-style:none; margin:0; padding:0; }
 .tag-cloud li{ margin-bottom: .55em; display:flex; justify-content:space-between; gap:.5em; }
-.tag-cloud a{ text-decoration:none; border-bottom:1px solid var(--border-strong); }
-.tag-cloud a:hover{ border-color:currentColor; }
+.tag-cloud a{ text-decoration:none; }
 .tag-count{ color: var(--text-faint); font-size: .82em; }
 
 .timeline{ list-style:none; margin:0; padding:0; }
@@ -900,6 +1039,24 @@ img.portrait{ object-fit: cover; display: block; }
 .subchapter-head h2, .subchapter-head h3{
   margin: 0; padding: 0; border: none; font-size: var(--step-2);
   font-style: normal; font-weight: 600; font-family: var(--font-serif);
+}
+/* Optional per-entry subtitle (sub.subtitle in front matter) — sits
+   between the title and the date, e.g. a homily's chapter number as the
+   title ("Chapter 1") with the piece's real subject as this subtitle
+   ("The Creation Narrative — Scripture vs Science"). Serif italic, not
+   the sans-serif treatment .subchapter-date uses, so it still reads as
+   part of the heading rather than as metadata. */
+.subchapter-subtitle{
+  margin: .3em 0 0; font-family: var(--font-serif); font-style: italic;
+  font-size: .92rem; color: var(--text-muted);
+}
+
+/* Optional per-entry date (sub.date in front matter) — same quiet
+   metadata treatment as .pub-year/.entry-meta elsewhere, not part of
+   the heading itself. */
+.subchapter-date{
+  display: block; font-family: var(--font-sans); font-size: .82rem;
+  color: var(--text-muted); margin-top: .3em;
 }
 
 .epigraph{ margin: 0 0 1.8em; padding: 0 2.4em; }

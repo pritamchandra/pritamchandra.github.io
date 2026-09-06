@@ -1,0 +1,19 @@
+{% comment %}
+  A control that copies a link to the clipboard, in one of two
+  presentations:
+    - variant "icon" (default) — a plain borderless link-glyph button,
+      sized in em, sitting right beside a post/book's own tags. One per
+      post/book header.
+    - variant "plain" — the single word "share", styled as quiet muted
+      text, no icon, no box. One at the end of each chapter/subchapter's
+      own content, right before the divider that follows it.
+  Usage — assign the full URL first (the include tag can't take a
+  filter chain inline), then pass that variable in:
+    assign share_url = page.url | absolute_url
+    include share-button.html url=share_url
+    include share-button.html url=share_url variant="plain"
+  `include.url` must already be the full, absolute URL to copy (build
+  any #anchor into it before assigning it — see book.html for the
+  chapter/subchapter case). See CLAUDE.md for the interaction design.
+{% endcomment %}
+{% if include.variant == "plain" %}<button type="button" class="share-btn share-btn--plain" data-action="copy-link" data-url="{{ include.url }}" title="Copy link" aria-label="Copy link"><span class="share-btn-label">share</span><span class="share-btn-feedback" aria-hidden="true">copied</span></button>{% else %}<button type="button" class="share-btn share-btn--icon" data-action="copy-link" data-url="{{ include.url }}" title="Copy link" aria-label="Copy link">{% include icon-copy-link.html %}<span class="share-btn-feedback" aria-hidden="true">Copied</span></button>{% endif %}

@@ -55,6 +55,7 @@ exclude:
   - Gemfile.lock
   - node_modules/
   - "*.log"
+  - for_later/
 
 # No GitHub Actions build and no Jekyll plugins beyond what GitHub Pages
 # ships by default — everything here (collections, where/sort/group_by,
