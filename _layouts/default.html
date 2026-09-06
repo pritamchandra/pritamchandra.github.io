@@ -7,7 +7,7 @@
 <meta name="description" content="{{ page.description }}">
 <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
 </head>
-<body{% if page.layout == "home" %} class="page-home"{% elsif page.layout == "blog-home" %} class="page-blog-home"{% elsif page.layout == "post" %} class="page-post"{% elsif page.layout == "book" %} class="page-book"{% endif %}>
+<body{% if page.layout == "home" %} class="page-home"{% elsif page.layout == "blog-home" %} class="page-blog-home"{% elsif page.layout == "post" %} class="page-post"{% elsif page.layout == "book" %} class="page-book"{% elsif page.layout == "tag" %} class="page-tag"{% endif %}>
 <a class="skip-link" href="#main">Skip to content</a>
 <div class="drawer-scrim" data-action="close-drawer"></div>
 {% include nav.html %}

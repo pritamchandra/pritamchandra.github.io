@@ -969,21 +969,21 @@ img.portrait{ object-fit: cover; display: block; }
    reading-review.html, and the portfolio's own h1 are all unaffected. */
 .page-post .entry-head h1, .page-book .entry-head h1{ font-size: var(--step-3); }
 
-/* On a phone, blog home's AND the portfolio's default text size starts
-   one notch below the site-wide 100% default (same visual result as
-   pressing the size control's "−" once) — everywhere else, and at
-   every other width, is unaffected. Targets html (not body) because
-   every --step-* value and the text-size control itself (main.js's
-   root.style.fontSize) both scale off the root element's font-size,
-   not body's — rem ignores nearer ancestors. This is only ever the
-   *starting point*: main.js only sets an inline root.style.fontSize
-   when the resolved size index differs from its own default, so a
-   first-time visitor gets this rule, and it's a true default — a
-   visitor who has already picked a size (inline style, wins over any
-   stylesheet rule) is unaffected either way, on either page or
-   anywhere else. */
+/* On a phone, blog home's, the portfolio's, AND a tag page's default
+   text size starts one notch below the site-wide 100% default (same
+   visual result as pressing the size control's "−" once) — everywhere
+   else, and at every other width, is unaffected. Targets html (not
+   body) because every --step-* value and the text-size control itself
+   (main.js's root.style.fontSize) both scale off the root element's
+   font-size, not body's — rem ignores nearer ancestors. This is only
+   ever the *starting point*: main.js only sets an inline
+   root.style.fontSize when the resolved size index differs from its
+   own default, so a first-time visitor gets this rule, and it's a true
+   default — a visitor who has already picked a size (inline style,
+   wins over any stylesheet rule) is unaffected either way, on any of
+   these pages or anywhere else. */
 @media (max-width: 700px){
-  html:has(body.page-blog-home), html:has(body.page-home){ font-size: 90%; }
+  html:has(body.page-blog-home), html:has(body.page-home), html:has(body.page-tag){ font-size: 90%; }
 }
 .entry-kind{
   font-family: var(--font-sans); font-size: .68rem; font-weight: 600; text-transform: uppercase;

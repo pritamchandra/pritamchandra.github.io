@@ -3427,3 +3427,17 @@ group is ever added to a lyrics post, add the explicit closing `</div>`
 this time rather than relying on kramdown's leniency a second time,
 since relying on implicit tag-balancing is fragile to depend on
 repeatedly and doesn't hurt anything to just write correctly next time.
+
+**UPDATE — tag pages added to the mobile-only 90% default text size.**
+Same mechanism, third `:has()` clause added to the existing rule:
+`html:has(body.page-blog-home), html:has(body.page-home),
+html:has(body.page-tag){ font-size: 90%; }`, inside the same `@media
+(max-width: 700px)` block — no new logic. `_layouts/default.html`'s
+body-class `{% if %}` chain grew a `page-tag` branch (`page.layout ==
+"tag"`) the same way `page-post`/`page-book` did. Verified a tag page
+now shows `html` at 14.4px (90% of 16px) under a 375px mobile width,
+and a full 16px at 1400px desktop — same pattern, same reasoning as the
+blog-home/portfolio version documented in the previous UPDATE (targets
+`html` not `body` for the `rem`-scaling reason given there; still only
+ever a starting default, never overriding a visitor's own saved size
+preference).
