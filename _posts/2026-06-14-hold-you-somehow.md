@@ -12,6 +12,7 @@ audio_caption: "Casual recording on Samsung M31."
 
 {% include audio-player.html src=page.audio_src duration=page.audio_duration instruments=page.audio_instruments caption=page.audio_caption %}
 
+<div class="lyrics-wrap">
 <span class="lyrics-tag">Verse 2</span>
   <p class="verse">The fog is clear, lift the blinds, winter&rsquo;s passed.
 Sun has come out again &mdash; this is the gift of trust.

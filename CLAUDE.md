@@ -3363,3 +3363,67 @@ mobile-only smaller default text size for that one page.**
    (a tag page) shows `html` at a full, unshrunk 16px even at a true
    375px mobile width, proving the `:has(body.page-blog-home)` scoping
    holds and doesn't leak to any other page.
+
+**UPDATE — the portfolio gets the same mobile-only smaller default as
+blog home, and a standalone post's/book's own `<h1>` is one step
+smaller on its own page.**
+
+1. **Portfolio (`page-home`) added to the mobile-only 90%-default rule**
+   from the previous UPDATE — the same `@media (max-width: 700px){
+   html:has(...){ font-size: 90%; } }` selector list just grew a second
+   `:has()` clause (`html:has(body.page-blog-home), html:has(body.page-
+   home){ font-size: 90%; }`), no new mechanism. Same reasoning applies
+   unchanged: targets `html` (not `body`) since `rem` and the text-size
+   control both scale off the root element; still only ever a
+   *default* — a visitor's own saved size preference (an inline
+   `root.style.fontSize` from `main.js`) always wins over this
+   stylesheet rule regardless.
+
+2. **New: a standalone post's or a book's own `<h1>` — on its own page,
+   not the blog home listing — is one step smaller.** `.prose h1{
+   font-size: var(--step-4); }` is shared by five different layouts
+   (portfolio, post, book, tag, reading-review, all use `.entry-head`),
+   so a blanket change there would have also shrunk the portfolio's own
+   name, tag pages' "Tag: X" headings, and reading reviews' titles —
+   none of which were asked for. Needed the same body-class scoping
+   pattern as `page-home`/`page-blog-home`: `_layouts/default.html`'s
+   `{% if %}` chain grew two more branches, `page-post` (`page.layout ==
+   "post"`) and `page-book` (`page.layout == "book"`), and the CSS is
+   `.page-post .entry-head h1, .page-book .entry-head h1{ font-size:
+   var(--step-3); }` — placed as its own rule rather than folded into
+   the existing `.page-blog-home .post-entry h2` rule from the previous
+   UPDATE, since that one governs the *listing* (blog home's blue
+   titles) while this one governs the *page itself* once you've clicked
+   through — two different elements (`.post-entry h2` vs `.entry-head
+   h1`) that happen to belong to the same general "make titles smaller"
+   request but needed to stay independently toggleable, confirmed by
+   Pritam's own phrasing distinguishing "on blog home" from "on their
+   corresponding actual page."
+
+   Verified in the browser: a book page's and a post's own `<h1>` both
+   render at 28px (`--step-3` = 1.75rem × 16px), down from the shared
+   34.4px (`--step-4`) default; a tag page's `<h1>` and the portfolio's
+   own `<h1>` both still render at the full 34.4px, confirming the
+   scoping doesn't leak to either. `.entry-head h1{ margin-bottom:
+   .5rem; }` (a pre-existing, separate rule, margin only) is untouched
+   and still applies everywhere `.entry-head` is used, since only
+   `font-size` was ever in scope for this request.
+
+Also pushed, in the same batch: a direct edit Pritam made to `_posts/
+2026-06-14-hold-you-somehow.md` (wrapping "Verse 2 + Chorus" in a
+`<div class="lyrics-wrap">`, matching the box already wrapping "Verse
+1 + Chorus" below it). Worth a note for future sessions: the second
+`.lyrics-wrap` div in that file has never had an explicit closing
+`</div>` in the Markdown source, going back further than this edit —
+confirmed this is not actually a bug by rebuilding and inspecting the
+real rendered HTML (`_site/blog/.../index.html`) rather than trusting
+the raw source: kramdown correctly auto-closes the dangling block-level
+`<div>` at the natural end of that raw-HTML block, right before the
+footer include, with no visual bleed into anything after it (verified
+both by grepping the rendered output's tag structure and by a
+screenshot). Left as-is rather than "fixed" by adding an explicit
+closing tag that isn't actually needed — but if a *third* verse/chorus
+group is ever added to a lyrics post, add the explicit closing `</div>`
+this time rather than relying on kramdown's leniency a second time,
+since relying on implicit tag-balancing is fragile to depend on
+repeatedly and doesn't hurt anything to just write correctly next time.
