@@ -3299,3 +3299,67 @@ real `@font-face` webfonts, the way KaTeX's fonts already are, would
 close this gap for good — flagged here as a real, known gap and a
 reasonable next step, not undertaken in this pass since the immediate
 reported symptom is fixed by the smaller, targeted change above.
+
+**UPDATE — blog home's post/collection titles sized down, and a
+mobile-only smaller default text size for that one page.**
+
+1. **`.post-entry h2` (the blue post/collection title links) is one
+   step smaller on blog home specifically** — `.page-blog-home
+   .post-entry h2{ font-size: var(--step-1); }`, added right after the
+   existing shared `.post-entry h2{ font-size: var(--step-2); }` rule
+   rather than changing that rule directly, since `.post-entry` is also
+   used by `_layouts/tag.html`'s listing and Pritam's request was
+   scoped to blog home only ("everything else stays the same"). This
+   needed a new body class: `_layouts/default.html`'s existing `{% if
+   page.layout == "home" %} class="page-home"{% endif %}` became an
+   `{% elsif page.layout == "blog-home" %} class="page-blog-home"`
+   branch, following the exact pattern `page-home` already established
+   for the portfolio. Verified tag pages still render their titles at
+   the original `--step-2` size (21.6px at a 16px root) while blog
+   home's are `--step-1` (18.4px) — at every viewport width, not just
+   mobile, since this part of the request wasn't width-scoped.
+
+2. **Blog home's default text size is one notch smaller on phone only**
+   — same visual result as pressing the size control's "−" once,
+   starting from the site's normal 100%/index-2 default, but only on
+   this one page and only below the 700px mobile breakpoint:
+   ```css
+   @media (max-width: 700px){
+     html:has(body.page-blog-home){ font-size: 90%; }
+   }
+   ```
+   Targets `html`, not `body` — every `--step-*` value, and the
+   text-size control's own mechanism (`main.js`'s `root.style.fontSize`,
+   `root` being `document.documentElement`), both scale off the *root*
+   element's font-size; `rem` ignores nearer ancestors, so setting this
+   on `body` instead would have silently done nothing to any `rem`-sized
+   text. `:has()` is what lets this rule live in the stylesheet scoped
+   by a class down on `body` while still targeting `html` itself — same
+   `:has()` mechanism already in production use for `.katex-display`'s
+   tagged-equation padding (§7), so no new browser-support floor is
+   introduced.
+
+   **This is a true default, not a forced override** — confirmed by
+   checking `main.js` first: it only ever writes an inline
+   `root.style.fontSize` on page load when the resolved size index
+   differs from its own default (`if (sizeIdx !== DEFAULT_IDX){
+   root.style.fontSize = ...}` — a first-time visitor with no
+   `localStorage` entry resolves to `DEFAULT_IDX` and gets **no** inline
+   style at all). An inline style always wins over any stylesheet rule
+   regardless of specificity, so a visitor who has ever actually touched
+   the −/+ control keeps exactly what they chose, on this page and
+   everywhere else — this CSS rule only ever supplies the *starting*
+   value for someone who hasn't set a preference yet, which is precisely
+   what "the default text size" was asking for, not a floor that fights
+   the control.
+
+   Verified in the browser at three widths on blog home: 1400px (`html`
+   stays 16px, title still shrunk per point 1 above — the two changes
+   are independent, one is width-scoped and one isn't), and confirmed
+   the emulated Browser pane's own narrower width (497px, under the
+   700px breakpoint) already showed `html` at 14.4px (16 × 0.9, exactly
+   the expected 90%) with the title compounding correctly on top of that
+   (16.56px = step-1 × 0.9). Also confirmed a completely different page
+   (a tag page) shows `html` at a full, unshrunk 16px even at a true
+   375px mobile width, proving the `:has(body.page-blog-home)` scoping
+   holds and doesn't leak to any other page.

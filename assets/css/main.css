@@ -957,6 +957,26 @@ img.portrait{ object-fit: cover; display: block; }
 .post-entry h2{ font-size: var(--step-2); margin: 0 0 .35em; border: none; padding: 0; }
 .post-entry h2 a{ text-decoration: none; }
 .post-entry h2 a:hover{ text-decoration: underline; text-decoration-color: var(--border-strong); }
+/* Blog home's own post/collection titles are one step smaller than the
+   shared .post-entry default above (which tag.html also uses, unaffected
+   by this) — scoped to .page-blog-home so nothing else changes. */
+.page-blog-home .post-entry h2{ font-size: var(--step-1); }
+
+/* On a phone, blog home's default text size starts one notch below the
+   site-wide 100% default (same visual result as pressing the size
+   control's "−" once) — everywhere else, and at every other width, is
+   unaffected. Targets html (not body) because every --step-* value and
+   the text-size control itself (main.js's root.style.fontSize) both
+   scale off the root element's font-size, not body's — rem ignores
+   nearer ancestors. This is only ever the *starting point*: main.js
+   only sets an inline root.style.fontSize when the resolved size index
+   differs from its own default, so a first-time visitor gets this rule,
+   and it's a true default — a visitor who has already picked a size
+   (inline style, wins over any stylesheet rule) is unaffected either
+   way, on this page or anywhere else. */
+@media (max-width: 700px){
+  html:has(body.page-blog-home){ font-size: 90%; }
+}
 .entry-kind{
   font-family: var(--font-sans); font-size: .68rem; font-weight: 600; text-transform: uppercase;
   letter-spacing: .08em; color: var(--accent); margin-right: .6em;
