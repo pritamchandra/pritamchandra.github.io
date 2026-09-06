@@ -3441,3 +3441,52 @@ blog-home/portfolio version documented in the previous UPDATE (targets
 `html` not `body` for the `rem`-scaling reason given there; still only
 ever a starting default, never overriding a visitor's own saved size
 preference).
+
+**UPDATE — "Teens" and "Adolescence" merged into one book, "Once upon a
+time," with three pieces retired.** Pritam asked to combine the two
+chapterless "when I was much younger" books into a single one, drop
+three specific pieces (Magic Wand, An Evening at the Golden Park, Love
+has a Love too) to `for_later/retired-posts/`, and have the merged
+book's remaining six pieces order themselves purely by date — which the
+date-first sort mechanism from an earlier UPDATE already handles
+without any new template code, since this is exactly the "book whose
+pieces mostly carry real dates" case that mechanism was built for.
+
+Mechanically: `git mv` renamed the six surviving pieces from their old
+`stories-when-younger-*`/`poems-when-younger-*` filenames to
+`once-upon-a-time-<n>-<slug>.md`, with `<n>` assigned in the piece's own
+*final displayed order* (date-descending, undated last) purely for
+filename/slug readability — `book:`, `order:`, and `slug:` in each
+piece's front matter were updated via `sed` to `once-upon-a-time` and
+the matching `1`–`6`. The three retired pieces were `git mv`'d directly
+into `for_later/retired-posts/` (no subfolder — unlike Confessions'
+retirement, which moved a whole book-plus-chapters-file as one unit,
+these are just three individual pieces peeled off an otherwise-surviving
+book), front matter left untouched since `for_later/` is excluded from
+the Jekyll build entirely and its content's structure is irrelevant to
+rendering. The two old book index pages
+(`blog/stories-from-when-i-was-much-younger/index.md`,
+`blog/poems-from-when-i-was-much-younger/index.md`) were deleted
+outright via `git rm` — a straight merge, not a redirect, since this
+site has never used `jekyll-redirect-from` and was only ever published
+publicly for the first time a few sessions ago, so the old URLs having
+no real inbound links yet made a plain 404 the acceptable outcome rather
+than something worth adding new machinery for.
+
+One piece, "Unprepared," has no `date` field at all — per the "never
+invent a date" rule already established elsewhere in this file, it was
+left undated rather than guessing one, so it trails last in the merged
+book's order via the existing undated-pieces-sort-by-`order`-fallback,
+exactly as the mechanism is designed to handle. New book front matter:
+`tags: [Prose, Fiction, Poetry]` (the union of the two originals' tags —
+checked afterward that this introduced no new tag and orphaned no old
+tag-page, since Prose/Fiction/Poetry are all still independently used
+by other content, confirmed by recomputing the site's full live-tag list
+before and after and diffing — identical). `preview`/`subtitle` both set
+to Pritam's exact given wording, "Short stories, prose pieces and poems
+composed when I was a teenager." Verified in the browser: the merged
+page renders all six pieces in the correct date-first order (Jan 2019 →
+Dec 2018 → Oct 2018 → Apr 2017 → Feb 2017 → undated last), both old book
+URLs 404, the retired pieces don't appear in `_site` anywhere, and a
+tag page (Fiction) correctly lists the merged book instead of either of
+the two originals.

@@ -1,11 +1,11 @@
 ---
-book: stories-from-when-i-was-much-younger
+book: once-upon-a-time
 chapter:
 chapter_order:
-order: 4
+order: 2
 title: "Dating in Darkness"
 date: 2018-12-01
-slug: 4
+slug: 2
 epigraph: null
 gloss: null
 ---

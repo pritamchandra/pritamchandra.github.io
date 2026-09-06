@@ -1,11 +1,11 @@
 ---
-book: stories-from-when-i-was-much-younger
+book: once-upon-a-time
 chapter:
 chapter_order:
-order: 2
+order: 4
 title: "The Salesman" 
 date: 2017-04-01
-slug: 2
+slug: 4
 epigraph: null
 gloss: null
 ---

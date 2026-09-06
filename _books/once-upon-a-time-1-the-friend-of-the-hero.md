@@ -1,11 +1,11 @@
 ---
-book: stories-from-when-i-was-much-younger
+book: once-upon-a-time
 chapter:
 chapter_order:
-order: 5
+order: 1
 title: "The Friend of the Hero"
 date: 2019-01-01
-slug: 5
+slug: 1
 epigraph: null
 gloss: null
 ---

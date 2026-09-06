@@ -1,11 +1,11 @@
 ---
-book: stories-from-when-i-was-much-younger
+book: once-upon-a-time
 chapter:
 chapter_order:
-order: 3
+order: 5
 title: "The Best One"
 date: 2017-02-01
-slug: 3
+slug: 5
 epigraph: null
 gloss: null
 ---
