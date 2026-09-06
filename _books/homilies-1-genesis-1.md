@@ -5,6 +5,7 @@ chapter_order: 1
 order: 1
 title: "Chapter 1"
 subtitle: "The Creation Narrative — Scripture vs Science"
+date: 2024-12-12
 slug: genesis-1
 epigraph: null
 gloss: null

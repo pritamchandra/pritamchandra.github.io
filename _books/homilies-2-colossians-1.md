@@ -4,6 +4,7 @@ chapter: "2"
 chapter_order: 1
 order: 2
 title: "Chapter 1"
+date: 2025-05-05
 slug: colossians-1
 epigraph: null
 gloss: null

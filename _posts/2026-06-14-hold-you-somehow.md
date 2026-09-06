@@ -1,7 +1,7 @@
 ---
 title: "Hold you somehow"
 description: "A song and its lyrics."
-date: 2026-06-14
+date: 2025-06-14
 tags: [Song, Audio]
 preview: "Inevitable seasons of intimacy. Original composition."
 audio_src: "/assets/audio/hold-you-somehow-sad.m4a"
