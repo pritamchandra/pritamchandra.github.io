@@ -10,7 +10,7 @@ layout: default
       {% include book-toc.html %}
     </aside>
 
-    <main class="col-content prose" id="main">
+    <main class="col-content prose{% if page.align == 'justify' or page.align == 'center' %} align-{{ page.align }}{% endif %}" id="main">
       {% assign book_url = page.url | absolute_url %}
       <header class="entry-head">
         <h1>{{ page.book_title }}</h1>

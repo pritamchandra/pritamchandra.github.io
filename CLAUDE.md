@@ -3571,3 +3571,90 @@ last. Confirmed by building and by touching the file with the server up.
 If a piece ever looks mis-ordered/dated only on localhost, run `jekyll
 build` and compare `_site/`, or restart the server, before assuming a
 template bug.
+
+**UPDATE — the small-caps titles now use a real small-caps font (Latin
+Modern Roman Caps) instead of browser-synthesized ones; Phantastes marked
+read; the basis-counting post's figures and thumbnail.**
+
+1. **Small-caps font.** The first version used `font-variant-caps:
+   small-caps`, which on this site's un-vendored serif stack is
+   *synthesized* (full capitals scaled down), so strokes stayed as heavy
+   as the bold serif — Pritam's LaTeX reference (Computer Modern
+   small caps) is thin and even. Fixed by self-hosting the actual TeX
+   face: `assets/fonts/lmromancaps10-regular.woff2`, a straight WOFF2
+   conversion (fontTools, no subsetting, glyphs untouched) of
+   `lmromancaps10-regular.otf` from the local MacTeX tree
+   (`texmf-dist/fonts/opentype/public/lm/`), with the GUST Font License
+   copied next to it (`assets/fonts/GUST-FONT-LICENSE.txt`). 46KB, full
+   Latin coverage incl. curly quotes, em dash, accented letters.
+   `@font-face` + a `--font-caps` token sit in `main.css` just above the
+   title rules; used by `.page-post .entry-head h1`, `.chapter-head h2`
+   and `.subchapter-head h2` (chapterless books' pieces), at
+   `var(--step-3)`/`--step-3`/`--step-2` — i.e. smaller than the previous
+   1.15× sizes (28px / 28px / 21.6px at a 16px root), with `letter-
+   spacing: .01em` and `font-weight: 400`. **Important detail:** this is
+   a dedicated "Caps" font — its *lowercase glyphs are already small
+   capitals* — so titles stay typed in ordinary mixed case and
+   `font-variant-caps` is deliberately NOT set anymore (setting it too
+   would make the browser re-synthesize on top of the font's own small
+   caps). If the file fails to load, the fallback is the normal serif in
+   plain mixed case. Verified `document.fonts` reports it `loaded`, the
+   computed family/size/weight, and screenshots of a post title and a
+   flat book's piece title; book titles and chaptered books'
+   `<h3>` subchapter titles remain bold Source Serif.
+
+2. **Phantastes** (`_reading/phantastes.md`): `status: reading` →
+   `status: null`, `year: null` → `year: 2026`, per Pritam ("read in
+   2026"). Verified the row shows "2026" (no book icon) and the count is
+   unchanged at 9 books.
+
+3. **Basis-counting figures.** Pritam reported the images had "suddenly"
+   become huge and asked to restore their previous size. Checked and could
+   not find any change: `.gallery-full img{width:100%}` dates from the
+   original gallery commit, the post and its four PNGs are byte-identical
+   to the launch commit (the only diff is the thumbnail line added last
+   round), and the figures have rendered at the full 640px column since
+   publication. So there was no earlier size to restore; instead the three
+   near-square diagrams (cube, triangle-cut, diagonals) got an inline
+   `style="max-width: 60%; margin: auto"` (≈384px) on their `<figure>`,
+   and the wide three-panel tetrahedra strip was left full width since it
+   would become illegible smaller. Sizes are a judgment call flagged to
+   Pritam — a bigger/smaller value is a one-number edit per figure. Its
+   `thumbnail:` line was removed; `assets/img/basis-thumbnail.png` stays
+   on disk, and EDITING-GUIDE.md still documents `thumbnail:` (with this
+   post as the ready-made example to re-enable).
+
+**UPDATE — small caps narrowed to book chapter titles only and shrunk a
+step; page titles back to the plain serif; `align:` now works on books;
+"From the journal" justified.**
+
+1. **Page titles reverted** (`.page-post .entry-head h1`): back to the
+   normal Source Serif stack, `font-size: var(--step-3)` (28px),
+   `font-weight: 400` — no small caps, no bold. It no longer uses
+   `--font-caps`. Book titles are still bold (unchanged since the
+   earlier round).
+2. **Small caps (Latin Modern Roman Caps) now applies only to
+   chapter-level titles inside books**, one type step smaller than the
+   previous round: `.chapter-head h2` `--step-3` → `--step-2` (21.6px),
+   and `.subchapter-head h2` (the title of each piece in a *chapterless*
+   book, which is the top-level unit there) `--step-2` → `--step-1`
+   (18.4px). Chaptered books' subchapter titles (`<h3>`) remain bold
+   serif. Verified: Homilies chapter "Genesis" 21.6px/400/LM Roman Caps,
+   its book title 28px/600, subchapter 21.6px/600; From the journal
+   piece titles 18.4px/400/LM Roman Caps.
+3. **`align:` on books.** `book.html`'s `<main>` gets the same
+   `align-justify`/`align-center` class hook as `post.html`, driven by
+   the collection's `blog/<slug>/index.md` front matter (so it applies
+   to every piece in that book). Book text lives inside `.subchapter`
+   sections rather than directly under `<main>`, so the CSS selectors
+   gained `.subchapter > p` / `> ul > li` / `> ol > li` (excluding
+   `.verse`, `.chords`, and `.chapter-gloss`) alongside the post
+   selectors; the book's `note`, verse blocks and epigraphs keep their
+   own alignment. `blog/from-the-journal/index.md` has `align: justify`
+   (all 24 piece paragraphs verified `justify`, the note still `start`).
+   EDITING-GUIDE.md's alignment paragraph was updated to say it works on
+   collections.
+4. **Why Phantastes "still" looked unread:** the previous round's
+   change (`status: null`, `year: 2026`) was correct locally but had
+   not been committed/pushed, so the live site still showed the old
+   `reading` state. Pushed with this batch.

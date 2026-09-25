@@ -339,8 +339,12 @@ It only changes running text — paragraphs, bullet/numbered lists, and the
 text inside theorem/proof boxes — and deliberately leaves poems/lyrics
 (`<p class="verse">`), chord lines, blockquotes, equations, captions, and
 the title/date/tags header alone, since those have their own alignment.
-This is per-post, one post at a time: "Rose Leaves" is the current trial
-(`align: justify`). It works on standalone posts only, not on book pages.
+This is per-post, one post at a time: "Rose Leaves" is a current example
+(`align: justify`). **It works on collections too** — put the same line in the
+collection's own `blog/<slug>/index.md` and it applies to every piece in
+that book (e.g. "From the journal" is justified this way). For a book it
+affects the pieces' running text only, not the collection's note, the
+poem/lyric blocks, or the small "gloss" line under a piece.
 
 **A thumbnail for the blog home's listing** (optional, like Substack's
 small image beside each entry). Save the image in `assets/img/`, then add
@@ -357,7 +361,9 @@ Posts without a `thumbnail:` line look exactly as before, so it's fine for
 only some posts to have one. (Collections can have one too — put the same
 `thumbnail:` line in the collection's own `blog/<slug>/index.md`.) It only
 appears on the blog home listing, not on tag pages or on the post itself.
-"Counting Special Basis for R^n" is the current example.
+(No post uses one right now; `assets/img/basis-thumbnail.png` is a ready-made
+one for the "Counting Special Basis" post if you want it back — just add
+`thumbnail: /assets/img/basis-thumbnail.png` to that post's front matter.)
 
 **If you want a theorem/lemma/proof box** (like in the math sample post),
 paste this directly into your post — it's plain HTML, which Markdown

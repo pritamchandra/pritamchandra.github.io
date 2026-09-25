@@ -438,11 +438,15 @@ a:hover{ text-decoration-color: currentColor; }
    blockquotes, equations, captions, or the header/footer. */
 .prose.align-justify > p:not(.verse):not(.chords),
 .prose.align-justify > ul > li, .prose.align-justify > ol > li,
+.prose.align-justify .subchapter > p:not(.verse):not(.chords):not(.chapter-gloss),
+.prose.align-justify .subchapter > ul > li, .prose.align-justify .subchapter > ol > li,
 .prose.align-justify .thm-body p, .prose.align-justify .proof > p{
   text-align: justify; hyphens: auto; -webkit-hyphens: auto;
 }
 .prose.align-center > p:not(.verse):not(.chords),
 .prose.align-center > ul > li, .prose.align-center > ol > li,
+.prose.align-center .subchapter > p:not(.verse):not(.chords):not(.chapter-gloss),
+.prose.align-center .subchapter > ul > li, .prose.align-center .subchapter > ol > li,
 .prose.align-center .thm-body p, .prose.align-center .proof > p{
   text-align: center;
 }
@@ -984,15 +988,24 @@ img.portrait{ object-fit: cover; display: block; }
    --step-4 default. Scoped to .page-post/.page-book so tag.html,
    reading-review.html, and the portfolio's own h1 are all unaffected. */
 .page-post .entry-head h1, .page-book .entry-head h1{ font-size: var(--step-3); }
-/* A standalone page's own title (not a book's): small caps, regular
-   weight instead of bold, and a touch larger than the bold version was
-   (small caps' lowercase letters run visibly shorter than real
-   lowercase, so the size bump keeps it from reading as smaller). Book
-   titles keep the rule above untouched. */
-.page-post .entry-head h1{
-  font-size: calc(var(--step-3) * 1.15);
-  font-weight: 400; font-variant-caps: small-caps; letter-spacing: .02em;
+/* Latin Modern Roman Caps (the TeX/Computer Modern small-caps face),
+   self-hosted like KaTeX's fonts, for book chapter titles only. It is a
+   dedicated "caps" font: lowercase letters in the text are drawn as true
+   small capitals by the font itself, so titles are typed in ordinary
+   mixed case and font-variant-caps must NOT also be set (the browser
+   would then re-synthesize on top of the font's own small caps).
+   License: GUST Font License, copy in assets/fonts/. */
+@font-face{
+  font-family: "LM Roman Caps";
+  src: url("../fonts/lmromancaps10-regular.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
 }
+:root{ --font-caps: "LM Roman Caps", var(--font-serif); }
+
+/* A standalone page's own title (not a book's): the normal serif, large,
+   at regular weight (no small caps, no bold). Book titles keep the bold
+   rule above untouched. */
+.page-post .entry-head h1{ font-size: var(--step-3); font-weight: 400; }
 
 /* On a phone, blog home's, the portfolio's, AND a tag page's default
    text size starts one notch below the site-wide 100% default (same
@@ -1092,8 +1105,8 @@ img.portrait{ object-fit: cover; display: block; }
   color: var(--text-faint); margin-bottom: .3em;
 }
 .chapter-head h2{
-  margin: 0; padding: 0; border: none; font-size: calc(var(--step-3) * 1.15);
-  font-weight: 400; font-variant-caps: small-caps; letter-spacing: .02em;
+  margin: 0; padding: 0; border: none; font-size: var(--step-2);
+  font-family: var(--font-caps); font-weight: 400; letter-spacing: .01em;
 }
 /* Optional short framing line under a chapter heading, before its first
    subchapter — demonstrates that chapter-level content is a real,
@@ -1118,8 +1131,8 @@ img.portrait{ object-fit: cover; display: block; }
    as they were) — so it gets the same small-caps/regular-weight title
    treatment as .chapter-head h2 above, at this heading's own size step. */
 .subchapter-head h2{
-  font-size: calc(var(--step-2) * 1.15);
-  font-weight: 400; font-variant-caps: small-caps; letter-spacing: .02em;
+  font-family: var(--font-caps); font-size: var(--step-1);
+  font-weight: 400; letter-spacing: .01em;
 }
 /* Optional per-entry subtitle (sub.subtitle in front matter) — sits
    between the title and the date, e.g. a homily's chapter number as the

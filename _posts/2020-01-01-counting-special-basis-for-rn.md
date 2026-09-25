@@ -3,7 +3,6 @@ title: 'On Counting Special Basis for $\mathbb{R}^n$'
 description: "Counting the basis sets of R^n whose vectors have only 0/1 coordinates."
 date: 2020-01-01
 tags: [Math]
-thumbnail: /assets/img/basis-thumbnail.png
 preview: 'Counting the number of basis sets of $\mathbb{R}^3$ whose involved vectors have only 0 or 1 coordinates.'
 ---
 We are interested in counting the number of basis sets (un-ordered) of $\mathbb{R}^n$ for which the coordinates of the involved vectors are either $0$s or $1$s. In this entry we will count (and prove) the same for $\mathbb{R}^3$ in two ways, and speculate a probable path to extend the count for the general case. The intent of this entry is to motivate a solution for the general case.
@@ -47,7 +46,7 @@ The relevant bases for $\mathbb{R}$ is $\{1\}$, and for $\mathbb{R}^2$ is,
 
 and therefore the calculation of $m(1)$ and $m(2)$ are trivial. Let us come to $\mathbb{R}^3$ now. The vectors of $\mathbb{R}^3$ whose coordinates are either $0$s or $1$s sit at the vertices of a unit cube. Hence it is only fair to identify these vectors with vertices of the unit cube.
 
-<figure class="gallery-full">
+<figure class="gallery-full" style="max-width: 60%; margin-left: auto; margin-right: auto;">
   <img src="/assets/img/basis-counting-cube.png" alt="A unit cube with vertices labelled A through H, identifying A with the zero vector and B, D, E with the standard basis vectors.">
 </figure>
 
@@ -63,7 +62,7 @@ Any choice of two non-zero vertices with the origin $A$ forms a triangular cross
 
 The following is an illustration with $T = AEC$ and $P = AEGC$.
 
-<figure class="gallery-full">
+<figure class="gallery-full" style="max-width: 60%; margin-left: auto; margin-right: auto;">
   <img src="/assets/img/basis-counting-triangle-cut.png" alt="The same cube with triangle AEC shaded, extended to the plane AEGC, showing the intersection with the cube.">
 </figure>
 
@@ -77,7 +76,7 @@ But $T$ shares three of its vertices with $I$, and hence shares at least two of 
 
 From (ii) we have that in such cases $T$ must contain no side of the cube, and therefore its sides must be the diagonals. But $T$ contains the origin $A$, and hence two of these diagonals must begin at $A$, meaning these two diagonals are exactly the first two chosen vertices. But there are 4 vertices which are diagonally opposite to $A$: three, $C, H, F$, along the faces, and one $G$ through the cube.
 
-<figure class="gallery-full">
+<figure class="gallery-full" style="max-width: 60%; margin-left: auto; margin-right: auto;">
   <img src="/assets/img/basis-counting-diagonals.png" alt="The cube with the four space and face diagonals from the origin drawn to C, H, F, and G.">
 </figure>
 
