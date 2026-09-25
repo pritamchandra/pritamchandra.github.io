@@ -431,6 +431,22 @@ a:hover{ text-decoration-color: currentColor; }
 .prose strong{ font-weight: 700; }
 .prose em{ font-style: italic; }
 
+/* Optional per-post text alignment (front matter `align:`, applied as a
+   class on <main> by post.html; left is simply the default, no class).
+   Only running text is affected — direct-child paragraphs/list items and
+   the text inside theorem/proof boxes — never verse blocks, chord lines,
+   blockquotes, equations, captions, or the header/footer. */
+.prose.align-justify > p:not(.verse):not(.chords),
+.prose.align-justify > ul > li, .prose.align-justify > ol > li,
+.prose.align-justify .thm-body p, .prose.align-justify .proof > p{
+  text-align: justify; hyphens: auto; -webkit-hyphens: auto;
+}
+.prose.align-center > p:not(.verse):not(.chords),
+.prose.align-center > ul > li, .prose.align-center > ol > li,
+.prose.align-center .thm-body p, .prose.align-center .proof > p{
+  text-align: center;
+}
+
 .prose blockquote{
   margin: 1.6em 0;
   padding: 0 3em;
@@ -968,6 +984,15 @@ img.portrait{ object-fit: cover; display: block; }
    --step-4 default. Scoped to .page-post/.page-book so tag.html,
    reading-review.html, and the portfolio's own h1 are all unaffected. */
 .page-post .entry-head h1, .page-book .entry-head h1{ font-size: var(--step-3); }
+/* A standalone page's own title (not a book's): small caps, regular
+   weight instead of bold, and a touch larger than the bold version was
+   (small caps' lowercase letters run visibly shorter than real
+   lowercase, so the size bump keeps it from reading as smaller). Book
+   titles keep the rule above untouched. */
+.page-post .entry-head h1{
+  font-size: calc(var(--step-3) * 1.15);
+  font-weight: 400; font-variant-caps: small-caps; letter-spacing: .02em;
+}
 
 /* On a phone, blog home's, the portfolio's, AND a tag page's default
    text size starts one notch below the site-wide 100% default (same
@@ -993,6 +1018,23 @@ img.portrait{ object-fit: cover; display: block; }
 .post-entry .entry-meta .tags{ display:inline-flex; gap:.4em; }
 .post-entry .entry-preview{ color: var(--text-muted); margin: 0; }
 .post-entry + hr.rule{ margin: 0 0 2.1rem; }
+
+/* Optional thumbnail (front matter `thumbnail:`), Substack-style: a small
+   square image to the right of the entry's text. Only entries that have
+   one get .has-thumb; the rest render exactly as before. */
+.post-entry.has-thumb{ display: flex; align-items: flex-start; gap: 1.3rem; }
+.post-entry.has-thumb[hidden]{ display: none; } /* same specificity as .post-entry[hidden] above, and this display would win over it */
+.post-entry-text{ min-width: 0; flex: 1 1 auto; }
+.post-thumb{
+  flex: 0 0 auto; display: block; width: 104px; aspect-ratio: 1;
+  margin-top: .25rem; overflow: hidden;
+  border: 1px solid var(--border); border-radius: var(--radius);
+}
+.post-thumb img{ width: 100%; height: 100%; object-fit: cover; display: block; }
+@media (max-width: 700px){
+  .post-entry.has-thumb{ gap: .9rem; }
+  .post-thumb{ width: 76px; }
+}
 
 
 /* ============================================================
@@ -1049,7 +1091,10 @@ img.portrait{ object-fit: cover; display: block; }
   display:block; font-family: var(--font-sans); font-size: .82rem; letter-spacing:.1em;
   color: var(--text-faint); margin-bottom: .3em;
 }
-.chapter-head h2{ margin: 0; padding: 0; border: none; font-size: var(--step-3); }
+.chapter-head h2{
+  margin: 0; padding: 0; border: none; font-size: calc(var(--step-3) * 1.15);
+  font-weight: 400; font-variant-caps: small-caps; letter-spacing: .02em;
+}
 /* Optional short framing line under a chapter heading, before its first
    subchapter — demonstrates that chapter-level content is a real,
    supported slot, not just a label. Plain, not oblique (oblique is
@@ -1067,6 +1112,14 @@ img.portrait{ object-fit: cover; display: block; }
 .subchapter-head h2, .subchapter-head h3{
   margin: 0; padding: 0; border: none; font-size: var(--step-2);
   font-style: normal; font-weight: 600; font-family: var(--font-serif);
+}
+/* In a chapterless book each piece IS the top-level "chapter", and its
+   title is the only <h2> here (chaptered books' subchapters are <h3>, left
+   as they were) — so it gets the same small-caps/regular-weight title
+   treatment as .chapter-head h2 above, at this heading's own size step. */
+.subchapter-head h2{
+  font-size: calc(var(--step-2) * 1.15);
+  font-weight: 400; font-variant-caps: small-caps; letter-spacing: .02em;
 }
 /* Optional per-entry subtitle (sub.subtitle in front matter) — sits
    between the title and the date, e.g. a homily's chapter number as the

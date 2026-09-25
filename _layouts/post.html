@@ -2,7 +2,7 @@
 layout: default
 ---
 <div class="cluster" style="padding-top: 2.6rem;">
-  <main class="prose" style="max-width: var(--content-width); margin: 0 auto;" id="main">
+  <main class="prose{% if page.align == 'justify' or page.align == 'center' %} align-{{ page.align }}{% endif %}" style="max-width: var(--content-width); margin: 0 auto;" id="main">
 
     <header class="entry-head">
       {% assign share_url = page.url | absolute_url %}

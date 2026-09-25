@@ -3,6 +3,7 @@ title: "Rose Leaves"
 description:
 date: 2025-12-01
 tags: [Prose, Fiction]
+align: justify
 preview: "Those who can&rsquo;t be helped should be left alone?"
 ---
 

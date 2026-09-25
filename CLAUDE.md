@@ -3490,3 +3490,84 @@ Dec 2018 → Oct 2018 → Apr 2017 → Feb 2017 → undated last), both old book
 URLs 404, the retired pieces don't appear in `_site` anywhere, and a
 tag page (Fiction) correctly lists the merged book instead of either of
 the two originals.
+
+**UPDATE — a new lecture-notes entry, per-post text alignment, small-caps
+titles, a thumbnail slot on blog home, "Elegy" → "Elegiac", two more
+pieces retired from "Once upon a time".**
+
+1. **`_data/notes.yml`**: added "Lecture Notes for Fourier Analysis"
+   (2026, same "(In progress) During Teaching Fellowship, Ashoka
+   University" venue as Real Analysis, link `assets/notes/fs-26.pdf`).
+   `ra-26.pdf` had been replaced on disk by Pritam; both PDFs shipped in
+   the same push.
+
+2. **Per-post alignment (`align:` front matter).** `post.html` adds
+   `align-justify`/`align-center` to `<main class="prose ...">` only when
+   `page.align` is exactly `justify` or `center` (anything else, or
+   nothing, leaves the default left alignment, so a typo can't inject an
+   arbitrary class). CSS (`main.css`, right after `.prose em`) targets
+   only direct-child `p:not(.verse):not(.chords)`, direct-child list
+   items, `.thm-body p` and `.proof > p` — deliberately *not* every `p`,
+   because blockquotes (centered on purpose), verse blocks, captions,
+   the header's `.entry-meta` and the footer all contain `<p>`s that must
+   keep their own alignment. Justified text also gets `hyphens: auto`
+   (`<html lang="en">` is already set), which is what keeps justified
+   lines from opening into wide gaps on a phone. Posts only — book pages
+   don't read this field. Trial: `rose-leaves` has `align: justify`.
+
+3. **Small-caps titles, regular weight, ~15% larger.** Applies to a
+   standalone page's `<h1>` (`.page-post .entry-head h1`) and to book
+   *chapter* titles — `.chapter-head h2` in chaptered books, and
+   `.subchapter-head h2` in chapterless ones, where each piece is the
+   top-level unit and its title is the only `<h2>` (chaptered books'
+   subchapters are `<h3>` and were left bold). Book titles
+   (`.page-book .entry-head h1`) are untouched. Uses
+   `font-variant-caps: small-caps` (real small caps where the font has
+   them, browser-synthesized otherwise — Source Serif 4 isn't
+   self-hosted, so the fallback stack usually synthesizes) with `font-
+   weight: 400`; size is `calc(var(--step-N) * 1.15)` since small caps'
+   lowercase runs visibly shorter than true lowercase. Verified: Rose
+   Leaves h1 32.2px/400/small-caps; Homilies book title still 28px/600,
+   its "Genesis" chapter title 32.2px/400/small-caps, its subchapter
+   `<h3>` unchanged.
+
+4. **Blog-home thumbnails (`thumbnail:` front matter).** `blog-home.html`
+   wraps each entry's text in `.post-entry-text` and, when
+   `entry.thumbnail` is set, adds `.has-thumb` to the article (flex row)
+   plus a small square `.post-thumb` link on the right (104px, 76px
+   below 700px, `object-fit: cover`, `alt=""` since the adjacent title
+   link already names the entry, `tabindex="-1"`/`aria-hidden` so the
+   image isn't a redundant tab stop). **Trap avoided**: `.post-entry.has-
+   thumb{display:flex}` has the same specificity as the existing
+   `.post-entry[hidden]{display:none}`, and the later rule wins — which
+   would have made the All/Collections/Pages filter fail to hide any
+   entry with a thumbnail — so `.post-entry.has-thumb[hidden]{display:
+   none}` exists explicitly (same class of bug as the reading-list
+   `[hidden]` one documented earlier). Blog home only; `tag.html`'s
+   listing uses the same `.post-entry` class but not this markup, so tag
+   pages have no thumbnails (deliberate — request was scoped to blog
+   home). Trial: `assets/img/basis-thumbnail.png` on the basis-counting
+   post. Works on collections too via `blog/<slug>/index.md`.
+
+5. **"Elegy" → "Elegiac"**: `title`/`book_title` in `blog/elegy/
+   index.md` only; the slug/URL (`/blog/elegy/`, `book_slug: elegy`, and
+   the `_books/elegy-*` filenames) were left alone since renaming the URL
+   would break the existing link for no visible benefit.
+
+6. **Retired "The Friend of the Hero" and "The Best One"** from "Once
+   upon a time" into `for_later/retired-posts/`; the four survivors
+   (Dating in Darkness, The Middle, The Salesman, Unprepared) were
+   renumbered 1–4 (`order`/`slug`/filenames). The book's own `date` moved
+   from 2019-01-01 to 2018-12-01 — the newest surviving piece — per
+   Pritam's standing "collection date = newest page date" rule, so it now
+   files under 2018 on blog home instead of 2019.
+
+**A dev-server quirk worth knowing (not a site bug):** while `jekyll
+serve` is running, editing an *undated* book piece makes the dev server
+regenerate it with a date (today's), which — because dated pieces sort
+before undated ones — jumps it to the top of its book *locally*. A real
+`jekyll build` (what GitHub Pages runs) leaves undated pieces undated,
+last. Confirmed by building and by touching the file with the server up.
+If a piece ever looks mis-ordered/dated only on localhost, run `jekyll
+build` and compare `_site/`, or restart the server, before assuming a
+template bug.

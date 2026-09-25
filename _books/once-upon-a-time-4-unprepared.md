@@ -2,9 +2,9 @@
 book: once-upon-a-time
 chapter:
 chapter_order:
-order: 6
+order: 4
 title: "Unprepared"
-slug: 6
+slug: 4
 epigraph: null
 gloss: null
 ---

@@ -86,10 +86,13 @@ layout: default
         {% for entry in group.items %}
           {% assign kind = "page" %}
           {% if entry.layout == "book" %}{% assign kind = "collection" %}{% endif %}
-          <article class="post-entry" data-kind="{{ kind }}">
-            <h2><a href="{{ entry.url | relative_url }}">{{ entry.title }}</a></h2>
-            <p class="entry-meta"><span class="entry-kind">{% if kind == "collection" %}Collection{% else %}Page{% endif %}</span><span class="tags">{% for t in entry.tags %}<a class="tag" href="{{ t | slugify | prepend: '/blog/tag/' | append: '/' | relative_url }}">{{ t }}</a>{% endfor %}</span> &middot; {{ entry.date | date: "%b %Y" }}</p>
-            {% if entry.preview %}<p class="entry-preview">{{ entry.preview }}</p>{% endif %}
+          <article class="post-entry{% if entry.thumbnail %} has-thumb{% endif %}" data-kind="{{ kind }}">
+            <div class="post-entry-text">
+              <h2><a href="{{ entry.url | relative_url }}">{{ entry.title }}</a></h2>
+              <p class="entry-meta"><span class="entry-kind">{% if kind == "collection" %}Collection{% else %}Page{% endif %}</span><span class="tags">{% for t in entry.tags %}<a class="tag" href="{{ t | slugify | prepend: '/blog/tag/' | append: '/' | relative_url }}">{{ t }}</a>{% endfor %}</span> &middot; {{ entry.date | date: "%b %Y" }}</p>
+              {% if entry.preview %}<p class="entry-preview">{{ entry.preview }}</p>{% endif %}
+            </div>
+            {% if entry.thumbnail %}<a class="post-thumb" href="{{ entry.url | relative_url }}" tabindex="-1" aria-hidden="true"><img src="{{ entry.thumbnail | relative_url }}" alt="" loading="lazy"></a>{% endif %}
           </article>
           {% unless forloop.last %}<hr class="rule">{% endunless %}
         {% endfor %}

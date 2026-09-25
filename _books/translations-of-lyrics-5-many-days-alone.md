@@ -9,7 +9,7 @@ slug: 5
 epigraph: null
 gloss: null
 ---
-*[Listen to Many Days Alone](https://www.youtube.com/watch?v=IO0t1zivGH8)*
+*[Listen to Bioscope'er nesha](https://www.youtube.com/watch?v=IO0t1zivGH8)*
 
 ### Many days alone
 

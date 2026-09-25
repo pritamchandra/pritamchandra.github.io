@@ -2,10 +2,10 @@
 book: once-upon-a-time
 chapter:
 chapter_order:
-order: 4
+order: 3
 title: "The Salesman" 
 date: 2017-04-01
-slug: 4
+slug: 3
 epigraph: null
 gloss: null
 ---

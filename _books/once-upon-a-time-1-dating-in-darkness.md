@@ -2,10 +2,10 @@
 book: once-upon-a-time
 chapter:
 chapter_order:
-order: 2
+order: 1
 title: "Dating in Darkness"
 date: 2018-12-01
-slug: 2
+slug: 1
 epigraph: null
 gloss: null
 ---

@@ -2,11 +2,11 @@
 book: once-upon-a-time
 chapter:
 chapter_order:
-order: 3
+order: 2
 title: "The Middle"
 subtitle: "Imaginative response to &ldquo;Edmund Wilson in Benares&rdquo; by Pankaj Mishra"
 date: 2018-10-01
-slug: 3
+slug: 2
 epigraph: null
 gloss: null
 ---

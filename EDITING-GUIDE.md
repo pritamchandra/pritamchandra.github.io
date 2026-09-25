@@ -324,6 +324,41 @@ under `blog/tag/`, ask (or use this guide's own file structure as a
 model — an existing tag folder like `blog/tag/mathematics/index.md` is a
 three-line file you can copy and rename).
 
+**Text alignment — left (default), justified, or centered.** Add one line
+to the post's front matter:
+
+```yaml
+align: justify
+```
+
+Use `justify` for evenly-edged columns of text (long prose reads well this
+way, and the site hyphenates automatically so the spacing doesn't get
+gappy on a phone), `center` for centered paragraphs, or leave the line out
+entirely (or write `align: left`) for the normal left-aligned look.
+It only changes running text — paragraphs, bullet/numbered lists, and the
+text inside theorem/proof boxes — and deliberately leaves poems/lyrics
+(`<p class="verse">`), chord lines, blockquotes, equations, captions, and
+the title/date/tags header alone, since those have their own alignment.
+This is per-post, one post at a time: "Rose Leaves" is the current trial
+(`align: justify`). It works on standalone posts only, not on book pages.
+
+**A thumbnail for the blog home's listing** (optional, like Substack's
+small image beside each entry). Save the image in `assets/img/`, then add
+one line to the post's front matter:
+
+```yaml
+thumbnail: /assets/img/your-image.png
+```
+
+The blog home then shows it as a small square (about 100px, smaller on a
+phone) to the right of that post's title/preview. Any picture works — it's
+cropped to a square from the center, so a roughly square image looks best.
+Posts without a `thumbnail:` line look exactly as before, so it's fine for
+only some posts to have one. (Collections can have one too — put the same
+`thumbnail:` line in the collection's own `blog/<slug>/index.md`.) It only
+appears on the blog home listing, not on tag pages or on the post itself.
+"Counting Special Basis for R^n" is the current example.
+
 **If you want a theorem/lemma/proof box** (like in the math sample post),
 paste this directly into your post — it's plain HTML, which Markdown
 passes through completely untouched (that's the whole reason it's

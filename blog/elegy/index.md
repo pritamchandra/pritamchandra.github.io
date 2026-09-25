@@ -1,9 +1,9 @@
 ---
 layout: book
-title: "Elegy"
+title: "Elegiac"
 description: "A small collection of elegies."
 book_slug: elegy
-book_title: "Elegy"
+book_title: "Elegiac"
 subtitle: "poems, 2024–2025"
 tags: [Realism, Poetry]
 date: 2025-01-01 12:00:00 +0530
