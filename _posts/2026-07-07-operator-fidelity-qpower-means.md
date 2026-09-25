@@ -3,6 +3,7 @@ title: "On the Incomparability of Operator Fidelity and <span class=\"mono\">Q</
 description: "A short note on matrix means in the near order."
 date: 2026-07-07
 tags: [Math, Matrix Analysis]
+align: justify
 preview: "A short note showing that operator fidelity and the power means of two positive matrices are incomparable in the near order, for any choice of exponent."
 ---
 Let $\mathbb{P}$ and $\mathbb{P}_0$ be the cones of $n\times n$ positive definite and positive semidefinite matrices over $\mathbb{C}$, respectively. We define

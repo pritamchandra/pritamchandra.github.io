@@ -3789,3 +3789,30 @@ re-tuned (smaller, no faux-bold); a dead font `@import` discovered.**
    URL 404 because that post's date was changed to 2025 and its URL is
    date-based, `/blog/2025/06/14/hold-you-somehow/` — a reminder that a
    post's address changes when its date changes.)
+
+**UPDATE — every prose post and prose collection is now justified;
+poems/lyrics/verse collections are not.** Done by setting `align:
+justify` explicitly in the front matter of each prose file rather than
+changing the site default, so the existing per-post opt-in stays the one
+mechanism (and a poem can't be justified by accident). Classified by
+actual content (verse-block counts vs prose paragraphs): justified —
+posts `an-average-monday-of-departure`, `the-anthropic-principle`,
+`evident-unto-itself`, `apologetics-of-human-freedom`,
+`you-can-call-me-abraham`, `rose-leaves` (already), and the four math
+posts (`counting-special-basis`, RVSD, Klein, operator-fidelity — math
+exposition is prose, and justified LaTeX-style text with inline math
+looked fine on inspection; drop the line from any of them to undo);
+collections `homilies`, `once-upon-a-time`, `from-the-journal` (already).
+Left-aligned — `there-may-be-rain`, `sailor-take-me`, `hold-you-somehow`,
+and the collections `confession`, `elegy` (Elegiac), `hope`,
+`translations-of-lyrics`. Note that "Once upon a time" mixes prose with
+one poem ("The Middle"): the collection is justified, and the poem stays
+left because alignment CSS never touches `<p class="verse">`. Verified
+with a scripted pass over every post/collection reachable from the blog
+home (computed `text-align` of body paragraphs and of verse blocks in
+each): 13 prose pages all `justify`, 7 verse pages all `start`, the
+poem inside Once upon a time `start`. **Default for new posts is
+unchanged (left)** — the alternative, making justified the site-wide
+default with `align: left` as the opt-out, is a one-line CSS/template
+change if Pritam prefers it; EDITING-GUIDE.md's alignment paragraph now
+states the current situation and both ways to opt in/out.

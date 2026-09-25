@@ -3,6 +3,7 @@ title: "Evident unto Itself"
 description: "A testimony on estrangement, anxiety, and finding hope."
 date: 2024-10-24
 tags: [Testimony, Journal]
+align: justify
 preview: "A tiny part of why I am a Christian."
 ---
 I enjoy sitting by a road, even when I&rsquo;m alone. I don&rsquo;t like being alone in a room. Even if I try to be, my body eventually revolts. But by being by the road, I can be alone and still not be far from people. In the background there is the effervescence of a moving traffic, a moving city. And when I want I can gaze up and encounter an &ldquo;other&rdquo;. Perhaps, being isolated, in a literal sense, is a great fear for me.

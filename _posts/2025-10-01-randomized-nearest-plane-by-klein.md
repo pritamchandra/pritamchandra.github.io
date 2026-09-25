@@ -3,6 +3,7 @@ title: "Cryptographic Algorithms on Lattices: Randomized Nearest Plane by Klein"
 description: "Notes on Babai's nearest plane algorithm and Klein's randomized variant."
 date: 2025-10-01
 tags: [Math, PQC]
+align: justify
 preview: "Notes on Babai's deterministic nearest-plane algorithm for the Closest Vector Problem, and Klein's randomized variant built on a discrete Gaussian sampler over the integers."
 ---
 ## 1. Randomized Nearest Plane by Klein

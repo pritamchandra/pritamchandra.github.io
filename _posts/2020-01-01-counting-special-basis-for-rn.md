@@ -3,6 +3,7 @@ title: 'On Counting Special Basis for $\mathbb{R}^n$'
 description: "Counting the basis sets of R^n whose vectors have only 0/1 coordinates."
 date: 2020-01-01
 tags: [Math]
+align: justify
 preview: 'Counting the number of basis sets of $\mathbb{R}^3$ whose involved vectors have only 0 or 1 coordinates.'
 ---
 We are interested in counting the number of basis sets (un-ordered) of $\mathbb{R}^n$ for which the coordinates of the involved vectors are either $0$s or $1$s. In this entry we will count (and prove) the same for $\mathbb{R}^3$ in two ways, and speculate a probable path to extend the count for the general case. The intent of this entry is to motivate a solution for the general case.

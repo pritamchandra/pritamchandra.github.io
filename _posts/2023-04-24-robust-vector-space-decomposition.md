@@ -3,6 +3,7 @@ title: "Exposition on Robust Vector Space Decomposition (RVSD)"
 description: "A walkthrough of the RVSD algorithm and its applications to learning arithmetic formulas and unsupervised learning."
 date: 2023-04-24
 tags: [Math, CS, Video, Exposition, ML]
+align: justify
 preview: "A brief explainer of Robust Vector Space Decomposition (RVSD), a meta-algorithm for unsupervised learning tasks like subspace clustering and mixtures of Gaussians, along with a short video lecture."
 ---
 The following is a brief explainer to the algorithm *Robust Vector Space Decomposition (RVSD)* introduced in our ITCS 2024 [paper](https://arxiv.org/abs/2311.07284). RVSD in its generality is a powerful meta-algorithm that is able to tackle various important unsupervised learning tasks, such as subspace clustering, mixtures of Gaussians, and tensor decompositions. The specifics of these reductions are discussed in detail in the paper. For subspace clustering we provide a complete smoothed analysis of this algorithm.

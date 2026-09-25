@@ -3,6 +3,7 @@ title: "An Average Monday of Departure"
 description: "A short piece of prose."
 date: 2018-01-01
 tags: [Prose, Realism]
+align: justify
 preview: "Housewives of Indian small towns."
 ---
 I don&rsquo;t ask you to stay back when you leave on Monday mornings. But my insides plead. I cannot cry anymore when you leave because that&rsquo;s improper for an adult. I cannot kiss you goodbye because what would our daughter think. I just watch you leave. I watch you not look back. And then I rush back with an empty heart to hold the 6 AM water.

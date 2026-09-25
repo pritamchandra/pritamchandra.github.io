@@ -341,8 +341,18 @@ It only changes running text — paragraphs, bullet/numbered lists, and the
 text inside theorem/proof boxes — and deliberately leaves poems/lyrics
 (`<p class="verse">`), chord lines, blockquotes, equations, captions, and
 the title/date/tags header alone, since those have their own alignment.
-This is per-post, one post at a time: "Rose Leaves" is a current example
-(`align: justify`). **It works on collections too** — put the same line in the
+This is per-post, one post at a time, and it's your choice each time.
+**Right now every prose post and prose collection is justified** (all the
+essays, stories, math posts, Homilies, Once upon a time, From the
+journal), while poems, song lyrics, and the verse collections (Confession,
+Elegiac, Hope, Translations) are left-aligned. **A new post is left-aligned
+unless you add `align: justify`** — so a new prose piece you *don't* want
+justified needs nothing at all (or write `align: left` to be explicit),
+and to turn justification off for an existing one, delete its `align:` line
+or change it to `align: left`. Poem and lyric blocks
+(`<p class="verse">`) are never justified even on a justified page — that
+is what keeps a poem safe if it sits inside a mostly-prose piece (like
+"The Middle" in Once upon a time). **It works on collections too** — put the same line in the
 collection's own `blog/<slug>/index.md` and it applies to every piece in
 that book (e.g. "From the journal" is justified this way). For a book it
 affects the pieces' running text only, not the collection's note, the

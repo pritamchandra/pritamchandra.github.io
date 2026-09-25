@@ -3,6 +3,7 @@ title: "You Can Call Me Abraham"
 description: "On names, idolatry, and Epaphroditus."
 date: 2025-06-01
 tags: [Faith, Theological-fiction]
+align: justify
 preview: "Christians with pagan names?"
 ---
 On a bright October afternoon convert Hari and his friend Jess sit at the solitary outdoor restaurant in their university. Over the last few days the place has become a regular for them. Conversations outdoors are good given the chill of early winter sits so well with the Indian sun.

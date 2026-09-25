@@ -3,6 +3,7 @@ title: "The Anthropic Principle"
 description: "A short piece of prose."
 date: 2023-01-14
 tags: [Prose, Realism]
+align: justify
 preview: "Since we are what we are, it is what it is."
 ---
 It is a strange thing that all these years have passed. The nervousness is intact. I have a vague memory of telling people that I wished to work part time as a construction laborer. This was when I had a big job. Though I lied a lot then, this was true.
