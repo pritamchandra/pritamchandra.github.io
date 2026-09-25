@@ -137,6 +137,8 @@ behalf when you ask for help with a change directly.
 ├── assets/
 │   ├── img/                → author photo goes here
 │   ├── audio/               → song recordings go here
+│   ├── fonts/               → the site's bundled typeface (Source Serif 4);
+│   │                            leave alone — it's what makes text look the same everywhere
 │   └── pritam-chandra-cv.pdf → your CV, once you have one to upload
 ├── _layouts/ and _includes/ → the actual templates (the "how it looks" —
 │                               you shouldn't need to open these)

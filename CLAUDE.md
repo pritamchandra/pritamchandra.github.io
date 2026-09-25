@@ -3725,3 +3725,67 @@ and book titles (28px/600) untouched.
 KaTeX is) would make the whole site's typography deterministic instead
 of "whatever serif the visitor's OS falls back to" — visitors on other
 platforms get Georgia/Times, not Iowan. Not done; flagged.
+
+**UPDATE — Source Serif 4 is now bundled with the site; small caps
+re-tuned (smaller, no faux-bold); a dead font `@import` discovered.**
+
+1. **What was really wrong with the fonts.** `main.css` had an
+   `@import url('https://fonts.googleapis.com/...')` (Source Serif 4,
+   IBM Plex Sans, IBM Plex Mono) sitting *after* the inlined KaTeX
+   `@font-face` rules. `@import` is only valid before every other rule,
+   so browsers silently dropped it: verified on the live site
+   (`document.styleSheets` for `main.css` contains zero `CSSImportRule`s
+   and `document.fonts` holds only the twelve KaTeX faces). So none of
+   the three families ever loaded for anyone; the site rendered on
+   system fallbacks — Iowan Old Style on macOS, Georgia/Times elsewhere
+   for the serif, Helvetica Neue/Arial for the sans. This is the true
+   root of every "looks different on my phone" font symptom in this file
+   (see the blockquote-oblique UPDATE), and it means earlier debugging
+   notes that say "Source Serif 4 isn't installed" describe the
+   *consequence*; the cause was the inert import.
+
+2. **Fix: self-hosted, unmodified Adobe variable fonts.**
+   `assets/fonts/SourceSerif4Variable-Roman.ttf.woff2` (429KB) and
+   `...-Italic.ttf.woff2` (347KB) plus `SourceSerif4-LICENSE.md` (SIL OFL
+   1.1), taken from Adobe's official `source-serif-4.005_WOFF2.zip`
+   release (github.com/adobe-fonts/source-serif, tag 4.005R). Chosen
+   deliberately: (a) **unmodified/no subsetting** — the license reserves
+   the name "Source", so a subset would count as a modified version;
+   (b) **TrueType-flavored** variable files rather than the CFF2 `.otf`
+   ones, for wider browser support; (c) full OpenType features intact —
+   the Roman file was confirmed to contain `smcp`/`c2sc`, i.e. genuine
+   small caps, which Google's hosted copies would have stripped. Axes:
+   weight 200–900, optical size 8–60 (browser default
+   `font-optical-sizing: auto` picks the right cut per size).
+   `main.css` now declares two `@font-face` rules (family `"Source Serif
+   4"`, roman + italic, `font-weight: 200 900`, `font-display: swap`)
+   where the dead `@import` used to be (with a comment explaining the
+   history), and `default.html` preloads the Roman file
+   (`<link rel="preload" ... as="font" type="font/woff2" crossorigin>` —
+   `crossorigin` is required even same-origin for font preloads) to cut
+   the swap flash. `--font-serif` already listed `'Source Serif 4'`
+   first, so nothing else changed. Cost: ~776KB of fonts, fetched once
+   then cached. **Not done, by scope:** IBM Plex Sans/Mono are *still not
+   loaded* (they never were) — `--font-sans`/`--font-mono` still resolve
+   to Helvetica Neue/Arial and Courier New; bundling them would visibly
+   change every nav/tag/sidebar label, so it was left as an explicit
+   follow-up choice.
+
+3. **Small caps re-tuned.** With the real font, its own small-cap glyphs
+   are crisp at regular weight, so the `-webkit-text-stroke` hairline
+   added last round (which was calibrated against the Iowan fallback and
+   is what made titles "too bold" once the font changed) was removed.
+   Sizes moved to a middle ground: chapter titles `calc(var(--step-3) *
+   1.07)` ≈ 30px (was 34.4), chapterless-book piece titles
+   `calc(var(--step-2) * 1.07)` ≈ 23.1px (was 28). Verified in the
+   browser with a side-by-side comparison page (sizes 22–34px × strokes
+   0/.006/.01/.015em) and in place on Homilies and From the journal.
+
+4. **Regression checks after the font swap** (font metrics changed
+   sitewide): loaded all of `/`, `/blog/`, two math posts, a lyrics
+   post, Translations, Homilies, From the journal, `/reading/`, and a
+   tag page at 375px — zero horizontal overflow on any, both font faces
+   `loaded` on each. (One false alarm during testing: a hold-you-somehow
+   URL 404 because that post's date was changed to 2025 and its URL is
+   date-based, `/blog/2025/06/14/hold-you-somehow/` — a reminder that a
+   post's address changes when its date changes.)

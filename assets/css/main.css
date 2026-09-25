@@ -13,8 +13,32 @@
    See CLAUDE.md for full documentation of every decision made here.
    ========================================================================== */
 
-/* ---- Fonts (Google Fonts — self-host these three families in production) */
-@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+/* ---- Fonts ---------------------------------------------------------------
+   Source Serif 4 (Adobe, SIL Open Font License; license copy in
+   assets/fonts/) is self-hosted, like KaTeX's fonts, so the site's serif
+   is the same on every device instead of whatever the OS falls back to.
+   These are Adobe's official variable fonts, deliberately UNMODIFIED (no
+   subsetting): the license reserves the name "Source", and unmodified
+   files keep every OpenType feature, including real small caps (smcp).
+   Weight axis 200-900, optical-size axis 8-60 (font-optical-sizing:auto,
+   the browser default, picks the right cut for each size).
+
+   History note: this spot used to hold an @import of Source Serif 4 and
+   the two IBM Plex families from Google Fonts. It never did anything:
+   @import is only valid before every other rule, and the KaTeX @font-face
+   rules above it come first, so browsers silently ignored it. IBM Plex
+   Sans/Mono are therefore still NOT loaded — --font-sans and --font-mono
+   fall back to Helvetica Neue/Arial and Courier New, as they always did. */
+@font-face{
+  font-family: "Source Serif 4";
+  src: url("../fonts/SourceSerif4Variable-Roman.ttf.woff2") format("woff2");
+  font-weight: 200 900; font-style: normal; font-display: swap;
+}
+@font-face{
+  font-family: "Source Serif 4";
+  src: url("../fonts/SourceSerif4Variable-Italic.ttf.woff2") format("woff2");
+  font-weight: 200 900; font-style: italic; font-display: swap;
+}
 
 :root{
   /* --- typography --- */
@@ -1090,20 +1114,14 @@ img.portrait{ object-fit: cover; display: block; }
   display:block; font-family: var(--font-sans); font-size: .82rem; letter-spacing:.1em;
   color: var(--text-faint); margin-bottom: .3em;
 }
-/* Small-caps titles (chapter titles, and pieces' titles in chapterless
-   books) carry a hairline text-stroke (.015em, scaling with the title's
-   size). Why: the site sets -webkit-font-smoothing: antialiased on body
-   (grayscale smoothing, which on macOS also turns OFF the system's
-   stem-darkening), and small-caps letterforms are wide and light, so at
-   title sizes they read visibly thinner/fainter than the body text
-   beside them even though they're the same font at the same nominal
-   weight. The stroke restores the missing stem weight without going
-   bold. The site's serif here is really Iowan Old Style on macOS
-   ("Source Serif 4" isn't installed and isn't self-hosted). */
+/* Small-caps titles: chapter titles, and pieces' titles in chapterless
+   books. Real small caps (the bundled Source Serif 4's own smcp glyphs)
+   at regular weight — no faux bolding needed now that the font is
+   self-hosted and unmodified. Sizes sit between the earlier "too small"
+   and "too large" rounds. */
 .chapter-head h2{
-  margin: 0; padding: 0; border: none; font-size: var(--step-4);
+  margin: 0; padding: 0; border: none; font-size: calc(var(--step-3) * 1.07);
   font-weight: 400; font-variant-caps: small-caps; letter-spacing: .02em;
-  -webkit-text-stroke: .015em currentColor;
 }
 /* Optional short framing line under a chapter heading, before its first
    subchapter — demonstrates that chapter-level content is a real,
@@ -1128,9 +1146,8 @@ img.portrait{ object-fit: cover; display: block; }
    as they were) — so it gets the same small-caps/regular-weight title
    treatment as .chapter-head h2 above, at this heading's own size step. */
 .subchapter-head h2{
-  font-size: var(--step-3);
+  font-size: calc(var(--step-2) * 1.07);
   font-weight: 400; font-variant-caps: small-caps; letter-spacing: .02em;
-  -webkit-text-stroke: .015em currentColor;
 }
 /* Optional per-entry subtitle (sub.subtitle in front matter) — sits
    between the title and the date, e.g. a homily's chapter number as the
