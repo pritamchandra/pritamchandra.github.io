@@ -3658,3 +3658,21 @@ step; page titles back to the plain serif; `align:` now works on books;
    change (`status: null`, `year: 2026`) was correct locally but had
    not been committed/pushed, so the live site still showed the old
    `reading` state. Pushed with this batch.
+
+**UPDATE — small caps reverted to the browser-synthesized version (the
+LM Roman Caps font is gone), at the larger sizes.** Pritam found the
+Latin Modern Caps face too small and not crisp on screen, and asked to
+go back to the original small caps but keep the *size* change. So:
+`.chapter-head h2` is `--step-3` (28px) and `.subchapter-head h2` (a
+chapterless book's piece titles) is `--step-2` (21.6px) — the sizes from
+before the previous round's step-down — with `font-weight: 400;
+font-variant-caps: small-caps; letter-spacing: .02em` on the site's
+normal serif (the same treatment as the first small-caps version, minus
+its 1.15× size bump). The `@font-face`, the `--font-caps` token, and
+`assets/fonts/` (font + GUST license) were removed; they remain in git
+history (commit 33cf1bf) if that face is ever wanted again — the
+source was `lmromancaps10-regular.otf` in the local MacTeX tree,
+converted with fontTools. Page titles (28px, 400, plain serif) and book
+titles (28px, 600) were left exactly as they were. Lesson: a font that
+looks right in a LaTeX PDF at print resolution can look thin and soft at
+web sizes — LM Caps is a light, print-optimized design.
