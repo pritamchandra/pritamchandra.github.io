@@ -3676,3 +3676,52 @@ converted with fontTools. Page titles (28px, 400, plain serif) and book
 titles (28px, 600) were left exactly as they were. Lesson: a font that
 looks right in a LaTeX PDF at print resolution can look thin and soft at
 web sizes — LM Caps is a light, print-optimized design.
+
+**UPDATE — small-caps clarity debugged (thin strokes, not a wrong font),
+and sizes bumped one more step.**
+
+The last push *was* live (live CSS confirmed); GitHub Pages serves CSS
+with a ~10-minute cache, so an early look can show the previous file.
+
+**Root causes found for "the small caps look obscure":**
+1. **The site's serif is not Source Serif 4 on this Mac — it is Iowan
+   Old Style.** "Source Serif 4" isn't installed and isn't self-hosted
+   (only KaTeX's fonts are vendored), so `--font-serif` silently falls
+   through to the next installed family. Confirmed with canvas
+   `measureText` widths per candidate family (Iowan Old Style's width
+   matched the element's rendered width exactly; Source Serif 4 measured
+   as "not installed"). Everything on the site, body text included, is
+   therefore Iowan on macOS. Iowan has genuine `smcp` glyphs (small-caps
+   width was ~99% of full-caps width, i.e. real drawn small caps, not
+   scaled capitals), so the earlier "synthesized small caps look thin"
+   theory was wrong for this machine.
+2. **`body{ -webkit-font-smoothing: antialiased }`** — grayscale smoothing
+   also switches off macOS's stem-darkening, so *all* text is a touch
+   thinner than macOS default; ordinary 16px lowercase tolerates that,
+   but wide, light small-cap letterforms at title size read visibly
+   fainter than the text next to them. A side-by-side test page (injected
+   via the browser tool) showed `-webkit-font-smoothing: auto` making the
+   same titles bold-looking, and the current rendering clearly lighter
+   than plain body text.
+
+**Fix:** `-webkit-text-stroke: .015em currentColor` on the two
+small-caps title rules (`.chapter-head h2`, `.subchapter-head h2`) — a
+hairline that scales with the title's size (0.52px at 34.4px) and
+restores the missing weight without going bold; no change to the global
+smoothing rule (that would re-weight every piece of text on the site).
+The font itself is exactly the "first version" one (Iowan small caps,
+weight 400, letter-spacing .02em) — the same CSS as the very first
+small-caps round, which Pritam called fine except too big.
+
+**Sizes**, per "one more size": chapter titles `--step-3` → `--step-4`
+(34.4px), chapterless-book piece titles `--step-2` → `--step-3` (28px).
+Note these are now *larger* than the first round (32.2px / 24.84px),
+which Pritam had called too big — he was reacting to how the thinner
+rendering looked at various sizes, so if the new sizes feel large the
+knob is one `var(--step-N)` per rule. Page titles (28px/400/plain serif)
+and book titles (28px/600) untouched.
+
+**Open item worth remembering:** self-hosting Source Serif 4 (as
+KaTeX is) would make the whole site's typography deterministic instead
+of "whatever serif the visitor's OS falls back to" — visitors on other
+platforms get Georgia/Times, not Iowan. Not done; flagged.

@@ -1090,9 +1090,20 @@ img.portrait{ object-fit: cover; display: block; }
   display:block; font-family: var(--font-sans); font-size: .82rem; letter-spacing:.1em;
   color: var(--text-faint); margin-bottom: .3em;
 }
+/* Small-caps titles (chapter titles, and pieces' titles in chapterless
+   books) carry a hairline text-stroke (.015em, scaling with the title's
+   size). Why: the site sets -webkit-font-smoothing: antialiased on body
+   (grayscale smoothing, which on macOS also turns OFF the system's
+   stem-darkening), and small-caps letterforms are wide and light, so at
+   title sizes they read visibly thinner/fainter than the body text
+   beside them even though they're the same font at the same nominal
+   weight. The stroke restores the missing stem weight without going
+   bold. The site's serif here is really Iowan Old Style on macOS
+   ("Source Serif 4" isn't installed and isn't self-hosted). */
 .chapter-head h2{
-  margin: 0; padding: 0; border: none; font-size: var(--step-3);
+  margin: 0; padding: 0; border: none; font-size: var(--step-4);
   font-weight: 400; font-variant-caps: small-caps; letter-spacing: .02em;
+  -webkit-text-stroke: .015em currentColor;
 }
 /* Optional short framing line under a chapter heading, before its first
    subchapter — demonstrates that chapter-level content is a real,
@@ -1117,8 +1128,9 @@ img.portrait{ object-fit: cover; display: block; }
    as they were) — so it gets the same small-caps/regular-weight title
    treatment as .chapter-head h2 above, at this heading's own size step. */
 .subchapter-head h2{
-  font-size: var(--step-2);
+  font-size: var(--step-3);
   font-weight: 400; font-variant-caps: small-caps; letter-spacing: .02em;
+  -webkit-text-stroke: .015em currentColor;
 }
 /* Optional per-entry subtitle (sub.subtitle in front matter) — sits
    between the title and the date, e.g. a homily's chapter number as the
