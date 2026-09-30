@@ -10,5 +10,5 @@ align: justify
 date: 2025-05-05 12:00:00 +0530
 note: "Verse citations are links — hover (tap, on a phone) to see the verse in NIV."
 
-preview: "Some commentaries (with fear and trembling) on some chapters of the Bible."
+preview: "Commentaries (with fear and trembling) on some chapters of the Bible."
 ---

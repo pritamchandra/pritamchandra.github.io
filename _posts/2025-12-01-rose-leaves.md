@@ -4,7 +4,7 @@ description:
 date: 2025-12-01
 tags: [Prose, Fiction]
 align: justify
-preview: "Those who can&rsquo;t be helped should be left alone?"
+preview: "Should those who can&rsquo;t be helped be left to themselves?"
 ---
 
 As his last resort he pleaded *Rose, if not for him, come for me*. Her eyes turned moist. The sorrow that spread across her face drew even him into her gloom. The sorrow spoke of a defeat that was long resisted. It was clear that Rose would not make this long-awaited journey to the distant town where Prince had arrived.

@@ -9,5 +9,5 @@ tags: [Prose, Fiction, Poetry]
 align: justify
 date: 2018-12-01 12:00:00 +0530
 note:
-preview: "Short stories, prose pieces and poems composed when I was a teenager."
+preview: "Some short stories, prose and poems composed when I was a teenager."
 ---

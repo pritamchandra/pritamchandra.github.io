@@ -8,5 +8,5 @@ subtitle:
 tags: [Poetry, Faith]
 date: 2026-05-03 12:00:00 +0530
 note: 
-preview: "Collection of poems about man&rsquo;s unceasing interactions with sin."
+preview: "A collection of poems about man&rsquo;s unceasing interactions with sin."
 ---

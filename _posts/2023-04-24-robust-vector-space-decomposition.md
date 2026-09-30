@@ -14,7 +14,7 @@ The following is a brief explainer to the algorithm *Robust Vector Space Decompo
   </div>
 </figure>
 
-Below is a full walkthrough of the talk, following its slides section by section.
+The content of the slides are compiled and presented below.
 
 ## 1. Robust Vector Space Decomposition (RVSD)
 

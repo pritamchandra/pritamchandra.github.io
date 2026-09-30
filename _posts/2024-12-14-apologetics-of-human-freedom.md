@@ -4,7 +4,7 @@ description: "On the problem of evil and the place of human freedom in the answe
 date: 2024-12-14
 tags: [OpEd, Faith]
 align: justify
-preview: "The problem of evil, and why evangelicals should reclaim human freedom as part of the answer rather than defaulting to only an appeal to God's glory."
+preview: "The problem of evil and why evangelicals should reclaim human freedom as part of the answer."
 ---
 Underneath all conversations around theism against atheism lies still the problem of evil. Be it philosophers or laymen, from early centuries to contemporary ones, people still reject God primarily because they cannot reconcile a benevolent, omnipotent creator with our collectively painful and terrible existence.
 

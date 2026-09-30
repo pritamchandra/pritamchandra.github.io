@@ -8,5 +8,5 @@ subtitle: "songs, translated"
 tags: [Translation, Poetry]
 date: 2026-09-05 12:00:00 +0530
 note: 
-preview: "Attempts to capture the quirks of a native language, the depth of their simplicity, in dynamic translations."
+preview: "Attempts to capture the quirks of the folk tongues and the depth of their simplicity in translations."
 ---
