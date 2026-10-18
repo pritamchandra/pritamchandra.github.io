@@ -3816,3 +3816,42 @@ unchanged (left)** — the alternative, making justified the site-wide
 default with `align: left` as the opt-out, is a one-line CSS/template
 change if Pritam prefers it; EDITING-GUIDE.md's alignment paragraph now
 states the current situation and both ways to opt in/out.
+
+**UPDATE — "Paul Freud" didn't appear live (timezone), posts got an
+optional `note:`, reading-list order, Wicked Seed gloss cleared.**
+
+1. **Why a post dated "today" can be missing from the live site.**
+   `_posts/2026-10-19-paul-freud.md` built locally but was a 404 on
+   GitHub Pages. Jekyll skips posts dated in the future, and a date-only
+   front-matter date means midnight; GitHub's build servers run on UTC
+   while Pritam is on IST (UTC+5:30), so for the first 5.5 hours of his
+   "today" the post was still future-dated on the server. Fixed
+   permanently with `timezone: Asia/Kolkata` in `_config.yml`, which makes
+   Jekyll read dates in IST. Verified: a build forced to `TZ=UTC` now
+   includes the post, and the set of existing post URLs is identical
+   before/after the setting (date-only posts keep the same calendar date,
+   `+0530` book dates are unaffected). Rule of thumb for the future: if a
+   just-written post isn't live, check its date against UTC before
+   debugging anything else.
+
+2. **New optional `note:` on posts** (`_layouts/post.html`): `{% if
+   page.note %}<div class="book-note">{{ page.note | markdownify
+   }}</div>{% endif %}` right after the header, reusing the collection
+   note's markup and `.book-note` styling (muted, with a rule below), so
+   it's one consistent component. Requested because Paul Freud's
+   framing paragraph lived in `description:`, which only feeds the
+   `<meta>` tag and never renders; Pritam suggested "epigraph", but an
+   epigraph is a centered quotation block (books only), while an
+   editorial intro is exactly what `note` already means on collections.
+   The text moved to `note:` (block scalar, so the curly-quote entities
+   and apostrophes need no escaping), and `description:` became one plain
+   sentence. Documented in EDITING-GUIDE.md §3. Alignment CSS only
+   targets direct-child paragraphs of `<main>`, so the note stays
+   left-aligned on justified posts (a `<div>`, not a `<p>`).
+
+3. **Reading list order**: Till We Have Faces `order: 10`, Phantastes `9`,
+   Stoner `8` (list sorts highest first; Stoner keeps `status: reading`
+   but sits third, per Pritam). Pushed earlier as f7d01db.
+
+4. `_books/confession-1-wicked-seed.md`: Pritam cleared the placeholder
+   `gloss: "trial text here"` (now blank), so no gloss line renders.

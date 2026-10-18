@@ -358,6 +358,23 @@ that book (e.g. "From the journal" is justified this way). For a book it
 affects the pieces' running text only, not the collection's note, the
 poem/lyric blocks, or the small "gloss" line under a piece.
 
+**An introductory note under the title.** To show a short paragraph (or
+a few) between a post's title block and its text — the way a collection's
+`note:` appears — add a `note:` field to the post's front matter. Use the
+`|` block form so quotation marks and apostrophes need no escaping:
+
+```yaml
+note: |
+  This piece came out of a writing activity. The prompt was "...", and
+  below is my attempt.
+```
+
+It supports normal Markdown (`*italics*`, `**bold**`, links, blank line =
+new paragraph) and is shown in the same quiet gray style as a collection's
+note. Leave it out for no note. Don't confuse it with `description:`, which
+is only the invisible text search engines and link previews show — it never
+appears on the page itself, and should stay one plain sentence.
+
 **A thumbnail for the blog home's listing** (optional, like Substack's
 small image beside each entry). Save the image in `assets/img/`, then add
 one line to the post's front matter:

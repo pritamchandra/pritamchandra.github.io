@@ -12,6 +12,8 @@ layout: default
       <hr class="rule" style="margin-top:1em;">
     </header>
 
+    {% if page.note %}<div class="book-note">{{ page.note | markdownify }}</div>{% endif %}
+
     {{ content }}
 
     {% include footer.html %}

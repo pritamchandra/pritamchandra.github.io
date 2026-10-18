@@ -13,6 +13,11 @@ email: pritamchandra18@gmail.com
 url: "https://pritamchandra.github.io"
 baseurl: ""
 
+# Dates in front matter are read in India time. GitHub's build servers run
+# on UTC, so without this a post dated "today" is treated as future-dated
+# (and silently skipped) until midnight UTC, i.e. 5:30am IST.
+timezone: Asia/Kolkata
+
 markdown: kramdown
 kramdown:
   input: GFM
