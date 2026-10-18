@@ -5,5 +5,5 @@ cover: "https://covers.openlibrary.org/b/id/14358814-M.jpg"
 goodreads: "https://www.goodreads.com/book/show/541923.Phantastes"
 year: 2026
 status: null
-order: 8
+order: 9
 ---
