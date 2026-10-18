@@ -2,7 +2,7 @@
 title: "Paul Freud"
 description: "A music director recounts the bizarre fall-from-glory of his nemesis."
 note: |
-  This piece came out of a writing activity my friends and I did. Our prompt was &ldquo;You&rsquo;re a music producer in the studio and a drugged out mega star enters with his entourage&rdquo;, and we had to write a 1500 word story in about 2 days. Two of my friends wrote really brilliant pieces with very interesting and very different interpretations of the prompt. Below is my attempt.
+  This piece came out of a writing activity my friends and I did. Our prompt was *you&rsquo;re a music producer in the studio and a drugged out mega star enters with his entourage*. We had about two days to write approximately 1500 words. Two of my friends who participated wrote very interesting pieces with very different interpretations of the prompt. Below is my attempt.
 date: 2026-10-19
 tags: [Fiction, Theological-fiction, Faith, Prose]
 align: justify
