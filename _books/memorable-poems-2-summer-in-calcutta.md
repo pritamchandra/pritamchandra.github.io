@@ -7,6 +7,6 @@ title: "Summer in Calcutta"
 subtitle: "Kamala Das"
 slug: 2
 epigraph: null
-gloss: "Kamala Das, <em>Summer in Calcutta</em> (Delhi: Everest Press, 1965)."
-# poem text still to be supplied (in copyright)
+gloss: "Kamala Das, <em>Summer in Calcutta</em> (Delhi: Everest Press, 1965). <a href=\"https://www.poemhunter.com/poem/summer-in-calcutta/\">Read it at PoemHunter</a>."
+# poem text not reproduced (in copyright); linked instead. Pasting it in later: see EDITING-GUIDE.md section 3 (verse blocks).
 ---

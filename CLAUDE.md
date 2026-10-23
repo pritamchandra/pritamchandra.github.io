@@ -3962,3 +3962,40 @@ retired, portfolio prose justified, and a toolchain mismatch found
 
 6. Also in this push: `ra-26.pdf` replaced again, and Pritam's further
    wording edit to `paul-freud.md`.
+
+**UPDATE — "Poems that have been memorable": ninth chapter added, and the
+seven in-copyright chapters now link to where each poem can be read.**
+
+Pritam supplied source pages for six poems (and then Rilke's "You who
+never arrived"). The poems' full text was **not** copied onto the site:
+Das, Miłosz, Kane, Novey, Nash and Abramson are in copyright (and Rilke's
+English translation almost certainly is, though his German original is
+public domain), so reproducing them from those pages was declined and
+each chapter instead carries its citation plus a "Read it at …" link in
+its `gloss:` (HTML-allowed field, rendered as `.chapter-gloss` under the
+chapter). Links are exactly the URLs Pritam gave: PoemHunter (Das), the
+Poetry Foundation (Miłosz), The Writer's Almanac (Kane), Daily Dose of
+Poetry (Novey), allpoetry (Nash and Rilke), *diode* (Abramson). Caveats
+recorded for the future: PoemHunter and allpoetry are aggregator sites
+that often host poems without permission (linking is Pritam's call; the
+publisher/magazine pages are the safer choice if better ones are found);
+the Writer's Almanac URL only works in the double-encoded form Pritam
+pasted (`index.php%3Fdate=2011%252F12%252F06.html`) — the clean
+`index.php?date=2011/12/06` form returned 403 to a script (likely bot
+blocking) — so it is used exactly as given; the Poetry Foundation and
+allpoetry URLs also 403 to scripts but are presumably fine in a browser.
+
+**Corrected title and citation for Kane**: the Writer's Almanac page
+shows the poem is "Used Book" (singular), from *Jazz Funeral* (Story
+Line Press, 2009), copyright line "© Story Line Press, 2009. Reprinted
+with permission." The chapter title was changed from "Used Books" and its
+file renamed to `memorable-poems-4-used-book.md`. This settles the
+title question flagged in the previous UPDATE. Other bibliographic
+detail taken from the linked pages only where actually shown: Abramson's
+poem is in *diode* vol. 6, no. 1 (no year shown on the page); Novey's and
+Nash's pages give no collection or year. Those, plus Rilke's translator
+(usually Stephen Mitchell's translation under this title — unconfirmed),
+remain `TODO` comments in the respective files. Chapter 9
+(`memorable-poems-9-you-who-never-arrived.md`, `order: 9`) is Rilke's.
+Verified in a Jekyll 3.10.0 build and in the browser: 9 chapters in order,
+no dates, each of the seven showing its citation and link.
