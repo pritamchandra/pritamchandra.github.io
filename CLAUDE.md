@@ -3855,3 +3855,110 @@ optional `note:`, reading-list order, Wicked Seed gloss cleared.**
 
 4. `_books/confession-1-wicked-seed.md`: Pritam cleared the placeholder
    `gloss: "trial text here"` (now blank), so no gloss line renders.
+
+**UPDATE — self-hosted video in "For Pippy", a new poetry book, one post
+retired, portfolio prose justified, and a toolchain mismatch found
+(local Jekyll was 4.3.4, GitHub's is 3.10.0).**
+
+1. **Local `jekyll` is no longer GitHub's Jekyll — this affects every
+   local verification.** `gem list jekyll` now shows both 4.3.4 and
+   3.10.0, and plain `jekyll` resolves to **4.3.4**. GitHub Pages
+   (`github-pages` gem 232) uses **3.10.0**. They differ in a way this
+   site depends on: Jekyll 4 gives a collection document with no `date:`
+   the build time as its date, so `{% if sub.date %}` is true for every
+   undated piece, the dated-first sort in `book.html`/`book-toc.html`
+   treats all of them as dated, and they come out newest-first (a new
+   8-poem book rendered 8→1, with an "Oct 2026" date under every piece).
+   Jekyll 3.10 leaves them undated and sorted by `order`, which is what
+   the live site does and what the templates were written for. This is
+   the *real* explanation of the "dev server quirk" noted in an earlier
+   UPDATE (it was never the dev server, it was a Jekyll 3-vs-4 split that
+   happened to show up only when previewing). **Rule: always build/serve
+   with `jekyll _3.10.0_ ...`** (the underscore syntax selects an
+   installed version); EDITING-GUIDE.md §7 now says so, since Pritam's
+   own preview would hit this too. Tried and rejected: a `Gemfile`
+   pinning `github-pages` — its mere presence makes every `jekyll` run in
+   the folder load GitHub's whole plugin/theme bundle and the build
+   fails (sass encoding error from `jekyll-theme-primer`); removed. Also
+   corrects this file's earlier claim that local tooling matched
+   GitHub's exactly: that was true when written (3.10.0 was the only
+   one installed) and stopped being true when 4.3.4 was installed.
+
+2. **"For Pippy" video** (`_books/from-the-journal-4-for-pippy.md`):
+   Pritam's `assets/pippy-auto.MOV` was an iPhone clip, HEVC (`hvc1`),
+   4s, stored 1080×1920 with a 90° rotation flag, two audio tracks (one
+   Apple spatial "APAC"). HEVC won't play in Firefox/some Chrome, and
+   rotation flags are inconsistently honored, so it was transcoded with
+   macOS's own `avconvert --preset Preset1920x1080` to H.264/AAC `.mp4`
+   with the rotation baked in (1920×1080, 16:9, 5.4MB, identity
+   transform), plus a poster JPEG grabbed at t=1s with AVFoundation.
+   Files: `assets/video/pippy.mp4`, `assets/video/pippy-poster.jpg`. The
+   original `.MOV` was moved to `for_later/Source-media/` (not `assets/`,
+   which would publish it as a 5MB unused download). Markup is
+   `<figure class="gallery-full"><video controls playsinline
+   preload="metadata" poster=...><source ...></video></figure>`, placed
+   right after the piece's first paragraph; the only CSS added is
+   `.gallery-full video{width:100%;height:auto;display:block;border:1px
+   solid var(--border);background:#000}` beside the existing image rule.
+   Verified: loads (`readyState 4`, H.264 reported "probably" playable),
+   640×360 in the desktop column, 310×175 at 375px, no horizontal page
+   overflow. Position (after paragraph 1, vs. the end) is a judgment
+   call; it's one block to move. Documented in EDITING-GUIDE.md §3 along
+   with the HEVC-vs-H.264 rule and the 100MB GitHub file limit.
+
+3. **Retired `2026-07-07-operator-fidelity-qpower-means.md`** ("On the
+   Incomparability of Operator Fidelity and Q-Power Means in the Near
+   Order") to `for_later/retired-posts/` (`git mv`). Nothing else linked
+   to it. It was the only user of the **Matrix Analysis** tag, so that
+   tag's page (`blog/tag/matrix-analysis/`) was deleted too, per the
+   standing "no dead tag pages" convention. (The portfolio's "matrix
+   analysis" in Interests is plain text, unaffected.)
+
+4. **New collection "Poems that have been memorable"**
+   (`blog/memorable-poems/`, `book_slug: memorable-poems`, tags
+   `[Poetry]`, preview = Pritam's exact sentence). Built as a
+   *chapterless* book — each poem is one top-level piece (the small-caps
+   `<h2>`, numbered 1–8 in the order Pritam gave, via `order:`), with the
+   poet as the piece's `subtitle:` and the bibliographic citation in
+   `gloss:` (rendered under the poem; HTML allowed, so `<em>` titles).
+   A chaptered book with one subchapter per chapter was rejected: it
+   would show every poem under a redundant "1.1 Chapter 1" sub-heading,
+   as Homilies does. No `date:` on any piece, so order comes purely from
+   `order:`. **Only two poems are reproduced, because only two are in the
+   public domain**: Crane's "In the desert" (1895; text checked against
+   Project Gutenberg's *The Black Riders*, eBook 40786 — flush left, no
+   indentation; the `--` there became a real em dash and quotes were
+   typed curly, per the verse-block rule) and Dickinson's "After great
+   pain a formal feeling comes" (text of the 1929 first printing, *Further
+   Poems of Emily Dickinson*, Little, Brown, poem 175, checked against
+   Wikisource's transcription of the page; flush left, no indentation;
+   its punctuation is the 1929 editors', which differs from the later
+   Johnson 341 / Franklin 372 texts — cited as such). The other six
+   (Das, Miłosz, Kane, Novey, Nash, Abramson) are in copyright, so they
+   are **empty chapters** (title + poet, plus a verified citation where
+   one was found), exactly as Pritam asked; each file carries a `#`
+   comment saying what is still needed. Citations I could verify and
+   included: Das, *Summer in Calcutta* (Everest Press, Delhi, 1965 — it
+   is the title poem of that collection); Miłosz "Encounter", trans.
+   Miłosz and Lillian Vallee, *The Collected Poems 1931–1987* (Ecco,
+   1988) — from search snippets, flagged for Pritam to confirm against
+   his edition. **Left blank rather than guessed:** Kane, Novey, Nash,
+   Abramson citations. **Title discrepancy flagged:** the only Julie Kane
+   poem found is "Used Book" (singular; a sonnet that won the 2007 Open
+   Poetry International Sonnet Competition), while Pritam's list says
+   "Used Books" — his wording was kept as the title pending his
+   confirmation. Indentation convention for when Pritam supplies poems:
+   verse blocks collapse leading spaces, so an indented line starts with
+   `&emsp;` per indent level (documented in EDITING-GUIDE.md §3, as used
+   in the Translations book).
+
+5. **Portfolio About + Teaching Experience paragraphs are justified**:
+   `.page-home #about > p, .page-home #teaching > p{ text-align: justify;
+   hyphens: auto }` in `main.css`. Interpreted "text description
+   sections" as those two prose sections; the publication/preprint/notes/
+   service entries are short one-line items (venue lines, descriptions)
+   and stay left. Verified computed `text-align` (all 5 paragraphs
+   `justify`; `.pub-venue` and service text `start`).
+
+6. Also in this push: `ra-26.pdf` replaced again, and Pritam's further
+   wording edit to `paul-freud.md`.

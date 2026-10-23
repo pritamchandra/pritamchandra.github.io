@@ -30,7 +30,7 @@ this guide walked you through. Save the file(s) like you would in any
 text editor.
 
 **Step 2 — preview locally (optional but recommended).** See §7 further
-down for the full instructions (`jekyll serve`, then open
+down for the full instructions (`jekyll _3.10.0_ serve`, then open
 `http://127.0.0.1:4000`) — this shows you the change exactly as it'll
 look live, *before* anyone else can see it, so you can catch a typo or a
 formatting mistake first. Skip this if you're confident about a small,
@@ -137,6 +137,7 @@ behalf when you ask for help with a change directly.
 ├── assets/
 │   ├── img/                → author photo goes here
 │   ├── audio/               → song recordings go here
+│   ├── video/               → your own video clips (as .mp4) go here
 │   ├── fonts/               → the site's bundled typeface (Source Serif 4);
 │   │                            leave alone — it's what makes text look the same everywhere
 │   └── pritam-chandra-cv.pdf → your CV, once you have one to upload
@@ -521,6 +522,18 @@ line two of the poem,
 a new stanza after a blank line.</p>
 ```
 
+**Indenting a line of verse** (many poems indent some lines — keep the
+poet's own indentation). Leading spaces typed in the block are ignored, so
+use the "em space" code `&emsp;` at the start of the line, one per level of
+indent (it's one em wide, roughly a capital M):
+
+```html
+<p class="verse">The first line, flush left,
+&emsp;an indented line,
+&emsp;&emsp;a doubly-indented line,
+back to the margin.</p>
+```
+
 For italic curly quotes/apostrophes and em-dashes inside a verse block,
 just type them directly (`'` `"` `—`) rather than typing straight quotes —
 unlike regular paragraph text, Markdown won't auto-convert them for you
@@ -579,6 +592,32 @@ Use `youtube-nocookie.com` (not the regular `youtube.com` embed URL) —
 it's YouTube's own privacy-friendlier embed domain, doesn't set tracking
 cookies until someone actually presses play. The video ID is the part
 after `watch?v=` in a normal YouTube URL.
+
+**If you want a video file of your own** (a short phone clip, say — an
+example is the dog video in "For Pippy" in "From the journal"), host it on
+the site itself instead of YouTube. Two rules make it play for everyone:
+
+1. **Convert it to H.264 `.mp4` first.** iPhone `.MOV` files are usually
+   HEVC, which Firefox and some Chrome setups can't play, and some browsers
+   mishandle a phone's "rotated" flag. On a Mac, in Terminal:
+   `avconvert --preset Preset1920x1080 --source clip.MOV --output clip.mp4`
+   (or just ask me to do it). Keep clips short — every visitor downloads
+   the file when they press play, and GitHub limits single files to 100 MB.
+2. **Put the `.mp4` in `assets/video/`**, plus (optionally) a still image
+   for the box before play, then paste:
+
+```html
+<figure class="gallery-full">
+  <video controls playsinline preload="metadata" poster="/assets/video/clip-poster.jpg">
+    <source src="/assets/video/clip.mp4" type="video/mp4">
+    Your browser can't play this video. <a href="/assets/video/clip.mp4">Download it here</a>.
+  </video>
+</figure>
+```
+
+It fills the width of the text column and keeps its proportions, so it
+looks right on both a wide screen and a phone. Keep the original `.MOV` in
+`for_later/` rather than `assets/`, or it gets published too.
 
 **If you want references (a numbered bibliography)**, write a plain
 numbered list at the end of your post, and link to each entry from the
@@ -993,11 +1032,21 @@ jekyll -v
 If that prints a version number, you're set. If not, ask for help
 installing Ruby + Jekyll (a one-time setup).
 
+**Always preview with `jekyll _3.10.0_ serve` (note the underscores), not
+plain `jekyll serve`.** More than one Jekyll is installed on this Mac, and
+plain `jekyll` now picks the newer 4.x one. GitHub Pages builds your live
+site with 3.10.0, and the two disagree on one thing that matters here: 4.x
+gives every piece that has no `date:` today's date, which shows a bogus
+date under it and throws a collection's ordering off (e.g. poems
+appearing 8-to-1 instead of 1-to-8) — but only on your own preview, never
+on the live site. Using `_3.10.0_` makes your preview match what will
+actually be published.
+
 To preview the site on your own computer before publishing:
 
 ```bash
 cd ~/path/to/this/folder
-jekyll serve
+jekyll _3.10.0_ serve
 ```
 
 Then open `http://127.0.0.1:4000` in your browser. Leave that terminal
@@ -1012,7 +1061,7 @@ so it listens for other devices, not just itself:
 
 ```bash
 cd ~/path/to/this/folder
-jekyll serve --host 0.0.0.0
+jekyll _3.10.0_ serve --host 0.0.0.0
 ```
 
 Then find your Mac's local network address — open a second Terminal tab
@@ -1027,7 +1076,7 @@ That prints something like `192.168.1.15`. On your phone's browser, go to
 printed). This address can change if your Mac reconnects to Wi-Fi or
 switches networks, so re-run the `ipconfig` command if the page stops
 loading on your phone after a while. Ctrl+C in the Terminal stops the
-server, same as the plain `jekyll serve` case above.
+server, same as the plain `jekyll _3.10.0_ serve` case above.
 
 ## 8. Publishing
 

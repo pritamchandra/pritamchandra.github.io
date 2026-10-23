@@ -769,6 +769,13 @@ html.sb-hidden .layout-2col > .col-content{
 .page-home .drawer a{
   text-decoration: none;
 }
+/* Portfolio's prose description sections (About, Teaching Experience)
+   are justified, like the prose posts. Scoped to these two sections'
+   paragraphs only — the publication/notes/service entries are short
+   one-line items and stay left-aligned. */
+.page-home #about > p, .page-home #teaching > p{
+  text-align: justify; hyphens: auto; -webkit-hyphens: auto;
+}
 .page-home .link-list a{
   border-bottom: none;
 }
@@ -1258,6 +1265,7 @@ sup[id^="fnref"]{ scroll-margin-top: 80px; }
 
 .gallery-full{ margin: 1.8em 0; }
 .gallery-full img, .gallery-full svg{ width: 100%; height: auto; display: block; border: 1px solid var(--border); }
+.gallery-full video{ width: 100%; height: auto; display: block; border: 1px solid var(--border); background: #000; }
 .gallery-full figcaption{ font-family: var(--font-sans); font-size: .78rem; color: var(--text-faint); margin-top: .5em; text-align: center; }
 
 .gallery-float-left, .gallery-float-right{ width: 42%; }
