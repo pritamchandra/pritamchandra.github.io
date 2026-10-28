@@ -1,0 +1,10 @@
+{% comment %}
+  Photo + name at the top of the side panel on small screens (below 1000px,
+  where the right sidebar's own photo is hidden, and always in the drawer).
+  Hidden by CSS at full desktop width. Used by home.html and drawer.html.
+{% endcomment %}
+{%- assign author_photo = site.static_files | where: "path", "/assets/img/author-photo.jpg" | first -%}
+<div class="side-id">
+  {% if author_photo %}<img class="portrait" src="{{ '/assets/img/author-photo.jpg' | relative_url }}" alt="Photograph of Pritam Chandra">{% endif %}
+  <p class="side-name">Pritam Chandra</p>
+</div>

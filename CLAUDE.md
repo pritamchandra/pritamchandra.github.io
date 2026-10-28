@@ -4021,3 +4021,43 @@ Experience is prose and was not part of this. The other five tried
 options (year headings, year pill above title, flush-right year, and
 boxed-tag versions of the dateline and flush-right) are not built; they
 only existed as private artifacts.
+
+**UPDATE — homepage list refinements (numbering, grouped lecture notes,
+lighter inner rules, side-panel photo + name).** All designed as private
+artifact mock-ups first, then built here.
+
+1. **Publications and Preprints are numbered**, each list separately,
+   oldest = 1 and newest = highest, still shown newest first. The number
+   is `forloop.rindex` (the data files are newest-first), set inline at
+   the start of the title line in the title's own serif/semibold
+   (`.title-line` > `.pub-num` + `.pub-title`, `.pub-list.numbered`);
+   only the title is the link. Earlier tries (bracketed `[1]`, hanging in
+   the gutter, a separate number column) were rejected.
+2. **Lecture notes are grouped by institution.** `_data/notes.yml` is now
+   a list of `{institution, notes: [{year, title, link, in_progress}]}`
+   (the old flat list with a per-note `venue` is gone, and "Lecture Notes
+   for" was dropped from titles). Rendering: italic regular-weight group
+   heading (`.prose h3.note-inst`; plain `.note-inst` loses to `.prose
+   h3`'s bold), then a simple list: small grey sans year *before* the
+   title, a `*` after the title for `in_progress`. No legend text for the
+   `*` (explicitly removed at Pritam's request, so it is unexplained on
+   the page). A rule separates groups (`.note-group + .note-group`);
+   there is one institution today, so none shows.
+3. **Inner list rules are lighter**: `.pub-list li` bottom borders and the
+   group rule use `color-mix(in srgb, var(--border) 70%, transparent)`
+   (45% was too faint). The rule under each section title is unchanged.
+4. **Side-panel photo + name below 1000px and in the drawer**
+   (`_includes/side-id.html`, `.side-id`): the portrait and "Pritam
+   Chandra" head the merged left column (700-1000px) and the drawer;
+   Elsewhere stays at the bottom. At ≥1000px the photo is still in the
+   right sidebar and the left copy is hidden. This reverses the earlier
+   "photo only appears in the 3-column layout" rule for the home page;
+   the right sidebar's own `.portrait` is still hidden below 1000px so
+   the photo never appears twice. As with every sidebar item, there are
+   two copies (home.html's `.col-left` and drawer.html) via one include.
+5. **The visible header (name, email line, rule) was removed from the
+   home page** at Pritam's request. An `<h1 class="visually-hidden">`
+   keeps the one-h1-per-page rule (§11) for screen readers/SEO. The email
+   still appears as a link in the About text. If the header is ever
+   wanted back, restore the `<header class="entry-head">` block in
+   `home.html` (§9 describes it) and delete the hidden h1.

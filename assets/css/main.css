@@ -911,7 +911,9 @@ img.portrait{ object-fit: cover; display: block; }
    line up flush with the other text sections. */
 .prose .pub-list, .prose .service-list{ list-style:none; margin:0 0 .5em; padding:0; }
 .pub-list li{
-  margin-bottom: 1.05em; padding-bottom: 1.05em; border-bottom: 1px solid var(--border);
+  margin-bottom: 1.05em; padding-bottom: 1.05em;
+  /* lighter than the rule under a section title */
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
 }
 .pub-list li:last-child{ border-bottom: none; margin-bottom:0; padding-bottom:0; }
 .dl-year{ font-family: var(--font-sans); font-style: normal; font-size: .82rem; font-variant-numeric: tabular-nums; color: var(--text); }
@@ -921,6 +923,38 @@ img.portrait{ object-fit: cover; display: block; }
 .pub-authors strong{ color: var(--text); font-weight: 600; }
 .pub-venue{ font-size: .88rem; font-style: italic; color: var(--text-muted); margin: 0; }
 .pub-note{ font-size: .84rem; color: var(--text-faint); margin: .3em 0 0; }
+
+/* Numbered lists (publications, preprints): the number is part of the title
+   line, in the title's own serif and weight; newest entry has the highest
+   number (the data files are newest first, so the number is forloop.rindex). */
+.numbered .title-line{ margin-bottom:.3em; }
+.numbered .title-line .pub-title{ display:inline; margin:0; }
+.numbered .pub-num{ font-family: var(--font-serif); font-weight:600; font-size:inherit; color: var(--text); margin-right:.4em; }
+
+/* Lecture notes: grouped by institution (italic heading, simple list
+   beneath, light rule between groups). Year first in small grey sans, an
+   optional * after the title for "in progress". */
+.note-group + .note-group{ margin-top:1.05em; padding-top:1.05em; border-top:1px solid color-mix(in srgb, var(--border) 70%, transparent); }
+.prose h3.note-inst{ margin:0 0 .55em; font-family:var(--font-serif); font-size:1rem; font-weight:400; font-style:italic; color:var(--text-muted); line-height:1.4; }
+.note-inst em{ font-weight:400; }
+.prose ul.note-list{ list-style:none; margin:0; padding:0; }
+.note-list li{ margin:0 0 .4em; }
+.note-list li:last-child{ margin-bottom:0; }
+.note-list .pub-title{ display:inline; margin:0; }
+.note-star{ margin-left:.05em; color:var(--text); }
+.note-meta{ font-family:var(--font-sans); font-size:.82rem; color:var(--text-muted); font-variant-numeric:tabular-nums; margin-right:.7em; }
+
+/* Photo + name at the top of the side panel: only below 1000px (where the
+   right sidebar's own photo is hidden) and in the drawer. */
+.col-left .side-id{ display:none; }
+.drawer .side-id{ display:block; margin-bottom:1.6rem; }
+.side-id .portrait{ margin:0 0 .7rem; }
+.side-id img.portrait{ display:block; }
+.side-name{ margin:0; font-family: var(--font-serif); font-size:1.15rem; font-weight:600; line-height:1.3; color: var(--text); }
+@media (max-width: 1000px){ .col-left .side-id{ display:block; margin-bottom:1.6rem; } }
+
+/* Text for screen readers only (the home page's <h1>). */
+.visually-hidden{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
 
 .service-list li{ margin-bottom: .75em; }
 .service-list li:last-child{ margin-bottom: 0; }

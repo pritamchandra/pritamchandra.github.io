@@ -1,20 +1,21 @@
-# Select Notes, shown on the portfolio page.
-- year: 2026
-  title: "Lecture Notes for Probability and Statistics"
-  venue: "During Teaching Fellowship, Ashoka University"
-  link: "assets/notes/prob-stat-26.pdf"  # TODO: Pritam — add the notes link (PDF or page) when available
-
-- year: 2025
-  title: "Lecture Notes for Matrix Analysis"
-  venue: "During Teaching Fellowship, Ashoka University"
-  link: "assets/notes/lama-25.pdf"  # TODO: Pritam — add the notes link (PDF or page) when available
-
-- year: 2026
-  title: "Lecture Notes for Real Analysis"
-  venue: "(In progress) During Teaching Fellowship, Ashoka University"
-  link: "assets/notes/ra-26.pdf"  # TODO: Pritam — add the notes link (PDF or page) when available
-
-- year: 2026
-  title: "Lecture Notes for Fourier Analysis"
-  venue: "(In progress) During Teaching Fellowship, Ashoka University"
-  link: "assets/notes/fs-26.pdf"
+# Select Lecture Notes, shown on the portfolio page, grouped by institution.
+# Each group is a heading (italic, above its list) plus its notes. To add a
+# second institution, copy a whole "- institution:" block below the first;
+# a light rule is drawn between groups automatically.
+# Set `in_progress: true` on a note to put a * after its title.
+- institution: "During Teaching Fellowship at Ashoka University"
+  notes:
+    - year: 2026
+      title: "Probability and Statistics"
+      link: "assets/notes/prob-stat-26.pdf"
+    - year: 2025
+      title: "Matrix Analysis"
+      link: "assets/notes/lama-25.pdf"
+    - year: 2026
+      title: "Real Analysis"
+      in_progress: true
+      link: "assets/notes/ra-26.pdf"
+    - year: 2026
+      title: "Fourier Analysis"
+      in_progress: true
+      link: "assets/notes/fs-26.pdf"

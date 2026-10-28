@@ -6,6 +6,7 @@ layout: default
 
     <div class="col-sidebar-wrap">
     <aside class="col-sidebar col-left sidebar-sticky">
+      {% include side-id.html %}
       <h2>Contents</h2>
       <nav class="toc">
         <ul style="list-style:none;padding:0;margin:0 0 2rem;">
@@ -44,11 +45,7 @@ layout: default
     </div>
 
     <main class="col-content prose" id="main">
-      <header class="entry-head">
-        <h1>Pritam Chandra</h1>
-        <p class="entry-meta">pritamchandra18[at]gmail[dot]com</p>
-        <hr class="rule">
-      </header>
+      <h1 class="visually-hidden">Pritam Chandra</h1>
 
       <section id="about">
         {{ content }}
@@ -56,11 +53,11 @@ layout: default
 
       <section id="publications">
         <h2>Select Journal Publications</h2>
-        <ul class="pub-list">
+        <ul class="pub-list numbered">
           {% for pub in site.data.publications %}
           <li>
             <div>
-              {% if pub.link %}<a class="pub-title" href="{% if pub.link contains 'http' %}{{ pub.link }}{% else %}{{ pub.link | relative_url }}{% endif %}">{{ pub.title }}</a>{% else %}<span class="pub-title">{{ pub.title }}</span>{% endif %}
+              <div class="title-line"><span class="pub-num">{{ forloop.rindex }}.</span>{% if pub.link %}<a class="pub-title" href="{% if pub.link contains 'http' %}{{ pub.link }}{% else %}{{ pub.link | relative_url }}{% endif %}">{{ pub.title }}</a>{% else %}<span class="pub-title">{{ pub.title }}</span>{% endif %}</div>
               <div class="pub-authors">{{ pub.authors | markdownify }}</div>
               <div class="pub-venue">{% include dateline.html year=pub.year text=pub.venue %}</div>
             </div>
@@ -72,11 +69,11 @@ layout: default
 
       <section id="preprints">
         <h2>Select Preprints and Working Papers</h2>
-        <ul class="pub-list">
+        <ul class="pub-list numbered">
           {% for pub in site.data.preprints %}
           <li>
             <div>
-              {% if pub.link %}<a class="pub-title" href="{% if pub.link contains 'http' %}{{ pub.link }}{% else %}{{ pub.link | relative_url }}{% endif %}">{{ pub.title }}</a>{% else %}<span class="pub-title">{{ pub.title }}</span>{% endif %}
+              <div class="title-line"><span class="pub-num">{{ forloop.rindex }}.</span>{% if pub.link %}<a class="pub-title" href="{% if pub.link contains 'http' %}{{ pub.link }}{% else %}{{ pub.link | relative_url }}{% endif %}">{{ pub.title }}</a>{% else %}<span class="pub-title">{{ pub.title }}</span>{% endif %}</div>
               <div class="pub-authors">{{ pub.authors | markdownify }}</div>
               <div class="pub-venue">{% include dateline.html year=pub.year text=pub.venue %}</div>
             </div>
@@ -112,16 +109,19 @@ layout: default
 
       <section id="notes">
         <h2>Select Lecture Notes</h2>
-        <ul class="pub-list">
-          {% for n in site.data.notes %}
-          <li>
-            <div>
-              {% if n.link %}<a class="pub-title" href="{% if n.link contains 'http' %}{{ n.link }}{% else %}{{ n.link | relative_url }}{% endif %}">{{ n.title }}</a>{% else %}<span class="pub-title">{{ n.title }}</span>{% endif %}
-              <div class="pub-venue">{% include dateline.html year=n.year text=n.venue %}</div>
-            </div>
-          </li>
+        {% comment %} Grouped by institution — see _data/notes.yml. {% endcomment %}
+        <div class="note-groups">
+          {% for g in site.data.notes %}
+          <section class="note-group">
+            <h3 class="note-inst"><em>{{ g.institution }}</em></h3>
+            <ul class="note-list">
+              {% for n in g.notes %}
+              <li><span class="note-meta">{{ n.year }}</span>{% if n.link %}<a class="pub-title" href="{% if n.link contains 'http' %}{{ n.link }}{% else %}{{ n.link | relative_url }}{% endif %}">{{ n.title }}</a>{% else %}<span class="pub-title">{{ n.title }}</span>{% endif %}{% if n.in_progress %}<span class="note-star">*</span>{% endif %}</li>
+              {% endfor %}
+            </ul>
+          </section>
           {% endfor %}
-        </ul>
+        </div>
       </section>
 
       <section id="service">

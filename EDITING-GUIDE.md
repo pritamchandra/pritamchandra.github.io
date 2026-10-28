@@ -282,6 +282,18 @@ show as plain text instead of a dead link, and you can fill it in later.
 `_data/service.yml` works the same way, just with different fields (look
 at an existing entry to see which).
 
+**Numbering.** Journal Publications and Preprints are numbered
+automatically, oldest = 1, newest = the highest number, and the list shows
+newest first. Keep each file newest-first and the numbers take care of
+themselves (a new paper at the top renumbers the rest).
+
+**Lecture notes are grouped by institution.** `_data/notes.yml` is a list
+of groups; each has an `institution:` (shown in italics) and its `notes:`.
+To add a note, add a block under the right institution; to add another
+institution, copy a whole `- institution:` block. Put `in_progress: true`
+on a note to show a `*` after its title. A light rule is drawn between
+institutions automatically.
+
 **`authors`, `venue`, and `description` all understand Markdown**, so you
 can put a link inside them the normal way — `[Falcon](https://...)` — not
 just in `title`/`link`. `<strong>`/`<em>` also still work if you'd rather
