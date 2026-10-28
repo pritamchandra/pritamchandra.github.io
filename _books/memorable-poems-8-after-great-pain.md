@@ -7,7 +7,7 @@ title: "After great pain a formal feeling comes"
 subtitle: "Emily Dickinson"
 slug: 8
 epigraph: null
-gloss: "Emily Dickinson, <em>Further Poems of Emily Dickinson</em>, ed. Martha Dickinson Bianchi and Alfred Leete Hampson (Boston: Little, Brown, 1929), poem 175 (Johnson 341; Franklin 372). Text as first printed, which sets every line flush left with no indentation; later critical editions differ in punctuation and lineation."
+gloss: "Emily Dickinson, <em>Further Poems of Emily Dickinson</em>, ed. Martha Dickinson Bianchi and Alfred Leete Hampson (Boston: Little, Brown, 1929), poem 175 (Johnson 341; Franklin 372). Text as first printed; later critical editions differ in punctuation and lineation."
 ---
 <p class="verse">After great pain a formal feeling comes—
 The nerves sit ceremonious like tombs;

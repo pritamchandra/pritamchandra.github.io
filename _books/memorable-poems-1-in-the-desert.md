@@ -7,7 +7,7 @@ title: "In the desert"
 subtitle: "Stephen Crane"
 slug: 1
 epigraph: null
-gloss: "Stephen Crane, <em>The Black Riders and Other Lines</em> (Boston: Copeland &amp; Day, 1895), poem III. No indentation in the original."
+gloss: "Stephen Crane, <em>The Black Riders and Other Lines</em> (Boston: Copeland &amp; Day, 1895), poem III."
 ---
 <p class="verse">In the desert
 I saw a creature, naked, bestial,
