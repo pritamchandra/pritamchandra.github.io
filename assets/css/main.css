@@ -904,22 +904,26 @@ img.portrait{ object-fit: cover; display: block; }
    against the Contents list right above it. */
 .drawer .resume-link{ font-size: 1rem; margin: 1.2rem 0 1.4rem; }
 
-.pub-list{ list-style:none; margin:0 0 .5em; padding:0; }
+/* Year lists (publications, preprints, notes, service): single column, the
+   year sits at the start of the grey venue/description line ("2026 · Venue")
+   instead of in a separate left column. `.prose .pub-list` is needed (not
+   just `.pub-list`) to beat `.prose ul`'s 1.4em left padding, so the lists
+   line up flush with the other text sections. */
+.prose .pub-list, .prose .service-list{ list-style:none; margin:0 0 .5em; padding:0; }
 .pub-list li{
-  display:grid; grid-template-columns: 3.4em minmax(0,1fr); gap: 1em;
-  margin-bottom: 1.4em; padding-bottom: 1.4em; border-bottom: 1px solid var(--border);
+  margin-bottom: 1.05em; padding-bottom: 1.05em; border-bottom: 1px solid var(--border);
 }
 .pub-list li:last-child{ border-bottom: none; margin-bottom:0; padding-bottom:0; }
-.pub-year{ font-family: var(--font-sans); font-size: .82rem; color: var(--text-muted); padding-top: .2em; }
+.dl-year{ font-family: var(--font-sans); font-style: normal; font-size: .82rem; font-variant-numeric: tabular-nums; color: var(--text); }
+.dl-sep{ font-style: normal; color: var(--text-faint); }
 .pub-title{ display:block; font-weight: 600; margin-bottom: .3em; text-decoration-color: var(--border-strong); }
 .pub-authors{ font-size: .88rem; color: var(--text-muted); margin: 0 0 .15em; }
 .pub-authors strong{ color: var(--text); font-weight: 600; }
 .pub-venue{ font-size: .88rem; font-style: italic; color: var(--text-muted); margin: 0; }
 .pub-note{ font-size: .84rem; color: var(--text-faint); margin: .3em 0 0; }
 
-.service-list{ list-style: none; padding:0; margin: 0; }
-.service-list li{ display:grid; grid-template-columns: 3.4em minmax(0,1fr); gap:1em; margin-bottom: .9em; }
-.service-list .pub-year{ padding-top: 0; }
+.service-list li{ margin-bottom: .75em; }
+.service-list li:last-child{ margin-bottom: 0; }
 
 /* Right sidebar (photo/CV/social) joining the bottom of the left sidebar
    at <1000px, and the drawer at <700px, are both handled generically by

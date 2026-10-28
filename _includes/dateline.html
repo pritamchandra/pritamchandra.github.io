@@ -1,0 +1,14 @@
+{% comment %}
+  Renders a list entry's text (venue / description, Markdown allowed) with the
+  entry's year at the start of its first line: "2026 · Venue name".
+  Used by the publication, preprint, notes and service lists on the home page.
+  Parameters: year, text.
+{% endcomment %}
+{%- capture dl_html %}{{ include.text | markdownify }}{% endcapture -%}
+{%- capture dl_year %}<span class="dl-year">{{ include.year }}</span>{% endcapture -%}
+{%- if dl_html contains '<p>' -%}
+  {%- capture dl_open %}<p>{{ dl_year }}<span class="dl-sep"> &middot; </span>{% endcapture -%}
+  {{ dl_html | replace_first: '<p>', dl_open }}
+{%- else -%}
+  <p>{{ dl_year }}</p>
+{%- endif -%}

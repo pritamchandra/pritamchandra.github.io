@@ -3999,3 +3999,25 @@ remain `TODO` comments in the respective files. Chapter 9
 (`memorable-poems-9-you-who-never-arrived.md`, `order: 9`) is Rilke's.
 Verified in a Jekyll 3.10.0 build and in the browser: 9 chapters in order,
 no dates, each of the seven showing its citation and link.
+
+**UPDATE — the homepage's year lists moved from a two-column layout
+(year | content) to a single column with the year in a "dateline".**
+Chosen from six artifact mock-ups (option A). On the home page's Journal
+Publications, Preprints, Lecture Notes and Academic Service lists, each
+entry is now title, authors, then one grey line that begins with the year:
+`2026 · Indian Journal of Pure and Applied Mathematics`. The year is
+sans-serif, upright (the rest of the line is italic), `.82rem`, in the
+normal text color; the dot is faint. Mechanics: `_includes/dateline.html`
+takes `year` and `text`, runs `text` through `markdownify` and splices the
+year into the start of its first `<p>` (`replace_first`), so links in a
+venue/description still work; with no text it prints the year alone. The
+old `.pub-year` column and the 3.4em grid on `.pub-list li` /
+`.service-list li` are gone. Two details that matter if this is touched
+again: (1) `.prose .pub-list` (not bare `.pub-list`) is needed because
+`.prose ul`'s 1.4em left padding has higher specificity and otherwise
+indents the lists relative to the other sections; (2) spacing between
+entries was tightened (1.05em margin + padding, service .75em). Teaching
+Experience is prose and was not part of this. The other five tried
+options (year headings, year pill above title, flush-right year, and
+boxed-tag versions of the dateline and flush-right) are not built; they
+only existed as private artifacts.

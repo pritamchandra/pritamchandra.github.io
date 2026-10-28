@@ -59,11 +59,10 @@ layout: default
         <ul class="pub-list">
           {% for pub in site.data.publications %}
           <li>
-            <span class="pub-year">{{ pub.year }}</span>
             <div>
               {% if pub.link %}<a class="pub-title" href="{% if pub.link contains 'http' %}{{ pub.link }}{% else %}{{ pub.link | relative_url }}{% endif %}">{{ pub.title }}</a>{% else %}<span class="pub-title">{{ pub.title }}</span>{% endif %}
               <div class="pub-authors">{{ pub.authors | markdownify }}</div>
-              <div class="pub-venue">{{ pub.venue | markdownify }}</div>
+              <div class="pub-venue">{% include dateline.html year=pub.year text=pub.venue %}</div>
             </div>
           </li>
           {% endfor %}
@@ -76,11 +75,10 @@ layout: default
         <ul class="pub-list">
           {% for pub in site.data.preprints %}
           <li>
-            <span class="pub-year">{{ pub.year }}</span>
             <div>
               {% if pub.link %}<a class="pub-title" href="{% if pub.link contains 'http' %}{{ pub.link }}{% else %}{{ pub.link | relative_url }}{% endif %}">{{ pub.title }}</a>{% else %}<span class="pub-title">{{ pub.title }}</span>{% endif %}
               <div class="pub-authors">{{ pub.authors | markdownify }}</div>
-              <div class="pub-venue">{{ pub.venue | markdownify }}</div>
+              <div class="pub-venue">{% include dateline.html year=pub.year text=pub.venue %}</div>
             </div>
           </li>
           {% endfor %}
@@ -117,10 +115,9 @@ layout: default
         <ul class="pub-list">
           {% for n in site.data.notes %}
           <li>
-            <span class="pub-year">{{ n.year }}</span>
             <div>
               {% if n.link %}<a class="pub-title" href="{% if n.link contains 'http' %}{{ n.link }}{% else %}{{ n.link | relative_url }}{% endif %}">{{ n.title }}</a>{% else %}<span class="pub-title">{{ n.title }}</span>{% endif %}
-              <div class="pub-venue">{{ n.venue | markdownify }}</div>
+              <div class="pub-venue">{% include dateline.html year=n.year text=n.venue %}</div>
             </div>
           </li>
           {% endfor %}
@@ -132,8 +129,7 @@ layout: default
         <ul class="service-list">
           {% for s in site.data.service %}
           <li>
-            <span class="pub-year">{{ s.year }}</span>
-            <div style="margin:0;">{{ s.description | markdownify }}</div>
+            <div style="margin:0;">{% include dateline.html year=s.year text=s.description %}</div>
           </li>
           {% endfor %}
         </ul>
