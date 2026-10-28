@@ -1304,6 +1304,11 @@ sup[id^="fnref"]{ scroll-margin-top: 80px; }
 .gallery-full{ margin: 1.8em 0; }
 .gallery-full img, .gallery-full svg{ width: 100%; height: auto; display: block; border: 1px solid var(--border); }
 .gallery-full video{ width: 100%; height: auto; display: block; border: 1px solid var(--border); background: #000; }
+/* Centered and a little narrower than the text on wide screens; full text
+   width on narrow ones, where there is no room to spare. */
+@media (min-width: 701px){
+  .gallery-inset{ width: 80%; margin-left: auto; margin-right: auto; }
+}
 .gallery-full figcaption{ font-family: var(--font-sans); font-size: .78rem; color: var(--text-faint); margin-top: .5em; text-align: center; }
 
 .gallery-float-left, .gallery-float-right{ width: 42%; }
@@ -1311,9 +1316,6 @@ sup[id^="fnref"]{ scroll-margin-top: 80px; }
 .gallery-float-right{ float: right; margin: .3em 0 1.2em 1.6em; }
 .gallery-float-left img, .gallery-float-right img,
 .gallery-float-left svg, .gallery-float-right svg{ width: 100%; height: auto; display: block; border: 1px solid var(--border); }
-.gallery-float-left video, .gallery-float-right video{ width: 100%; height: auto; display: block; border: 1px solid var(--border); background: #000; }
-/* a float that needs to be a little larger than the 42% default (e.g. a landscape video) */
-.gallery-float-wide{ width: 50%; }
 .gallery-float-left figcaption, .gallery-float-right figcaption{
   font-family: var(--font-sans); font-size: .74rem; color: var(--text-faint); margin-top: .4em;
 }
@@ -1323,12 +1325,6 @@ sup[id^="fnref"]{ scroll-margin-top: 80px; }
 
 @media (max-width: 700px){
   .gallery-float-left, .gallery-float-right{ float: none; width: 100%; margin: 1.2em 0; }
-}
-/* The larger float (a video) needs a wider column than the 42% default:
-   between 700px and 900px the content column is still narrow (the sidebar
-   takes a slice), so it stacks full width until there is room to wrap. */
-@media (max-width: 900px){
-  .gallery-float-wide{ float: none; width: 100%; margin: 1.2em 0; }
 }
 
 .gallery-video{ margin: 1.8em 0; }

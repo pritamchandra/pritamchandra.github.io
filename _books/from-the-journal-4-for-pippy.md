@@ -12,7 +12,7 @@ gloss: null
 
 This prayer is for Pippy, our dog. I don&rsquo;t think &ldquo;our&rdquo; is an overstep here. I love Pippy, although I feel disrupted by her at times. Pippy, truly speaking, fascinates me. In many ways she is an animal &hellip; for example, her loyalty to us doesn&rsquo;t surpass her loyalty to food. Of course, this is not a volitional charcteristic. Now, in some ways she is also a *person* (what is even a person?) Pippy reminds me of Mr. Skimpole from *Bleak House* &mdash; a man blind to every concern, lost in himself, without awareness; rash, childish and frequently a nuisance. I hated Mr. Skimpole even more than Tulkinghorn the antagonist. But I absolutely love Pippy, for such nature suits a dog.
 
-<figure class="gallery-float-left gallery-float-wide">
+<figure class="gallery-full gallery-inset">
   <video controls playsinline preload="metadata" poster="/assets/video/pippy-poster.jpg">
     <source src="/assets/video/pippy.mp4" type="video/mp4">
     Your browser can't play this video. <a href="/assets/video/pippy.mp4">Download it here</a>.
