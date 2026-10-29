@@ -4061,3 +4061,11 @@ artifact mock-ups first, then built here.
    still appears as a link in the About text. If the header is ever
    wanted back, restore the `<header class="entry-head">` block in
    `home.html` (§9 describes it) and delete the hidden h1.
+
+**UPDATE — "*Hi!*" opener and more space under the nav on the home page.**
+`index.md` now starts with `*Hi!* I am a mathematician…`: "Hi!" in italics,
+exclamation mark included. A script font (Dancing Script, self-hosted) was
+tried first and removed again at Pritam's request, along with its files.
+`home.html`'s `.cluster` top padding went from 2.6rem to 3.6rem. Dateline
+years (`.dl-year`) now use `color: inherit`, so they match the venue line
+(muted) or, in Academic Service, the description text.

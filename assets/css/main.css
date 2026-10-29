@@ -916,7 +916,7 @@ img.portrait{ object-fit: cover; display: block; }
   border-bottom: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
 }
 .pub-list li:last-child{ border-bottom: none; margin-bottom:0; padding-bottom:0; }
-.dl-year{ font-family: var(--font-sans); font-style: normal; font-size: .82rem; font-variant-numeric: tabular-nums; color: var(--text); }
+.dl-year{ font-family: var(--font-sans); font-style: normal; font-size: .82rem; font-variant-numeric: tabular-nums; color: inherit; }
 .dl-sep{ font-style: normal; color: var(--text-faint); }
 .pub-title{ display:block; font-weight: 600; margin-bottom: .3em; text-decoration-color: var(--border-strong); }
 .pub-authors{ font-size: .88rem; color: var(--text-muted); margin: 0 0 .15em; }
