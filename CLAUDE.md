@@ -4069,3 +4069,27 @@ tried first and removed again at Pritam's request, along with its files.
 `home.html`'s `.cluster` top padding went from 2.6rem to 3.6rem. Dateline
 years (`.dl-year`) now use `color: inherit`, so they match the venue line
 (muted) or, in Academic Service, the description text.
+
+**UPDATE — "Poems that have been memorable" converted from a book
+(collection) to a standalone post, with a link list; Franz Wright added.**
+Because most of the poems can't be reproduced on the site, the collection
+was retired and replaced by `_posts/2026-10-23-poems-that-have-been-
+memorable.md`: a title, a subtitle, and a plain bulleted list, one line
+per poem (`[Title](link) — Poet`), in the original order with Wright's
+"Night Walk" and "Blade" appended. The old book index and its nine
+`_books/memorable-poems-*.md` pieces (including the full Crane and
+Dickinson texts and all the citations) were `git mv`'d to
+`for_later/retired-posts/memorable-poems/`, not deleted. The post sets
+`permalink: /blog/memorable-poems/` so the old collection URL keeps
+working (a dated post URL would have been a 404 for it); on the blog home
+it now shows as a "Page", not a "Collection". `post.html` gained an
+optional `subtitle:` (rendered under the `<h1>` exactly like
+`book.html`'s, through `markdownify`). The subtitle is the `preview`
+sentence; the sentence "Some of them appear in this collection." was
+dropped because nothing is hosted on the site any more. Link choices (all
+external): Crane → Wikipedia's "In the Desert" page, Dickinson → poets.org,
+Miłosz → Poetry Foundation, Wright's "Blade" → Poetry International (its
+Poetry Foundation page blocks scripts, so it couldn't be checked), Wright's
+"Night Walk" → an unofficial blog (`poemsandtheirmusic.blogspot.com`; no
+publisher page turned up; the poem is from *God's Silence*, 2009); Das,
+Nash and Rilke still point at PoemHunter/allpoetry aggregators, as before.

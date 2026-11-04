@@ -339,6 +339,10 @@ under `blog/tag/`, ask (or use this guide's own file structure as a
 model — an existing tag folder like `blog/tag/mathematics/index.md` is a
 three-line file you can copy and rename).
 
+**An optional subtitle.** Add `subtitle: "A line shown right under the
+title."` to the front matter (Markdown works inside it, same as a book's
+subtitle). Leave it out and nothing is shown.
+
 **Text alignment — left (default), justified, or centered.** Add one line
 to the post's front matter:
 
