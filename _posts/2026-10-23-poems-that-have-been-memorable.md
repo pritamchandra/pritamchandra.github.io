@@ -8,7 +8,7 @@ date: 2026-10-23 12:00:00 +0530
 preview: "In 2026 I started reading poetry seriously, a good part of it owing to my participation in a poetry club."
 permalink: /blog/memorable-poems/
 ---
-1. [In the desert](https://en.wikipedia.org/wiki/In_the_Desert) &mdash; Stephen Crane
+1. [In the desert](https://en.wikisource.org/wiki/In_the_Desert) &mdash; Stephen Crane
 1. [Summer in Calcutta](https://www.poemhunter.com/poem/summer-in-calcutta/) &mdash; Kamala Das
 1. [Encounter](https://www.poetryfoundation.org/poems/49457/encounter-56d22b901521b) &mdash; Czesław Miłosz
 1. [Used Book](https://writersalmanac.publicradio.org/index.php%3Fdate=2011%252F12%252F06.html) &mdash; Julie Kane

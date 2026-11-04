@@ -4087,7 +4087,9 @@ optional `subtitle:` (rendered under the `<h1>` exactly like
 `book.html`'s, through `markdownify`). The subtitle is the `preview`
 sentence; the sentence "Some of them appear in this collection." was
 dropped because nothing is hosted on the site any more. Link choices (all
-external): Crane → Wikipedia's "In the Desert" page, Dickinson → poets.org,
+external; every link must go to a page of the poem itself, not about it — Crane
+was first linked to Wikipedia's article and corrected to Wikisource's "In the
+Desert", since Poetry Foundation blocks scripts): Crane → Wikisource, Dickinson → poets.org,
 Miłosz → Poetry Foundation, Wright's "Blade" → Poetry International (its
 Poetry Foundation page blocks scripts, so it couldn't be checked), Wright's
 "Night Walk" → an unofficial blog (`poemsandtheirmusic.blogspot.com`; no
