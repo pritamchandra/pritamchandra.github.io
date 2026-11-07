@@ -4137,3 +4137,6 @@ sidebar isn't visible on phones, so the drawer's Contents are the only
 navigation between sections, so a one-line hint under the intro
 (`p.menu-hint` in `home.html`, shown only when `tabs-on`) says
 "Publications, notes and more are in the menu."
+
+The phone hint's styling was later stripped to plain text (same font, size and
+color as the intro paragraphs); only its show/hide rule remains in `main.css`.
