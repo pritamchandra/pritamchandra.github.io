@@ -7,6 +7,23 @@
 <meta name="description" content="{{ page.description }}">
 <link rel="preload" href="{{ '/assets/fonts/SourceSerif4Variable-Roman.ttf.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+{% if page.layout == "home" %}
+{% comment %}
+  Phones only: the home page shows one section at a time (see main.css,
+  "Home page on phones"). This runs in <head> so the right section is
+  already chosen before the first paint — no flash of the whole page.
+{% endcomment %}
+<script>
+(function(){ try {
+  var d = document.documentElement;
+  if (window.matchMedia('(max-width: 700px)').matches){
+    d.classList.add('tabs-on');
+    var h = location.hash.slice(1);
+    d.setAttribute('data-tab', ['about','publications','preprints','teaching','notes','service'].indexOf(h) > -1 ? h : 'about');
+  }
+} catch(e){} })();
+</script>
+{% endif %}
 </head>
 <body{% if page.layout == "home" %} class="page-home"{% elsif page.layout == "blog-home" %} class="page-blog-home"{% elsif page.layout == "post" %} class="page-post"{% elsif page.layout == "book" %} class="page-book"{% elsif page.layout == "tag" %} class="page-tag"{% endif %}>
 <a class="skip-link" href="#main">Skip to content</a>

@@ -4110,3 +4110,30 @@ piece is the newest, the collection's own `date` in
 Oct 2026 on the blog home. The date-first sort puts the piece at the top.
 `assets/notes/ra-26.pdf` (Real Analysis notes) was pushed in the same
 batch, replaced by Pritam.
+
+**UPDATE — the home page shows one section at a time on phones.**
+At a viewport of 700px or less (the site's one mobile breakpoint, the same
+as the drawer), the home page no longer scrolls through every section:
+only the intro (About) is shown by default, and the Contents links in the
+drawer switch to Journal Publications, Preprints, Teaching, Lecture Notes
+or Academic Service, each shown alone like its own page. Wider screens are
+untouched (every section, as before). Mechanics: a small `<head>` script
+in `_layouts/default.html` (home layout only) adds `html.tabs-on` and
+`html[data-tab="<section id>"]` before first paint, taking the id from the
+URL hash (default `about`) so there is no flash of the full page;
+`main.css` ("Home page on phones") hides every `#main > section` except
+the one `data-tab` names (child selector on purpose: the lecture-notes
+institution groups are nested `<section>`s that must not be hidden);
+`main.js` ("home page on phones") switches `data-tab` when a `.toc` link is
+clicked (`preventDefault`, `history.pushState('#id')`, scroll to top, mark
+the link `.current`), follows Back/forward and `hashchange`, and re-applies
+the mode if the viewport crosses 700px (e.g. a rotated phone), so a
+link like `/#notes` opens that section on a phone. The whole feature is
+client-side: with JavaScript off, nothing gets `tabs-on` and every section
+shows. If a section is added to the home page, its id must be added in
+three places: the `TABS` list in `main.js`, the head script's list in
+`default.html`, and a `data-tab` rule in `main.css`. The static left
+sidebar isn't visible on phones, so the drawer's Contents are the only
+navigation between sections, so a one-line hint under the intro
+(`p.menu-hint` in `home.html`, shown only when `tabs-on`) says
+"Publications, notes and more are in the menu."

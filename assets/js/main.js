@@ -192,6 +192,49 @@
     tocSections.forEach(function(el){ spy.observe(el); });
   }
 
+  /* ---------- home page on phones: one section at a time ---------- */
+  /* The page's sections (About, Publications, ...) become "pages": only
+     the one named by html[data-tab] is shown (main.css does the hiding),
+     and the Contents links in the drawer switch between them instead of
+     scrolling. About is the default. The state also lives in the URL
+     hash, so Back works and a link like /#notes opens that section. On a
+     wide screen nothing of this applies and every section is shown. */
+  if (document.body.classList.contains('page-home') && window.matchMedia){
+    var TABS = ['about', 'publications', 'preprints', 'teaching', 'notes', 'service'];
+    var phone = window.matchMedia('(max-width: 700px)');
+    var tabFromHash = function(){
+      var h = location.hash.slice(1);
+      return TABS.indexOf(h) > -1 ? h : 'about';
+    };
+    var showTab = function(id){
+      root.setAttribute('data-tab', id);
+      document.querySelectorAll('.toc a[href^="#"]').forEach(function(a){
+        a.classList.toggle('current', a.getAttribute('href') === '#' + id);
+      });
+    };
+    var applyMode = function(){
+      if (phone.matches){ root.classList.add('tabs-on'); showTab(tabFromHash()); }
+      else { root.classList.remove('tabs-on'); }
+    };
+    applyMode();
+    if (phone.addEventListener){ phone.addEventListener('change', applyMode); }
+    else if (phone.addListener){ phone.addListener(applyMode); }
+    document.querySelectorAll('.toc a[href^="#"]').forEach(function(a){
+      a.addEventListener('click', function(e){
+        var id = a.getAttribute('href').slice(1);
+        if (!phone.matches || TABS.indexOf(id) < 0) return;
+        e.preventDefault();
+        if (tabFromHash() !== id || location.hash.slice(1) !== id){
+          try { history.pushState(null, '', '#' + id); } catch(err){ location.hash = id; }
+        }
+        showTab(id);
+        window.scrollTo(0, 0);
+      });
+    });
+    window.addEventListener('popstate', function(){ if (phone.matches){ showTab(tabFromHash()); window.scrollTo(0, 0); } });
+    window.addEventListener('hashchange', function(){ if (phone.matches){ showTab(tabFromHash()); } });
+  }
+
   /* ---------- hide navbar on scroll down, reveal on scroll up ---------- */
   var nav = document.querySelector('.sitenav');
   if (nav){

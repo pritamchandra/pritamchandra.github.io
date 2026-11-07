@@ -953,6 +953,25 @@ img.portrait{ object-fit: cover; display: block; }
 .side-name{ margin:0; font-family: var(--font-serif); font-size:1.15rem; font-weight:600; line-height:1.3; color: var(--text); }
 @media (max-width: 1000px){ .col-left .side-id{ display:block; margin-bottom:1.6rem; } }
 
+/* Home page on phones: one section at a time. head script / main.js add
+   html.tabs-on (viewport <= 700px) and html[data-tab="<section id>"]; every
+   section of #main is hidden except the one named by data-tab. Wide
+   screens never get .tabs-on, so they show every section as usual. */
+html.tabs-on body.page-home #main > section{ display: none; }
+html.tabs-on[data-tab="about"] body.page-home #about,
+html.tabs-on[data-tab="publications"] body.page-home #publications,
+html.tabs-on[data-tab="preprints"] body.page-home #preprints,
+html.tabs-on[data-tab="teaching"] body.page-home #teaching,
+html.tabs-on[data-tab="notes"] body.page-home #notes,
+html.tabs-on[data-tab="service"] body.page-home #service{ display: block; }
+
+/* One-line hint under the intro, phones only (the other sections live in the menu). */
+.menu-hint{ display: none; }
+html.tabs-on .page-home #about > p.menu-hint{
+  display: block; margin: 1.6em 0 0; text-align: left; hyphens: manual;
+  font-family: var(--font-sans); font-size: .82rem; color: var(--text-muted);
+}
+
 /* Text for screen readers only (the home page's <h1>). */
 .visually-hidden{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
 
