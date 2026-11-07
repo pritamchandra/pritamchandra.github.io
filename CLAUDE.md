@@ -4095,3 +4095,18 @@ Poetry Foundation page blocks scripts, so it couldn't be checked), Wright's
 "Night Walk" → an unofficial blog (`poemsandtheirmusic.blogspot.com`; no
 publisher page turned up; the poem is from *God's Silence*, 2009); Das,
 Nash and Rilke still point at PoemHunter/allpoetry aggregators, as before.
+
+**UPDATE — "The Moon" added to "From the journal".** New piece
+`_books/from-the-journal-6-the-moon.md` (`date: 2026-10-01`, shown as
+"Oct 2026"; the day is a placeholder since only the month was given),
+typed up from `~/Documents/1-iCloud/Writings/moon.pdf`. The PDF's text
+layer had line-break hyphens ("desir-able"), lost em dashes and "fi"/"ff"
+ligatures, so it was cleaned by hand and the paragraph breaks were
+confirmed against a rendering of the pages; British spellings
+(*contextualise*, *organised*, *mould*) kept as written. Because the
+piece is the newest, the collection's own `date` in
+`blog/from-the-journal/index.md` moved to 2026-10-01 per the standing
+"collection date = newest page date" rule, so the book now files under
+Oct 2026 on the blog home. The date-first sort puts the piece at the top.
+`assets/notes/ra-26.pdf` (Real Analysis notes) was pushed in the same
+batch, replaced by Pritam.
