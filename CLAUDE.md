@@ -4140,3 +4140,9 @@ navigation between sections, so a one-line hint under the intro
 
 The phone hint's styling was later stripped to plain text (same font, size and
 color as the intro paragraphs); only its show/hide rule remains in `main.css`.
+
+**UPDATE — the home page has no footer.** The `© 2026 Pritam Chandra.` line
+(and the rule above it) was removed from `home.html` at every width, so §12's
+"portfolio keeps the plain copyright-only footer" no longer holds; every
+other page type still has its footer (with the "Jesu Juva" line). The
+`home` branch in `_includes/footer.html` is now unused but left in place.
