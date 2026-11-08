@@ -4146,3 +4146,8 @@ color as the intro paragraphs); only its show/hide rule remains in `main.css`.
 "portfolio keeps the plain copyright-only footer" no longer holds; every
 other page type still has its footer (with the "Jesu Juva" line). The
 `home` branch in `_includes/footer.html` is now unused but left in place.
+
+**UPDATE — bottom space on the home page.** With the footer gone the page
+ended flush against the last section, so the home `.cluster` now has
+`padding-bottom: 3.6rem`, the same value as its `padding-top` (the gap
+between the nav bar and the first paragraph), in `home.html`.
