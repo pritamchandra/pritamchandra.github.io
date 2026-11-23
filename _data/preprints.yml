@@ -1,9 +1,9 @@
 # Preprints & Working Papers, shown on the portfolio page.
 - year: 2026
-  title: "Various Order Relations between Some Matrix Means"
+  title: "Order Relations between Geometric Means and Power Means of Positive Definite Matrices"
   authors: "Rajendra Bhatia, <strong>Pritam Chandra</strong>"
-  venue: "In submission at Acta Scientiarum Mathematicarum"
-  link: null  # TODO: Pritam — add the preprint link when available
+  venue: "In submission at Positivity"
+  link: "/assets/preprints/order-relations-means.pdf"
 
 - year: 2026
   title: "An Elementary Introduction to Smoothing Parameter Bounds"
