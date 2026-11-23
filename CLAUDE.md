@@ -4151,3 +4151,8 @@ other page type still has its footer (with the "Jesu Juva" line). The
 ended flush against the last section, so the home `.cluster` now has
 `padding-bottom: 3.6rem`, the same value as its `padding-top` (the gap
 between the nav bar and the first paragraph), in `home.html`.
+
+**UPDATE — Stoner marked as read.** `_reading/stoner.md`: `status: reading`
+→ `status: null`, `year: null` → `year: 2026` (finished in 2026; the year
+is the only date known). It keeps `order: 8`, third in the list. The
+updated `assets/notes/ra-26.pdf` went out in the same push.
